@@ -81,7 +81,7 @@ def laters(func):
     def ltr(*args, **kwargs):
         "wrap function."
         try:
-            return func(*args)
+            return func(*args, **kwargs)
         except (KeyboardInterrupt, EOFError):
             _thread.interrupt_main()
         except Exception as ex:

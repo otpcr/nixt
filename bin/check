@@ -28,7 +28,7 @@ def main():
     popen(f'grep -R importlib {NAME}')
     popen(f'grep -R "import sys" {NAME}')
     popen(f'grep -R "import inspect" {NAME}')
-   # popen(f'fgrep -R "import os" {NAME}')
+    #popen(f'fgrep -R "import os" {NAME}')
 
 
 if __name__ == "__main__":
