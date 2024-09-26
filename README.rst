@@ -138,8 +138,8 @@ start service
 ::
 
     $ nixt srv > nixt.service
-    $ nixt mv nixt.service /etc/systemd/system/
-    $ nixt systemctl enable nixt --now
+    $ sudo mv nixt.service /etc/systemd/system/
+    $ sudo systemctl enable nixt --now
 
     joins #nixt on localhost
 

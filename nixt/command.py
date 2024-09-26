@@ -6,7 +6,7 @@
 
 
 from .object  import Default
-from .runtime import later
+from .runtime import laters
 
 
 class Commands:
@@ -27,11 +27,8 @@ def command(bot, evt):
     evt.orig = repr(bot)
     func = Commands.cmds.get(evt.cmd, None)
     if func:
-        try:
-            func(evt)
-            bot.display(evt)
-        except Exception as ex:
-            later(ex)
+        func(evt)
+        bot.display(evt)
     evt.ready()
 
 

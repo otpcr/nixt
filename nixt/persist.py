@@ -13,8 +13,7 @@ import time
 import _thread
 
 
-from .object import Default
-from .object import dump, fqn, load, match, search, update
+from .object import Default, dump, fqn, load, match, search, update
 
 
 lock = _thread.allocate_lock()

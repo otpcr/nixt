@@ -74,6 +74,23 @@ def later(exc, evt=None):
         evt.ready()
 
 
+def laters(func):
+
+    "later decorator."
+
+    def ltr(*args, **kwargs):
+        "wrap function."
+        try:
+            return func(*args)
+        except (KeyboardInterrupt, EOFError):
+            _thread.interrupt_main()
+        except Exception as ex:
+            later(ex)
+            ready(args)
+
+    return ltr
+
+
 class Event:
 
     "Event"
@@ -208,22 +225,11 @@ class Thread(threading.Thread):
         super().join(timeout)
         return self.result
 
+    @laters
     def run(self):
         "run this thread's payload."
-        try:
-            func, args = self.queue.get()
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-        except Exception as ex:
-            later(ex)
-            return
-        try:
-            self.result = func(*args)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-        except Exception as ex:
-            later(ex)
-            ready(args)
+        func, args = self.queue.get()
+        self.result = func(*args)
 
 
 class Timer:
