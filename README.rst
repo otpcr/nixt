@@ -4,8 +4,9 @@ N I X T
 
 **NAME**
 
+::
 
-``NIXT`` - NIXT
+   NIXT - NIXT
 
 
 **SYNOPSIS**
@@ -19,6 +20,8 @@ N I X T
 
 
 **DESCRIPTION**
+
+::
 
     you have been nixt.
 
@@ -143,10 +146,9 @@ start service
 
 **COMMANDS**
 
-
-here is a list of available commands
-
 ::
+
+    here is a list of available commands
 
     cfg - irc configuration
     cmd - commands
@@ -168,8 +170,9 @@ here is a list of available commands
 
 **SOURCE**
 
+::
 
-source is at ``https://github.com/otpcr/nixt``
+    source is at ``https://github.com/otpcr/nixt``
 
 
 **FILES**
@@ -186,11 +189,13 @@ source is at ``https://github.com/otpcr/nixt``
 
 **AUTHOR**
 
+::
 
-Bart Thate ``<record11719@gmail.com>``
+    Bart Thate <record11719@gmail.com>
 
 
 **COPYRIGHT**
 
+::
 
-``NIXT`` is Public Domain.
+    NIXT is Public Domain.

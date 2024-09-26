@@ -1,19 +1,8 @@
 # This file is placed in the Public Domain.
 
-
-title = "NIXT"
-
-
-# system
-
-
 [build-system]
 requires = ["setuptools>=43.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
-
-
-# project
-
 
 [project]
 name = "nixt"
@@ -32,15 +21,10 @@ classifiers=[
     'Topic :: Utilities'
 ]
 
-
 [project.urls]
 "home" = "https://pypi.org/project/nixt"
 "bugs" = "https://github.com/otpcr/nixt/issues"
 "source" = "https://github.com/otpcr/nixt"
-
-
-# setuptools
-
 
 [tool.setuptools]
 script-files = [

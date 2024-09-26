@@ -95,5 +95,6 @@ def parse(obj, txt=None):
 def __dir__():
     return (
         'Commands',
-        'command'
+        'command',
+        'parse'
     )
