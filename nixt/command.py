@@ -12,7 +12,7 @@ class Commands:
 
     "Commands"
 
-    cmds     = {}
+    cmds = {}
 
     @staticmethod
     def add(func):

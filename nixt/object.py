@@ -93,8 +93,10 @@ def fmt(obj, args=None, skip=None, plain=False):
             continue
         if plain:
             txt += f"{value} "
-        else:
+        elif isinstance(value, str) and len(value.split()) >= 2:
             txt += f'{key}="{value}" '
+        else:
+            txt += f'{key}={value} '
     return txt.strip()
 
 
