@@ -1,0 +1,56 @@
+# This file is placed in the Public Domain.
+
+
+title = "NIXT"
+
+
+# system
+
+
+[build-system]
+requires = ["setuptools>=43.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+# project
+
+
+[project]
+name = "nixt"
+version = "51"
+authors = [
+    {name = "Bart Thate", email = "record11719@gmail.com" },
+]
+description = "NIXT"
+readme = "README.rst"
+license = { text="Public Domain"}
+classifiers=[
+    'Development Status :: 4 - Beta',
+    'License :: Public Domain',
+    'Operating System :: Unix',
+    'Programming Language :: Python :: 3',
+    'Topic :: Utilities'
+]
+
+
+[project.urls]
+"home" = "https://pypi.org/project/nixt"
+"bugs" = "https://github.com/otpcr/nixt/issues"
+"source" = "https://github.com/otpcr/nixt"
+
+
+# setuptools
+
+
+[tool.setuptools]
+script-files = [
+   'bin/nixt',
+   'bin/nixtc',
+   'bin/nixtd',
+   'bin/nixts'
+]   
+packages = [
+   'nixt',
+   'nixt.modules'
+]
+

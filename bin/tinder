@@ -1,0 +1,152 @@
+#!/usr/bin/env python3
+# This file is placed in the Public Domain.
+# pylint: disable=C0413,W0212,W0401,W0614,W0622,W0718
+
+
+"tinder"
+
+
+import os
+import profile
+import shutil
+import sys
+import termios
+import time
+import _thread
+
+
+sys.path.insert(0, os.getcwd())
+
+
+from nixt.command import Commands, command, parse
+from nixt.object  import Default, Object
+from nixt.modules import face
+from nixt.persist import Workdir, laps, skel
+from nixt.runtime import STARTTIME, Client, Event, errors, later, launch
+
+
+cfg = Default()
+
+
+if os.path.exists("mods"):
+    from mods import face as MODS
+    MODS.rss.DEBUG = True
+
+
+face.rss.DEBUG = True
+
+
+LAP = 1
+NRS = 1
+NRCOMMAND = 1
+PERCALL   = 1
+STARTTIME = time.time()
+
+
+events = []
+paylock = _thread.allocate_lock()
+
+
+param = Object()
+param.cmd = [""]
+param.dpl = ["hnrss title,url"]
+param.fnd = ["log", "todo", "rss", "config"]
+param.imp = ["tests/feeds.opml"]
+param.log = ["bla"]
+param.mod = [""]
+param.mre = [""]
+param.nme = ["hnrss hackernews"]
+param.pwd = ["bla mekker"]
+param.rem = ["hnrss"]
+param.req = [""]
+param.res = [""]
+param.rss = ["http://hnrss.org/newest",]
+param.tdo = ["mekker"]
+param.ver = [""]
+
+
+class CLI(Client):
+
+    "command line interface."
+
+    def __init__(self):
+        Client.__init__(self)
+        self.register("command", command)
+
+    def raw(self, txt):
+        if "v" in cfg.opts:
+            print(txt)
+
+
+def banner():
+    "show banner."
+    tme = time.ctime(time.time()).replace("  ", " ")
+    print(f"{Workdir.name.upper()} since {tme}")
+
+
+def consume(events):
+    for evt in events:
+        evt.wait()
+
+
+def payload(clt):
+    "do payload."
+    with paylock:
+        nmr = 0
+        for cmdd in Commands.cmds:
+            for ex in getattr(param, cmdd, [""]):
+                evt = Event()
+                evt.txt = cmdd + " " + ex
+                clt.put(evt)
+                events.append(evt)
+                nmr += 1
+        return nmr
+
+
+def wrap(func):
+    "reset console."
+    old = None
+    try:
+        old = termios.tcgetattr(sys.stdin.fileno())
+    except termios.error:
+        pass
+    try:
+        func()
+    except (KeyboardInterrupt, EOFError):
+        print("")
+    except Exception as ex:
+        later(ex)
+    finally:
+        if old:
+            termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old)
+
+
+def main():
+    "main"
+    Workdir.wdr = ".test"
+    parse(cfg, " ".join(sys.argv[1:]))
+    NRCOMMAND = len(Commands.cmds) or 1
+    if "v" in cfg.opts:
+        banner()
+    if "f" in cfg.opts:
+        if os.path.exists(Workdir.wdr):
+            shutil.rmtree(Workdir.wdr)
+    skel()
+    clt = CLI()
+    clt.start()
+    nrs = cfg.index or 1
+    for _nr in range(nrs):
+        launch(payload, clt)
+    consume(events)
+    clt.wait()
+    if "v" in cfg.opts:
+        endtime = time.time()
+        lap = laps(endtime-STARTTIME)
+        percall = (endtime-STARTTIME)/(nrs*NRCOMMAND)
+        print(",".join(Commands.cmds))
+        print(f"{lap} {nrs} {NRCOMMAND} {percall}")
+
+
+if __name__ == "__main__":
+    wrap(main)
+    errors(print)
