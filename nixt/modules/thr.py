@@ -8,10 +8,10 @@ import threading
 import time
 
 
-from nixt.command import Commands
-from nixt.object  import Object, update
-from nixt.persist import laps
-from nixt.runtime import STARTTIME
+from ..command import Commands
+from ..object  import Object, update
+from ..persist import laps
+from ..runtime import STARTTIME
 
 
 def thr(event):
