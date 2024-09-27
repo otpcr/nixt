@@ -69,7 +69,7 @@ use -v to enable verbose
 ::
 
     $ nixtc -v
-    OTPCR since Tue Sep 17 04:10:08 2024
+    NIXT since Tue Sep 17 04:10:08 2024
     > 
 
 
