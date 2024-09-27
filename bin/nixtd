@@ -61,7 +61,7 @@ def privileges(username):
 
 def main():
     "main"
-    daemon(True)
+    daemon()
     privileges(getpass.getuser())
     pidfile(NAME)
     init(face)
