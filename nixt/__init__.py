@@ -4,4 +4,6 @@
 ""
 
 
-__doc__ = __file__.rsplit("/", maxsplit=2)[-2].upper()
+NAME    = __file__.rsplit("/", maxsplit=2)[-2]
+__doc__ = NAME.upper()
+

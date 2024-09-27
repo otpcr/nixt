@@ -13,18 +13,21 @@ import sys
 
 
 from nixt.modules import face
-from nixt.persist import NAME, Workdir
+from nixt.persist import Workdir
 from nixt.runtime import errors, forever, init, wrap
+
+
+from nixt import NAME
 
 
 def pidfile(name):
     "write the pid to a file."
-    pidfile = os.path.join(wdr, f"{name}.pid")
+    pidfile = os.path.join(Workdir.wdr, f"{name}.pid")
     if os.path.exists(pidfile):
         os.unlink(pidfile)
     path = pathlib.Path(pidfile)
     path.parent.mkdir(parents=True, exist_ok=True)
-    with open(pid, "w", encoding="utf-8") as fds:
+    with open(pidfile, "w", encoding="utf-8") as fds:
         fds.write(str(os.getpid()))
 
 
@@ -45,3 +48,4 @@ def main():
 
 if __name__ == "__main__":
     wrap(main, print)
+    errors(print)
