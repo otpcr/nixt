@@ -28,11 +28,6 @@ from nixt.runtime import STARTTIME, Client, Event, errors, later, launch
 cfg = Default()
 
 
-if os.path.exists("mods"):
-    from mods import face as MODS
-    MODS.rss.DEBUG = True
-
-
 face.rss.DEBUG = True
 
 
@@ -73,6 +68,10 @@ class CLI(Client):
         Client.__init__(self)
         self.register("command", command)
 
+    def callback(self, evt):
+        Client.callback(self, evt)
+        evt.wait()
+
     def raw(self, txt):
         if "v" in cfg.opts:
             print(txt)
@@ -93,7 +92,7 @@ def payload(clt):
     "do payload."
     with paylock:
         nmr = 0
-        for cmdd in Commands.cmds:
+        for cmdd in sorted(Commands.cmds):
             for ex in getattr(param, cmdd, [""]):
                 evt = Event()
                 evt.txt = cmdd + " " + ex
