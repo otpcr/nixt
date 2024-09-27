@@ -16,8 +16,9 @@ import _thread
 from .object import Default, dump, fqn, load, match, search, update
 
 
-lock = _thread.allocate_lock()
+lock     = _thread.allocate_lock()
 disklock = _thread.allocate_lock()
+p        = os.path.join
 
 
 class ReadError(Exception):
@@ -46,7 +47,7 @@ def long(name):
 
 def skel():
     "create directory,"
-    stor = os.path.join(Workdir.wdr, "store", "")
+    stor = p(Workdir.wdr, "store", "")
     path = pathlib.Path(stor)
     path.mkdir(parents=True, exist_ok=True)
     return path
@@ -54,10 +55,10 @@ def skel():
 
 def store(pth=""):
     "return objects directory."
-    stor = os.path.join(Workdir.wdr, "store", "")
+    stor = p(Workdir.wdr, "store", "")
     if not os.path.exists(stor):
         skel()
-    return os.path.join(Workdir.wdr, "store", pth)
+    return p(Workdir.wdr, "store", pth)
 
 
 def types():
@@ -78,7 +79,7 @@ def cdir(pth):
 
 def ident(obj):
     "return an id for an object."
-    return os.path.join(fqn(obj), *str(datetime.datetime.now()).split())
+    return p(fqn(obj), *str(datetime.datetime.now()).split())
 
 
 def find(mtc, selector=None, index=None, deleted=False, matching=False):
@@ -108,9 +109,9 @@ def fns(mtc=""):
         if dirs:
             for dname in sorted(dirs):
                 if dname.count('-') == 2:
-                    ddd = os.path.join(rootdir, dname)
+                    ddd = p(rootdir, dname)
                     for fll in os.scandir(ddd):
-                        yield strip(os.path.join(ddd, fll))
+                        yield strip(p(ddd, fll))
 
 
 def fntime(daystr):
