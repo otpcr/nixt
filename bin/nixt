@@ -7,13 +7,11 @@
 
 
 import getpass
-import os
-import readline
 import sys
 
 
 from nixt.command import Commands, command, parse
-from nixt.modules import face
+from nixt.modules import face # pylint: disable=W0611
 from nixt.object  import Default
 from nixt.runtime import Client, Event, errors
 

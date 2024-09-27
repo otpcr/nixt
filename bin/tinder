@@ -7,7 +7,6 @@
 
 
 import os
-import profile
 import shutil
 import sys
 import termios
@@ -83,8 +82,9 @@ def banner():
     print(f"{Workdir.name.upper()} since {tme}")
 
 
-def consume(events):
-    for evt in events:
+def consume(evts):
+    "wait for all events to finish."
+    for evt in evts:
         evt.wait()
 
 
@@ -102,29 +102,29 @@ def payload(clt):
         return nmr
 
 
-def wrap(func):
+def wrap(function):
     "reset console."
-    old = None
+    old3 = None
     try:
-        old = termios.tcgetattr(sys.stdin.fileno())
+        old3 = termios.tcgetattr(sys.stdin.fileno())
     except termios.error:
         pass
     try:
-        func()
+        function()
     except (KeyboardInterrupt, EOFError):
         print("")
     except Exception as ex:
         later(ex)
     finally:
-        if old:
-            termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old)
+        if old3:
+            termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old3)
 
 
 def main():
     "main"
     Workdir.wdr = ".test"
     parse(cfg, " ".join(sys.argv[1:]))
-    NRCOMMAND = len(Commands.cmds) or 1
+    nrcommands = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()
     if "f" in cfg.opts:
@@ -141,9 +141,9 @@ def main():
     if "v" in cfg.opts:
         endtime = time.time()
         lap = laps(endtime-STARTTIME)
-        percall = (endtime-STARTTIME)/(nrs*NRCOMMAND)
+        percall = (endtime-STARTTIME)/(nrs*nrcommands)
         print(",".join(Commands.cmds))
-        print(f"{lap} {nrs} {NRCOMMAND} {percall}")
+        print(f"{lap} {nrs} {nrcommands} {percall}")
 
 
 if __name__ == "__main__":

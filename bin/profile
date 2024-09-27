@@ -16,10 +16,10 @@ def main():
         print("profile <filename>")
         return
     fnm = sys.argv[1]
-    SRC = ""
-    with open(sys.argv[1], "r") as src:
-        SRC = src.read()
-    code = compile(SRC, fnm, "exec")
+    srce = ""
+    with open(sys.argv[1], "r", encoding="utf-8") as src:
+        srce = src.read()
+    code = compile(srce, fnm, "exec")
     profile.runctx(code, __main__.__dict__, __main__.__dict__)
 
 
