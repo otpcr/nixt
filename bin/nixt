@@ -16,25 +16,13 @@ from nixt.modules import face
 from nixt.runtime import NAME, Client, errors
 
 
+"defines"
+
+
 cfg = Config()
 
 
-class CLI(Client):
-
-    "CLI"
-
-    def raw(self, txt):
-        "print text."
-        print(txt)
-
-
-def srv(event):
-    "create service file (pipx)."
-    if event.args:
-        name = event.args[0]
-    else:
-        name  = getpass.getuser()
-    txt = """[Unit]
+TXT = """[Unit]
 Description=%s
 After=network-online.target
 
@@ -46,7 +34,24 @@ ExecStart=/home/%s/.local/bin/%ss
 
 [Install]
 WantedBy=multi-user.target"""
-    event.reply(txt % (NAME.upper(), name, name, name, NAME))
+
+
+class CLI(Client):
+
+    "CLI"
+
+    def raw(self, txt):
+        "print text."
+        print(txt)
+
+
+"commands"
+
+
+def srv(event):
+    "create service file (pipx)."
+    name  = getpass.getuser()
+    event.reply(TXT % (NAME.upper(), name, name, name, NAME))
 
 
 Commands.add(srv)
