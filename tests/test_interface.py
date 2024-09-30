@@ -28,7 +28,7 @@ PACKAGE = [
     '__path__',
     '__spec__',
     'command',
-    'method',
+    'default',
     'object',
     'persist',
     'runtime'

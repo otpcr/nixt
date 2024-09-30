@@ -117,7 +117,7 @@ def setdefault(obj, key, default):
     return obj.__dict__.setdefault(key, default)
 
 
-def update(obj, data, empty=True):
+def update(obj, data):
     "update an object."
     if isinstance(data, type({})):
         obj.__dict__.update(data)
