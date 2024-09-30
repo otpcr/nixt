@@ -40,17 +40,7 @@ class Default(Object):
         return self.__dict__.get(key, "")
 
 
-class Config(Default):
-
-    "Config"
-
-
 "methods"
-
-
-def clear(obj):
-    "reset object."
-    obj.__dict__.clear()
 
 
 def construct(obj, *args, **kwargs):
@@ -67,21 +57,6 @@ def construct(obj, *args, **kwargs):
         update(obj, kwargs)
 
 
-def copy(obj):
-    "shallow copy."
-    return obj.__dict__.copy()
-
-
-def fromkeys(obj, keys, value=None):
-    "return list if values from keys with default."
-    return obj.__dict__.fromkeys(keys, value)
-
-
-def get(obj, key, default=None):
-    "return key associated value."
-    return obj.__dict__.get(key, default)
-
-
 def items(obj):
     "return the items of an object."
     if isinstance(obj,type({})):
@@ -95,21 +70,6 @@ def keys(obj):
     if isinstance(obj, type({})):
         return obj.keys()
     return list(obj.__dict__.keys())
-
-
-def pop(obj, key, default=None):
-    "pop an element with default."
-    return obj.__dict__.pop(key, default)
-
-
-def popitem(obj):
-    "pop a single item."
-    return obj.__dict__.popitem()
-
-
-def setdefault(obj, key, default):
-    "set key with default."
-    return obj.__dict__.setdefault(key, default)
 
 
 def update(obj, data):
@@ -306,7 +266,6 @@ def search(obj, selector, matching=None):
 
 def __dir__():
     return (
-        'Config',
         'Default',
         'Object',
         'construct',

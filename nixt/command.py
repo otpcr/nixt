@@ -12,6 +12,11 @@ from .object  import Default
 from .runtime import later
 
 
+class Config(Default):
+
+    "Config"
+
+
 class Commands:
 
     "Commands"
@@ -70,7 +75,6 @@ class Event:
         self._ready.wait()
         if self._thr:
             self._thr.join()
-
 
 
 def parse(obj, txt=None):
