@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=R,C0413
+# pylint: disable=R,W0105,C0413,W0611
 
 
 "cli"
@@ -10,13 +10,13 @@ import getpass
 import sys
 
 
-from nixt.command import Commands, command, parse
-from nixt.modules import face # pylint: disable=W0611
-from nixt.object  import Default
-from nixt.runtime import Client, Event, errors
+from nixt.command import Commands, Event, command, parse
+from nixt.default import Config
+from nixt.modules import face
+from nixt.runtime import NAME, Client, errors
 
 
-NAME = Default.__module__.split(".", maxsplit=2)[-2]
+cfg = Config()
 
 
 class CLI(Client):
@@ -49,10 +49,14 @@ WantedBy=multi-user.target"""
     event.reply(txt % (NAME.upper(), name, name, name, NAME))
 
 
+Commands.add(srv)
+
+
+"main"
+
+
 def main():
     "main"
-    Commands.add(srv)
-    cfg = Default()
     parse(cfg, " ".join(sys.argv[1:]))
     cli = CLI()
     evt = Event()

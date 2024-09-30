@@ -2,22 +2,18 @@
 # This file is placed in the Public Domain.
 # pylint: disable=W0212
 
+
 "daemon"
 
 
 import getpass
 import os
-import pathlib
-import pwd
 import sys
 
 
 from nixt.modules import face
-from nixt.persist import Workdir
-from nixt.runtime import forever, init
-
-
-from nixt import NAME
+from nixt.persist import pidname
+from nixt.runtime import forever, init, pidfile, privileges
 
 
 def daemon(verbose=False):
@@ -41,29 +37,11 @@ def daemon(verbose=False):
     os.nice(10)
 
 
-def pidfile(name):
-    "write the pid to a file."
-    fname = os.path.join(Workdir.wdr, f"{name}.pid")
-    if os.path.exists(fname):
-        os.unlink(fname)
-    path = pathlib.Path(fname)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(fname, "w", encoding="utf-8") as fds:
-        fds.write(str(os.getpid()))
-
-
-def privileges(username):
-    "drop privileges."
-    pwnam = pwd.getpwnam(username)
-    os.setgid(pwnam.pw_gid)
-    os.setuid(pwnam.pw_uid)
-
-
 def main():
     "main"
     daemon()
     privileges(getpass.getuser())
-    pidfile(NAME)
+    pidfile(pidname())
     init(face)
     forever()
 

@@ -6,41 +6,18 @@
 
 
 import getpass
-import os
-import pathlib
-import pwd
 
 
 from nixt.modules import face
-from nixt.persist import Workdir
-from nixt.runtime import errors, forever, init, wrap
-
-
-from nixt import NAME as PROGNAME
-
-
-def pidfile(name):
-    "write the pid to a file."
-    filename = os.path.join(Workdir.wdr, f"{name}.pid")
-    if os.path.exists(filename):
-        os.unlink(filename)
-    path = pathlib.Path(filename)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(filename, "w", encoding="utf-8") as fds:
-        fds.write(str(os.getpid()))
-
-
-def privileges(username):
-    "privileges."
-    pwnam = pwd.getpwnam(username)
-    os.setgid(pwnam.pw_gid)
-    os.setuid(pwnam.pw_uid)
+from nixt.persist import pidname
+from nixt.runtime import errors, forever, init, pidfile, privileges, wrap
 
 
 def main():
     "main"
     privileges(getpass.getuser())
-    pidfile(PROGNAME)
+    name = pidname()
+    pidfile(name)
     init(face)
     forever()
 
