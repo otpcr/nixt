@@ -19,23 +19,17 @@ VALIDJSON = '{"test": "bla"}'
 
 
 attrs1 = (
-    'Config',
     'Default',
     'Object',
     'construct',
-    'copy',
     'dumps',
     'edit',
     'format',
     'fqn',
-    'fromkeys',
-    'get',
     'items',
     'keys',
     'loads',
     'match',
-    'pop',
-    'popitem',
     'search',
     'update',
     'values'
