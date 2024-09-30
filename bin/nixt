@@ -11,8 +11,8 @@ import sys
 
 
 from nixt.command import Commands, Event, command, parse
-from nixt.default import Config
 from nixt.modules import face
+from nixt.object  import Config
 from nixt.runtime import NAME, Client, errors
 
 

@@ -8,7 +8,7 @@
 import threading
 
 
-from .default import Default
+from .object  import Default
 from .runtime import later
 
 
