@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C0413,W0212,W0401,W0614,W0622,W0718
+# pylint: disable=C0413,W0212,W0401,W0611,W0614,W0622,W0718,E0401
 
 
 "tinder"
@@ -17,11 +17,16 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.command import Commands, command, parse
-from nixt.object  import Default, Object
+from nixt         import Object
+from nixt.command import Commands, Event, command, parse
+from nixt.default import Default
 from nixt.modules import face
 from nixt.persist import Workdir, laps, skel
-from nixt.runtime import STARTTIME, Client, Event, errors, later, launch
+from nixt.runtime import NAME, STARTTIME, Client, errors, later, launch
+
+
+if os.path.exists('mods'):
+    from mods import face as MODS
 
 
 cfg = Default()
@@ -56,6 +61,8 @@ param.req = [""]
 param.res = [""]
 param.rss = ["http://hnrss.org/newest",]
 param.tdo = ["mekker"]
+param.tmr = ["13:00 bla", "23:59 mekker"]
+param.udp = ["mekker"]
 param.ver = [""]
 
 
@@ -79,7 +86,7 @@ class CLI(Client):
 def banner():
     "show banner."
     tme = time.ctime(time.time()).replace("  ", " ")
-    print(f"{Workdir.name.upper()} since {tme}")
+    print(f"{NAME.upper()} since {tme}")
 
 
 def consume(evts):
