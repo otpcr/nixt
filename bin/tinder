@@ -21,7 +21,8 @@ from nixt.command import Commands, Event, command, parse
 from nixt.modules import face
 from nixt.object  import Default, Object
 from nixt.persist import Workdir, laps, skel
-from nixt.runtime import NAME, STARTTIME, Client, errors, later, launch
+from nixt.runtime import NAME, STARTTIME, Client, Errors
+from nixt.runtime import errors, later, launch
 
 
 if os.path.exists('mods'):
@@ -150,7 +151,8 @@ def main():
         percall = (endtime-STARTTIME)/(nrs*nrcommands)
         print(",".join(Commands.cmds))
         print(f"{lap} {nrs} {nrcommands} {percall}")
-
+        if not Errors.errors:
+            print("no errors")
 
 if __name__ == "__main__":
     wrap(main)
