@@ -20,8 +20,8 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from ..        import Object, construct, update
-from ..default import Default
+from ..        import Object, update
+from ..classes import Default
 from ..command import Commands
 from ..method  import format
 from ..persist import find, fntime, laps, last, sync
@@ -536,7 +536,7 @@ def imp(event):
                 nrskip += 1
                 continue
             feed = Rss()
-            construct(feed, obj)
+            update(feed, obj)
             feed.rss = obj.xmlUrl
             feed.insertid = insertid
             sync(feed)

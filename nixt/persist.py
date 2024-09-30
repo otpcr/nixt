@@ -14,7 +14,7 @@ import _thread
 
 
 from .        import dump, load, update
-from .default import Default
+from .classes import Default
 from .method  import search
 
 
@@ -24,6 +24,7 @@ p        = os.path.join
 
 
 class ReadError(Exception):
+
     "error reading json file."
 
 

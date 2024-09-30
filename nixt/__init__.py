@@ -76,9 +76,10 @@ def get(obj, key, default=None):
 
 def items(obj):
     "return the items of an object."
-    if isinstance(obj, type({})):
+    if isinstance(obj,type({})):
         return obj.items()
-    return obj.__dict__.items()
+    else:
+        return obj.__dict__.items()
 
 
 def keys(obj):
@@ -105,10 +106,10 @@ def setdefault(obj, key, default):
 
 def update(obj, data, empty=True):
     "update an object."
-    for key, value in items(data):
-        if empty and not value:
-            continue
-        setattr(obj, key, value)
+    if isinstance(data, type({})):
+        obj.__dict__.update(data)
+    else:
+        obj.__dict__.update(vars(data))
 
 
 def values(obj):
@@ -138,12 +139,9 @@ class ObjectDecoder(json.JSONDecoder):
         return json.JSONDecoder.raw_decode(self, s, idx)
 
 
-def hook(objdict, typ=None):
+def hook(objdict):
     "construct object from dict."
-    if typ:
-        obj = typ()
-    else:
-        obj = Object()
+    obj = Object()
     construct(obj, objdict)
     return obj
 

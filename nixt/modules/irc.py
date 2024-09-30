@@ -17,7 +17,7 @@ import _thread
 
 
 from ..        import Object, keys
-from ..default import Default
+from ..classes import Default
 from ..command import Commands, Event, command
 from ..method  import edit, format
 from ..persist import last, sync
