@@ -72,13 +72,6 @@ METHODS = [
 ]
 
 
-DIFF = [
-    "__dict__",
-    "__module__",
-    "__slots__",
-]
-
-
 class TestInterface(unittest.TestCase):
 
     "TestInterface"

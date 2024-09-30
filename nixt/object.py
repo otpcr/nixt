@@ -13,27 +13,22 @@ class Object:
     "Object"
 
     def __contains__(self, key):
+        "verify containment."
         return key in dir(self)
 
-    def __delitem__(self, key):
-        del self.__dict__[key]
-
-    def __getitem__(self, key):
-        return self.__dict__.__getitem__(key)
-
     def __getstate__(self):
-        pass
+        "no pickle."
 
     def __iter__(self):
+        "iterate over the object."
         return iter(self.__dict__)
 
     def __len__(self):
+        "determine length of the object."
         return len(self.__dict__)
 
-    def __setitem__(self, key, value):
-        self.__dict__.__setitem__(key, value)
-
     def __str__(self):
+        "return printable string."
         return str(self.__dict__)
 
 

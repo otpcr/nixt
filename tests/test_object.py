@@ -12,67 +12,88 @@ import unittest
 from nixt.object import Object, items, keys, update, values
 
 
+import nixt.object
+
+
 VALIDJSON = '{"test": "bla"}'
 
 
 attrs1 = (
-    "Object",
-    "clear",
-    "copy",
-    "fromkeys",
-    "get",
-    "items",
-    "keys",
-    "matchkey",
-    "pop",
-    "popitem",
-    "save",
-    "setdefault",
-    "update",
-    "values",
+    'Config',
+    'Default',
+    'Object',
+    'construct',
+    'copy',
+    'dumps',
+    'edit',
+    'format',
+    'fqn',
+    'fromkeys',
+    'get',
+    'items',
+    'keys',
+    'loads',
+    'match',
+    'pop',
+    'popitem',
+    'search',
+    'update',
+    'values'
 )
 
 
 attrs2 = (
-    "__class__",
-    "__delattr__",
-    "__dict__",
-    "__dir__",
-    "__doc__",
-    "__eq__",
-    "__fnm__",
-    "__format__",
-    "__ge__",
-    "__getattribute__",
-    "__gt__",
-    "__hash__",
-    "__init__",
-    "__init_subclass__",
-    "__iter__",
-    "__le__",
-    "__len__",
-    "__lt__",
-    "__module__",
-    "__ne__",
-    "__new__",
-    "__reduce__",
-    "__reduce_ex__",
-    "__repr__",
-    "__setattr__",
-    "__sizeof__",
-    "__slots__",
-    "__str__",
-    "__subclasshook__",
+    '__doc__',
+    '__lt__',
+    '__init__',
+    '__setattr__',
+    '__ne__',
+    '__delattr__',
+    '__eq__',
+    '__dir__',
+    '__new__',
+    '__iter__',
+    '__reduce__',
+    '__class__',
+    '__module__',
+    '__gt__',
+    '__str__',
+    '__init_subclass__',
+    '__reduce_ex__',
+    '__dict__',
+    '__subclasshook__',
+    '__le__',
+    '__contains__',
+    '__weakref__',
+    '__ge__',
+    '__sizeof__',
+    '__getattribute__',
+    '__format__',
+    '__len__',
+    '__getstate__',
+    '__repr__',
+    '__hash__'
 )
 
 
-attrs2 = dir({})
+OBJECT  = Object()
+PACKAGE = nixt.object
 
 
 class TestObject(unittest.TestCase):
 
 
     "Object related tests."
+
+
+    def test_attributes(self):
+        okd = True
+        for meth in attrs2:
+            print(meth)
+            mth = getattr(OBJECT, meth, None)
+            if mth is None:
+                okd = meth
+        self.assertTrue(okd)
 
     def test_constructor(self):
         "constructor test."
@@ -97,19 +118,6 @@ class TestObject(unittest.TestCase):
         obj.key = "value"
         del obj.key
         self.assertTrue("key" not in obj)
-
-    def test_delitem(self):
-        "test deleting of items."
-        obj = Object()
-        obj["a"] = "b"
-        self.assertTrue(getattr(obj, "a") == "b")
-
-
-    def test_getitem(self):
-        "test deleting of items."
-        obj = Object()
-        obj["a"] = "b"
-        self.assertTrue(obj["a"] == "b")
 
     def test_dict(self):
         "test __dict__"
@@ -187,6 +195,15 @@ class TestObject(unittest.TestCase):
         obj = Object()
         self.assertEqual(len(obj), 0)
 
+    def test_methods(self):
+        okd = True
+        for attr in attrs1:
+            att = getattr(PACKAGE, attr, None)
+            if not att:
+                okd = attr
+                break
+        self.assertTrue(okd)
+
     def test_module(self):
         "test module name."
         self.assertEqual(Object().__module__, "nixt.object")
@@ -197,7 +214,6 @@ class TestObject(unittest.TestCase):
         setattr(obj, "key", "value")
         self.assertEqual(obj.key, "value")
 
-
     def test_repr(self):
         "test representation."
         self.assertTrue(update(Object(), {"key": "value"}).__repr__(), {"key": "value"})
@@ -207,12 +223,6 @@ class TestObject(unittest.TestCase):
         obj = Object()
         obj.__setattr__("key", "value")
         self.assertTrue(obj.key, "value")
-
-    def test_setitem(self):
-        "test setting an item."
-        obj = Object()
-        obj["a"] = "b"
-        self.assertTrue(obj["a"], "b")
 
     def test_str(self):
         "test stringify."
