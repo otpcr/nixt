@@ -1,10 +1,7 @@
 # This file is placed in the Public Domain.
-#
-#
-# pylint: disable=C,R,W1503
 
 
-"no tests"
+"hackernews"
 
 
 import unittest
@@ -15,10 +12,13 @@ from nixt.modules.rss import Parser
 
 class TestParse(unittest.TestCase):
 
+    "TestParse"
+
     def test_hnrss(self):
+        "test hackernews feed."
         res = Parser.parse(TXT)
         self.assertEqual(len(res), 20)
-        
+
 
 TXT = """
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hacker News: Newest</title><link>https://news.ycombinator.com/newest</link><description>Hacker News RSS</description><docs>https://hnrss.org/</docs><generator>hnrss v2.1.1</generator><lastBuildDate>Mon, 11 Mar 2024 19:18:15 +0000</lastBuildDate><atom:link href="https://hnrss.org/newest" rel="self" type="application/rss+xml"/><item><title><![CDATA[CISA forced to take two systems offline last month after Ivanti compromise]]></title><description><![CDATA[

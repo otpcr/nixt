@@ -1,16 +1,28 @@
 # This file is placed in the Public Domain.
-#
-#
-# pylint: disable=C,R,W1503
 
 
-"no tests"
+"opml"
 
 
 import unittest
 
 
 from nixt.modules.rss import OPMLParser
+
+
+class TestOPML(unittest.TestCase):
+
+    "TestOPML"
+
+    def test_opml(self):
+        "test opml export."
+        res = OPMLParser.parse(TXT, "outline", "title,type,text,xmlUrl")
+        self.assertTrue(len(res) == 20)
+
+    def test_import(self):
+        "test opml import."
+        res = OPMLParser.parse(TXT2, "outline", "name,display_list,xmlUrl")
+        self.assertTrue(len(res) == 1)
 
 
 TXT = """<opml version="1.0">
@@ -56,23 +68,12 @@ TXT = """<opml version="1.0">
 TXT2 = """
 <opml version="1.0">
     <head>
-        <title>OPML</title>
+        <title>rssbot opml</title>
     </head>
     <body>
-        <outline title="OPML" text="24/7 feed fetcher">
+        <outline title="rssbot opml" text="24/7 feed fetcher">
             <outline name="url1" display_list="title,link,author" xmlUrl="http://hnrss.org/newest"/>
         </outline>
     </body>
 </opml>
 """
-
-
-class TestOPML(unittest.TestCase):
-
-    def test_opml(self):
-        res = OPMLParser.parse(TXT, "outline", "title,type,text,xmlUrl")
-        self.assertTrue(len(res) == 20)
-
-    def test_import(self):
-        res = OPMLParser.parse(TXT2, "outline", "name,display_list,xmlUrl")
-        self.assertTrue(len(res) == 1)

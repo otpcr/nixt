@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R0903,W0401,W0614,W0622
+# pylint: disable=R,W0401,W0614,W0622
 # ruff: noqa: F403,F405
 
 
@@ -11,10 +11,10 @@ import sys
 import unittest
 
 
-from nixt.object import *
-
-
 import nixt
+
+
+from nixt import *
 
 
 PACKAGE = [
@@ -27,6 +27,9 @@ PACKAGE = [
     '__package__',
     '__path__',
     '__spec__',
+    'command',
+    'persist',
+    'runtime'
 ]
 
 
@@ -34,6 +37,7 @@ METHODS = [
     '__class__',
     '__contains__',
     '__delattr__',
+    '__delitem__',
     '__dict__',
     '__dir__',
     '__doc__',
@@ -41,6 +45,7 @@ METHODS = [
     '__format__',
     '__ge__',
     '__getattribute__',
+    '__getitem__',
     '__getstate__',
     '__gt__',
     '__hash__',
@@ -57,6 +62,7 @@ METHODS = [
     '__reduce_ex__',
     '__repr__',
     '__setattr__',
+    '__setitem__',
     '__sizeof__',
     '__str__',
     '__subclasshook__',
@@ -64,17 +70,11 @@ METHODS = [
 ]
 
 
-DICT = {}
-
-
 DIFF = [
     "__dict__",
     "__module__",
     "__slots__",
 ]
-
-
-OBJECT = nixt
 
 
 class TestInterface(unittest.TestCase):
@@ -85,16 +85,11 @@ class TestInterface(unittest.TestCase):
         "test methods interface."
         okd = True
         for meth in PACKAGE:
-            func1 = getattr(OBJECT, meth)
+            func1 = getattr(nixt, meth, None)
             if not func1:
-                continue
-            func2 = DICT.get(meth)
-            if not func2:
-                continue
-            if dir(func1) != dir(func2):
-                print(func1, func2)
+                print(f"missing {meth}")
                 okd = False
-            sys.stdout.flush()
+                break
         self.assertTrue(okd)
 
 
@@ -102,17 +97,10 @@ class TestInterface(unittest.TestCase):
         "test methods interface."
         okd = True
         obj = Object()
-        for meth in METHODS:
-            func1 = getattr(obj, meth)
-            if not func1:
-                continue
-            func2 = DICT.get(meth)
-            if not func2:
-                continue
-            if dir(func1) != dir(func2):
-                print(func1, func2)
+        for meth in dir(obj):
+            if meth not in METHODS:
+                print(f"missing method {meth}")
                 okd = False
-            sys.stdout.flush()
         self.assertTrue(okd)
 
 

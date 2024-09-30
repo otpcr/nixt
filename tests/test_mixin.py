@@ -8,11 +8,10 @@
 import unittest
 
 
-from nixt.object import Object
+from nixt import Object
 
 
 class Mix:
-
     "class to mixin."
 
     a = "b"

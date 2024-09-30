@@ -1,10 +1,7 @@
 # This file is placed in the Public Domain.
-#
-#
-# pylint: disable=C,R,W1503
 
 
-"no tests"
+"github"
 
 
 import unittest
@@ -15,7 +12,10 @@ from nixt.modules.rss import Parser
 
 class TestAtom(unittest.TestCase):
 
+    "TestAtom"
+
     def test_github(self):
+        "test atom feeds."
         res = Parser.parse(TXT, "entry", "title,author,link")
         self.assertEqual(len(res), 20)
 
