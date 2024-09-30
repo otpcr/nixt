@@ -12,8 +12,8 @@ import sys
 import termios
 
 
-from nixt.classes import Config
 from nixt.command import Event, command, parse
+from nixt.default import Config
 from nixt.modules import face
 from nixt.runtime import Client, Logging
 from nixt.runtime import banner, errors, forever, init, later

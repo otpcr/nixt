@@ -14,7 +14,7 @@ import unittest
 import nixt
 
 
-from nixt import *
+from nixt.object import *
 
 
 PACKAGE = [
@@ -28,6 +28,8 @@ PACKAGE = [
     '__path__',
     '__spec__',
     'command',
+    'method',
+    'object',
     'persist',
     'runtime'
 ]

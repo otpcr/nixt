@@ -5,7 +5,7 @@
 "default values"
 
 
-from . import Object
+from .object import Object
 
 
 class Default(Object):

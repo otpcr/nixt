@@ -293,7 +293,7 @@ def forever():
 
 
 def init(*pkgs):
-    "scan modules for commands and classes"
+    "run the init function in modules."
     mods = []
     for pkg in pkgs:
         for modname in modnames(pkg):

@@ -9,7 +9,7 @@
 import unittest
 
 
-from nixt import Object, items, keys, update, values
+from nixt.object import Object, items, keys, update, values
 
 
 VALIDJSON = '{"test": "bla"}'
@@ -189,7 +189,7 @@ class TestObject(unittest.TestCase):
 
     def test_module(self):
         "test module name."
-        self.assertEqual(Object().__module__, "nixt")
+        self.assertEqual(Object().__module__, "nixt.object")
 
     def test_register(self):
         "test setting attribute."        

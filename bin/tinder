@@ -18,8 +18,8 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt         import Object
-from nixt.classes import Default
 from nixt.command import Commands, Event, command, parse
+from nixt.default import Default
 from nixt.modules import face
 from nixt.persist import Workdir, laps, skel
 from nixt.runtime import NAME, STARTTIME, Client, errors, later, launch

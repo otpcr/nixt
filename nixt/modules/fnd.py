@@ -9,7 +9,7 @@ import time
 
 
 from ..command import Commands
-from ..method  import format
+from ..object  import format
 from ..persist import find, fntime, laps, long, skel, store, types
 
 
