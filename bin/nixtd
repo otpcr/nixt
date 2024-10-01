@@ -11,9 +11,9 @@ import os
 import sys
 
 
+from nixt.main    import forever, init, pidfile, privileges
 from nixt.modules import face
 from nixt.persist import pidname
-from nixt.runtime import forever, init, pidfile, privileges
 
 
 def daemon(verbose=False):

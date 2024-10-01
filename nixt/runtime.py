@@ -16,10 +16,6 @@ import types
 import _thread
 
 
-NAME      = __file__.rsplit("/", maxsplit=2)[-2]
-STARTTIME = time.time()
-
-
 class Broker:
 
     "Broker"
@@ -71,7 +67,7 @@ class Reactor:
         "call callback based on event type."
         func = self.cbs.get(evt.type, None)
         if func:
-            launch(func, self, evt)
+            launch(func, self, evt, name=evt.txt.split()[0])
 
     def loop(self):
         "proces events until interrupted."
@@ -175,6 +171,33 @@ class Thread(threading.Thread):
             later(ex)
 
 
+def launch(func, *args, **kwargs):
+    "launch a thread."
+    name = kwargs.get("name", named(func))
+    thread = Thread(func, name, *args, **kwargs)
+    thread.start()
+    debug(f"THR {thread}")
+    return thread
+
+
+def named(obj):
+    "return a full qualified name of an object/function/module."
+    if isinstance(obj, types.ModuleType):
+        return obj.__name__
+    typ = type(obj)
+    if '__builtins__' in dir(typ):
+        return obj.__name__
+    if '__self__' in dir(obj):
+        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj) and '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj):
+        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
+    if '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    return None
+
+
 class Timer:
 
     "Timer"
@@ -274,98 +297,6 @@ def debug(txt):
         Logging.out(txt)
 
 
-"utilities"
-
-
-def banner():
-    "show banner."
-    tme = time.ctime(time.time()).replace("  ", " ")
-    debug(f"{NAME.upper()} since {tme}")
-
-
-def forever():
-    "it doesn't stop, until ctrl-c"
-    while True:
-        try:
-            time.sleep(1.0)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-
-
-def init(*pkgs):
-    "run the init function in modules."
-    mods = []
-    for pkg in pkgs:
-        for modname in modnames(pkg):
-            modi = getattr(pkg, modname)
-            if "init" not in dir(modi):
-                continue
-            thr = launch(modi.init)
-            mods.append((modi, thr))
-    return mods
-
-
-def launch(func, *args, **kwargs):
-    "launch a thread."
-    name = kwargs.get("name", named(func))
-    thread = Thread(func, name, *args, **kwargs)
-    thread.start()
-    return thread
-
-
-def modnames(*args):
-    "return module names."
-    res = []
-    for arg in args:
-        res.extend([x for x in dir(arg) if not x.startswith("__")])
-    return sorted(res)
-
-
-def named(obj):
-    "return a full qualified name of an object/function/module."
-    if isinstance(obj, types.ModuleType):
-        return obj.__name__
-    typ = type(obj)
-    if '__builtins__' in dir(typ):
-        return obj.__name__
-    if '__self__' in dir(obj):
-        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj) and '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj):
-        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
-    if '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    return None
-
-
-def pidfile(filename):
-    "write the pid to a file."
-    if os.path.exists(filename):
-        os.unlink(filename)
-    path = pathlib.Path(filename)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(filename, "w", encoding="utf-8") as fds:
-        fds.write(str(os.getpid()))
-
-
-def privileges(username):
-    "privileges."
-    pwnam = pwd.getpwnam(username)
-    os.setgid(pwnam.pw_gid)
-    os.setuid(pwnam.pw_uid)
-
-
-def wrap(func, outer):
-    "reset console."
-    try:
-        func()
-    except (KeyboardInterrupt, EOFError):
-        outer("")
-    except Exception as ex:
-        later(ex)
-
-
 "interface"
 
 
@@ -379,14 +310,8 @@ def __dir__():
         'Thread',
         'Timer',
         'debug',
-        'forever',
         'errors',
-        'init',
         'later',
         'launch',
-        'modnames',
-        'named',
-        'pidfile',
-        'privileges',
-        'wait'
+        'named'
     )

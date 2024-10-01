@@ -9,9 +9,9 @@ import time
 
 
 from ..command import Commands
+from ..main    import STARTTIME
 from ..object  import Object, update
 from ..persist import laps
-from ..runtime import STARTTIME
 
 
 def thr(event):

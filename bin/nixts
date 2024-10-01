@@ -8,9 +8,10 @@
 import getpass
 
 
+from nixt.main    import forever, init, pidfile, privileges, wrap
 from nixt.modules import face
 from nixt.persist import pidname
-from nixt.runtime import errors, forever, init, pidfile, privileges, wrap
+from nixt.runtime import errors
 
 
 def main():

@@ -600,7 +600,7 @@ def cb_privmsg(bot, evt):
             return
         if evt.txt:
             evt.txt = evt.txt[0].lower() + evt.txt[1:]
-        debug(f"command from {evt.origin}: {evt.txt}")
+        debug(f"CMD {evt.origin}: {evt.txt}")
         command(bot, evt)
 
 
