@@ -141,8 +141,11 @@ def main():
     clt = CLI()
     clt.start()
     nrs = cfg.index or 1
+    thrs = []
     for _nr in range(nrs):
-        launch(payload, clt)
+        thrs.append(launch(payload, clt))
+    for thr in thrs:
+        thr.join()
     consume(events)
     clt.wait()
     if "v" in cfg.opts:

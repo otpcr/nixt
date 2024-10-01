@@ -15,10 +15,16 @@ from nixt.modules import face
 from nixt.runtime import NAME, Client, errors
 
 
-"defines"
-
-
 cfg = Config()
+
+
+class CLI(Client):
+
+    "CLI"
+
+    def raw(self, txt):
+        "print text."
+        print(txt)
 
 
 TXT = """[Unit]
@@ -33,15 +39,6 @@ ExecStart=/home/%s/.local/bin/%ss
 
 [Install]
 WantedBy=multi-user.target"""
-
-
-class CLI(Client):
-
-    "CLI"
-
-    def raw(self, txt):
-        "print text."
-        print(txt)
 
 
 "commands"
