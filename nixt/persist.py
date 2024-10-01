@@ -52,6 +52,10 @@ def long(name):
     return res
 
 
+def modpath():
+    return os.path.join(Workdir.wdr, "mods")
+
+
 def pidname():
     "return pidfile path."
     return os.path.join(Workdir.wdr, f"{Workdir.name}.pid")
@@ -60,6 +64,9 @@ def pidname():
 def skel():
     "create directory,"
     stor = p(Workdir.wdr, "store", "")
+    path = pathlib.Path(stor)
+    path.mkdir(parents=True, exist_ok=True)
+    stor = p(Workdir.wdr, "mods", "")
     path = pathlib.Path(stor)
     path.mkdir(parents=True, exist_ok=True)
     return path
@@ -262,6 +269,7 @@ def __dir__():
         'last',
         'laps',
         'long',
+        'mods',
         'pidname',
         'read',
         'skel',

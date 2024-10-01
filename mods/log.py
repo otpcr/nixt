@@ -8,9 +8,8 @@
 import time
 
 
-from ..command import Commands
-from ..object  import Object
-from ..persist import find, laps, sync, fntime
+from nixt.object  import Object
+from nixt.persist import find, laps, sync, fntime
 
 
 class Log(Object):
@@ -37,6 +36,3 @@ def log(event):
     obj.txt = event.rest
     sync(obj)
     event.reply('ok')
-
-
-Commands.add(log)

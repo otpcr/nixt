@@ -12,6 +12,9 @@ import unittest
 
 
 import nixt
+import nixt.object
+import nixt.persist
+import nixt.runtime
 
 
 from nixt.object import *
@@ -27,7 +30,6 @@ PACKAGE = [
     '__package__',
     '__path__',
     '__spec__',
-    'command',
     'object',
     'persist',
     'runtime'
@@ -78,14 +80,13 @@ class TestInterface(unittest.TestCase):
     def test_package(self):
         "test methods interface."
         okd = True
-        for meth in PACKAGE:
-            func1 = getattr(nixt, meth, None)
-            if not func1:
-                print(f"missing {meth}")
+        for mod in PACKAGE:
+            mod1 = getattr(nixt, mod, None)
+            if not mod1:
+                print(f"missing {mod}")
                 okd = False
                 break
         self.assertTrue(okd)
-
 
     def test_objects(self):
         "test methods interface."

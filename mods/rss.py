@@ -20,26 +20,9 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from ..command import Commands
-from ..object  import Object, Obj, format, update
-from ..persist import find, fntime, laps, last, sync
-from ..runtime import Broker, Repeater, launch
-
-
-def init():
-    "start fetcher."
-    fetcher = Fetcher()
-    fetcher.start()
-    return fetcher
-
-
-def spl(txt):
-    "split comma separated string into a list."
-    try:
-        result = txt.split(',')
-    except (TypeError, ValueError):
-        result = txt
-    return [x for x in result if x]
+from nixt.object  import Object, Obj, format, update
+from nixt.persist import find, fntime, laps, last, sync
+from nixt.runtime import Broker, Repeater, launch
 
 
 DEBUG = False
@@ -58,6 +41,22 @@ importlock = _thread.allocate_lock()
 
 
 skipped = []
+
+
+def init():
+    "start fetcher."
+    fetcher = Fetcher()
+    fetcher.start()
+    return fetcher
+
+
+def spl(txt):
+    "split comma separated string into a list."
+    try:
+        result = txt.split(',')
+    except (TypeError, ValueError):
+        result = txt
+    return [x for x in result if x]
 
 
 class Feed(Obj):
@@ -309,9 +308,6 @@ def dpl(event):
     event.reply('ok')
 
 
-Commands.add(dpl)
-
-
 def nme(event):
     "set name of feed."
     if len(event.args) != 2:
@@ -323,9 +319,6 @@ def nme(event):
             feed.name = event.args[1]
             sync(feed, fnm)
     event.reply('ok')
-
-
-Commands.add(nme)
 
 
 def rem(event):
@@ -342,9 +335,6 @@ def rem(event):
     event.reply('ok')
 
 
-Commands.add(rem)
-
-
 def res(event):
     "restore a feed."
     if len(event.args) != 1:
@@ -357,9 +347,6 @@ def res(event):
             feed.__deleted__ = False
             sync(feed, fnm)
     event.reply('ok')
-
-
-Commands.add(res)
 
 
 def rss(event):
@@ -387,9 +374,6 @@ def rss(event):
     event.reply('ok')
 
 
-Commands.add(rss)
-
-
 def syn(event):
     "synchronize feeds."
     if DEBUG:
@@ -402,9 +386,6 @@ def syn(event):
         thr.join()
         nrs += 1
     event.reply(f"{nrs} feeds synced")
-
-
-Commands.add(syn)
 
 
 class OPMLParser:
@@ -503,9 +484,6 @@ def exp(event):
     event.reply("</opml>")
 
 
-Commands.add(exp)
-
-
 def imp(event):
     "import opml."
     if not event.args:
@@ -543,6 +521,3 @@ def imp(event):
         event.reply(f"skipped {nrskip} urls.")
     if nrs:
         event.reply(f"added {nrs} urls.")
-
-
-Commands.add(imp)

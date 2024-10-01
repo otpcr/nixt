@@ -8,10 +8,11 @@ import threading
 import time
 
 
-from ..command import Commands
-from ..main    import STARTTIME
-from ..object  import Object, update
-from ..persist import laps
+STARTTIME = time.time()
+
+
+from nixt.object  import Object, update
+from nixt.persist import laps
 
 
 def thr(event):
@@ -39,6 +40,3 @@ def thr(event):
         event.reply(' '.join(res))
     else:
         event.reply('no threads')
-
-
-Commands.add(thr)

@@ -270,6 +270,7 @@ def search(obj, selector, matching=None):
 
 def __dir__():
     return (
+        'Config',
         'Object',
         'Obj',
         'construct',

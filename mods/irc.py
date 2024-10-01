@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R,W0105,W0201,w0622,W0718,E1102
+# pylint: disable=R,W0105,W0201,W0613,w0622,W0718,E1102
 
 
 "internet relay chat"
@@ -16,17 +16,17 @@ import time
 import _thread
 
 
-from ..command import Commands, Event, command
-from ..object  import  Object, Obj, edit, keys, format
-from ..persist import last, sync
-from ..runtime import Broker, Client, Logging, debug, later, launch
+from nixt.object  import  Object, Obj, edit, keys, format
+from nixt.persist import last, sync
+from nixt.runtime import Broker, Event, Reactor, later, launch
 
 
-NAME = Client.__module__.split(".", maxsplit=2)[-2]
+NAME = Reactor.__module__.split(".", maxsplit=2)[-2]
 VERBOSE = False
 
 
-Logging.filter = ["PING", "PONG", "PRIVMSG"]
+def debug(txt):
+    "echo to screen" 
 
 
 saylock = _thread.allocate_lock()
@@ -158,12 +158,12 @@ class Output:
         return 0
 
 
-class IRC(Client, Output):
+class IRC(Reactor, Output):
 
     "IRC"
 
     def __init__(self):
-        Client.__init__(self)
+        Reactor.__init__(self)
         Output.__init__(self)
         self.buffer = []
         self.cfg = Config()
@@ -502,7 +502,7 @@ class IRC(Client, Output):
         self.events.connected.clear()
         self.events.joined.clear()
         launch(Output.out, self)
-        Client.start(self)
+        Reactor.start(self)
         launch(
                self.doconnect,
                self.cfg.server or "localhost",
@@ -518,7 +518,7 @@ class IRC(Client, Output):
         self.disconnect()
         self.dostop.set()
         self.oput(None, None)
-        Client.stop(self)
+        Reactor.stop(self)
 
     def wait(self):
         "wait for ready."
@@ -600,8 +600,6 @@ def cb_privmsg(bot, evt):
             return
         if evt.txt:
             evt.txt = evt.txt[0].lower() + evt.txt[1:]
-        debug(f"CMD {evt.origin}: {evt.txt}")
-        command(bot, evt)
 
 
 def cb_quit(bot, evt):
@@ -632,9 +630,6 @@ def cfg(event):
         event.reply('ok')
 
 
-Commands.add(cfg)
-
-
 def mre(event):
     "show from output cache."
     if not event.channel:
@@ -655,9 +650,6 @@ def mre(event):
     event.reply(f'{size} more in cache')
 
 
-Commands.add(mre)
-
-
 def pwd(event):
     "create a base64 password."
     if len(event.args) != 2:
@@ -670,6 +662,3 @@ def pwd(event):
     base = base64.b64encode(enc)
     dcd = base.decode('ascii')
     event.reply(dcd)
-
-
-Commands.add(pwd)

@@ -13,76 +13,38 @@ import types
 import _thread
 
 
-"threads"
+"events"
 
 
-class Thread(threading.Thread):
+class Event:
 
-    "Thread"
+    "Event"
 
-    def __init__(self, func, thrname, *args, daemon=True, **kwargs):
-        super().__init__(None, self.run, thrname, (), {}, daemon=daemon)
-        self.name      = thrname
-        self.queue     = queue.Queue()
-        self.result    = None
-        self.starttime = time.time()
-        self.queue.put_nowait((func, args))
+    def __init__(self):
+        self._ready  = threading.Event()
+        self._thr    = None
+        self.channel = ""
+        self.orig    = ""
+        self.result  = []
+        self.txt     = ""
+        self.type    = "event"
 
-    def __contains__(self, key):
-        return key in self.__dict__
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
 
-    def __iter__(self):
-        return self
+    def ready(self):
+        "flag event as ready."
+        self._ready.set()
 
-    def __next__(self):
-        yield from dir(self)
+    def reply(self, txt):
+        "add text to the result."
+        self.result.append(txt)
 
-    def size(self):
-        "return qsize"
-        return self.queue.qsize()
-
-    def join(self, timeout=None):
-        "join this thread."
-        super().join(timeout)
-        return self.result
-
-    def run(self):
-        "run this thread's payload."
-        try:
-            func, args = self.queue.get()
-            self.result = func(*args)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-        except Exception as ex:
-            later(ex)
-
-
-def launch(func, *args, **kwargs):
-    "launch a thread."
-    name = kwargs.get("name", named(func))
-    thread = Thread(func, name, *args, **kwargs)
-    thread.start()
-    debug(f"THR {thread}")
-    return thread
-
-
-def named(obj):
-    "return a full qualified name of an object/function/module."
-    if isinstance(obj, types.ModuleType):
-        return obj.__name__
-    typ = type(obj)
-    if '__builtins__' in dir(typ):
-        return obj.__name__
-    if '__self__' in dir(obj):
-        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj) and '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj):
-        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
-    if '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    return None
-
+    def wait(self):
+        "wait for results."
+        self._ready.wait()
+        if self._thr:
+            self._thr.join()
 
 "reactor"
 
@@ -158,6 +120,77 @@ class Client(Reactor):
     def raw(self, txt):
         "print to screen."
         raise NotImplementedError
+
+
+"threads"
+
+
+class Thread(threading.Thread):
+
+    "Thread"
+
+    def __init__(self, func, thrname, *args, daemon=True, **kwargs):
+        super().__init__(None, self.run, thrname, (), {}, daemon=daemon)
+        self.name      = thrname
+        self.queue     = queue.Queue()
+        self.result    = None
+        self.starttime = time.time()
+        self.queue.put_nowait((func, args))
+
+    def __contains__(self, key):
+        return key in self.__dict__
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        yield from dir(self)
+
+    def size(self):
+        "return qsize"
+        return self.queue.qsize()
+
+    def join(self, timeout=None):
+        "join this thread."
+        super().join(timeout)
+        return self.result
+
+    def run(self):
+        "run this thread's payload."
+        try:
+            func, args = self.queue.get()
+            self.result = func(*args)
+        except (KeyboardInterrupt, EOFError):
+            _thread.interrupt_main()
+        except Exception as ex:
+            later(ex)
+
+
+def launch(func, *args, **kwargs):
+    "launch a thread."
+    name = kwargs.get("name", named(func))
+    thread = Thread(func, name, *args, **kwargs)
+    thread.start()
+    return thread
+
+
+def named(obj):
+    "return a full qualified name of an object/function/module."
+    if isinstance(obj, types.ModuleType):
+        return obj.__name__
+    typ = type(obj)
+    if '__builtins__' in dir(typ):
+        return obj.__name__
+    if '__self__' in dir(obj):
+        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj) and '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj):
+        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
+    if '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    return None
+
 
 
 "timers"
@@ -265,39 +298,12 @@ def fmat(exc):
                               )
 
 
-def errors(outer):
-    "display errors."
-    for exc in Errors.errors:
-        for line in exc:
-            outer(line.strip())
-
-
 def later(exc):
     "add an exception"
     excp = exc.with_traceback(exc.__traceback__)
     fmt = fmat(excp)
     if fmt not in Errors.errors:
         Errors.errors.append(fmt)
-
-
-"logging"
-
-
-class Logging:
-
-    "Logging"
-
-    filter = []
-    out = None
-
-
-def debug(txt):
-    "print to console."
-    for skp in Logging.filter:
-        if skp in txt:
-            return
-    if Logging.out:
-        Logging.out(txt)
 
 
 "interface"
@@ -312,8 +318,6 @@ def __dir__():
         'Repeater',
         'Thread',
         'Timer',
-        'debug',
-        'errors',
         'later',
         'launch',
         'named'
