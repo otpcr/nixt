@@ -260,7 +260,7 @@ def wrap(func, outer):
 "commands"
 
 
-def ls(event):
+def cmd(event):
     "list commands."
     event.reply(",".join(sorted(keys(Commands.cmds))))
 
@@ -276,9 +276,9 @@ def srv(event):
 
 def main():
     "main"
-    parse(cfg, " ".join(sys.argv[1:]))
-    Commands.add(ls)
+    Commands.add(cmd)
     Commands.add(srv)
+    parse(cfg, " ".join(sys.argv[1:]))
     scanner(face)
     cli = CLI()
     evt = Event()

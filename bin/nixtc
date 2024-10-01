@@ -280,7 +280,7 @@ def wrap(func):
 "commands"
 
 
-def ls(event):
+def cmd(event):
     "list commands."
     event.reply(",".join(sorted(keys(Commands.cmds))))
 
@@ -291,7 +291,7 @@ def ls(event):
 def main():
     "main"
     readline.redisplay()
-    Commands.add(ls)
+    Commands.add(cmd)
     parse(cfg, " ".join(sys.argv[1:]))
     if "v" in cfg.opts:
         banner()
