@@ -21,7 +21,7 @@ from urllib.parse import quote_plus, urlencode
 
 
 from ..command import Commands
-from ..object  import Default, Object, format, update
+from ..object  import Object, Obj, format, update
 from ..persist import find, fntime, laps, last, sync
 from ..runtime import Broker, Repeater, launch
 
@@ -60,23 +60,23 @@ importlock = _thread.allocate_lock()
 skipped = []
 
 
-class Feed(Default):
+class Feed(Obj):
 
     "Feed"
 
 
-class Rss(Default):
+class Rss(Obj):
 
     "Rss"
 
     def __init__(self):
-        Default.__init__(self)
+        Obj.__init__(self)
         self.display_list = 'title,link,author'
         self.insertid     = None
         self.rss          = ''
 
 
-class Urls(Default):
+class Urls(Obj):
 
     "Seen"
 
@@ -209,7 +209,7 @@ class Parser:
         result = []
         for line in Parser.getitems(txt, toke):
             line = line.strip()
-            obj = Default()
+            obj = Obj()
             for itm in spl(items):
                 val = Parser.getitem(line, itm)
                 if val:
@@ -463,7 +463,7 @@ class OPMLParser:
         for attrz in OPMLParser.getattrs(txt, toke):
             if not attrz:
                 continue
-            obj = Default()
+            obj = Obj()
             for itm in spl(itemz):
                 if itm == "link":
                     itm = "href"
@@ -493,7 +493,7 @@ def exp(event):
     nrs = 0
     for _fn, ooo in find("rss"):
         nrs += 1
-        obj = Default()
+        obj = Obj()
         update(obj, ooo)
         name = obj.name or f"url{nrs}"
         txt = f'<outline name="{name}" display_list="{obj.display_list}" xmlUrl="{obj.rss}"/>'

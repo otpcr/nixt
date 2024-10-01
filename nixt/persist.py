@@ -13,12 +13,15 @@ import time
 import _thread
 
 
-from .object  import Default, dump, load, search, update
+from .object  import Obj, dump, load, search, update
 
 
 lock     = _thread.allocate_lock()
 disklock = _thread.allocate_lock()
 p        = os.path.join
+
+
+"exceptions"
 
 
 class ReadError(Exception):
@@ -34,7 +37,7 @@ class Workdir:
     "Workdir"
 
     fqns = []
-    name = Default.__module__.split(".", maxsplit=2)[-1]
+    name = Obj.__module__.split(".", maxsplit=2)[-1]
     wdr = os.path.expanduser(f"~/.{name}")
 
 
@@ -99,7 +102,7 @@ def find(mtc, selector=None, index=None, deleted=False, matching=False):
     clz = long(mtc)
     nrs = -1
     for fnm in sorted(fns(clz), key=fntime):
-        obj = Default()
+        obj = Obj()
         fetch(obj, fnm)
         if not deleted and '__deleted__' in obj and obj.__deleted__:
             continue

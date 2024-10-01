@@ -8,13 +8,8 @@
 import threading
 
 
-from .object  import Default
+from .object  import Obj
 from .runtime import later
-
-
-class Config(Default):
-
-    "Config"
 
 
 class Commands:
@@ -84,13 +79,13 @@ def parse(obj, txt=None):
     args = []
     obj.args    = []
     obj.cmd     = ""
-    obj.gets    = Default()
+    obj.gets    = Obj()
     obj.hasmods = False
     obj.index   = None
     obj.mod     = ""
     obj.opts    = ""
     obj.result  = []
-    obj.sets    = Default()
+    obj.sets    = Obj()
     obj.txt     = txt or ""
     obj.otxt    = obj.txt
     _nr = -1

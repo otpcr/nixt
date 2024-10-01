@@ -13,39 +13,75 @@ import types
 import _thread
 
 
-class Broker:
+"threads"
 
-    "Broker"
 
-    objs = {}
+class Thread(threading.Thread):
 
-    @staticmethod
-    def add(obj):
-        "add object."
-        Broker.objs[repr(obj)] = obj
+    "Thread"
 
-    @staticmethod
-    def announce(txt, kind=None):
-        "announce text on brokered objects."
-        for obj in Broker.all(kind):
-            if "announce" in dir(obj):
-                obj.announce(txt)
+    def __init__(self, func, thrname, *args, daemon=True, **kwargs):
+        super().__init__(None, self.run, thrname, (), {}, daemon=daemon)
+        self.name      = thrname
+        self.queue     = queue.Queue()
+        self.result    = None
+        self.starttime = time.time()
+        self.queue.put_nowait((func, args))
 
-    @staticmethod
-    def all(kind=None):
-        "return all objects."
-        result = []
-        if kind is not None:
-            for key in [x for x in Broker.objs if kind in x]:
-                result.append(Broker.get(key))
-        else:
-            result.extend(list(Broker.objs.values()))
-        return result
+    def __contains__(self, key):
+        return key in self.__dict__
 
-    @staticmethod
-    def get(orig):
-        "return object by matching repr."
-        return Broker.objs.get(orig)
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        yield from dir(self)
+
+    def size(self):
+        "return qsize"
+        return self.queue.qsize()
+
+    def join(self, timeout=None):
+        "join this thread."
+        super().join(timeout)
+        return self.result
+
+    def run(self):
+        "run this thread's payload."
+        try:
+            func, args = self.queue.get()
+            self.result = func(*args)
+        except (KeyboardInterrupt, EOFError):
+            _thread.interrupt_main()
+        except Exception as ex:
+            later(ex)
+
+
+def launch(func, *args, **kwargs):
+    "launch a thread."
+    name = kwargs.get("name", named(func))
+    thread = Thread(func, name, *args, **kwargs)
+    thread.start()
+    debug(f"THR {thread}")
+    return thread
+
+
+def named(obj):
+    "return a full qualified name of an object/function/module."
+    if isinstance(obj, types.ModuleType):
+        return obj.__name__
+    typ = type(obj)
+    if '__builtins__' in dir(typ):
+        return obj.__name__
+    if '__self__' in dir(obj):
+        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj) and '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj):
+        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
+    if '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    return None
 
 
 "reactor"
@@ -124,75 +160,7 @@ class Client(Reactor):
         raise NotImplementedError
 
 
-"threads"
-
-
-class Thread(threading.Thread):
-
-    "Thread"
-
-    def __init__(self, func, thrname, *args, daemon=True, **kwargs):
-        super().__init__(None, self.run, thrname, (), {}, daemon=daemon)
-        self.name      = thrname
-        self.queue     = queue.Queue()
-        self.result    = None
-        self.starttime = time.time()
-        self.queue.put_nowait((func, args))
-
-    def __contains__(self, key):
-        return key in self.__dict__
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        yield from dir(self)
-
-    def size(self):
-        "return qsize"
-        return self.queue.qsize()
-
-    def join(self, timeout=None):
-        "join this thread."
-        super().join(timeout)
-        return self.result
-
-    def run(self):
-        "run this thread's payload."
-        try:
-            func, args = self.queue.get()
-            self.result = func(*args)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-        except Exception as ex:
-            later(ex)
-
-
-def launch(func, *args, **kwargs):
-    "launch a thread."
-    name = kwargs.get("name", named(func))
-    thread = Thread(func, name, *args, **kwargs)
-    thread.start()
-    debug(f"THR {thread}")
-    return thread
-
-
-def named(obj):
-    "return a full qualified name of an object/function/module."
-    if isinstance(obj, types.ModuleType):
-        return obj.__name__
-    typ = type(obj)
-    if '__builtins__' in dir(typ):
-        return obj.__name__
-    if '__self__' in dir(obj):
-        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj) and '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj):
-        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
-    if '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    return None
+"timers"
 
 
 class Timer:
@@ -238,6 +206,44 @@ class Repeater(Timer):
     def run(self):
         launch(self.start)
         super().run()
+
+
+"broker"
+
+
+class Broker:
+
+    "Broker"
+
+    objs = {}
+
+    @staticmethod
+    def add(obj):
+        "add object."
+        Broker.objs[repr(obj)] = obj
+
+    @staticmethod
+    def announce(txt, kind=None):
+        "announce text on brokered objects."
+        for obj in Broker.all(kind):
+            if "announce" in dir(obj):
+                obj.announce(txt)
+
+    @staticmethod
+    def all(kind=None):
+        "return all objects."
+        result = []
+        if kind is not None:
+            for key in [x for x in Broker.objs if kind in x]:
+                result.append(Broker.get(key))
+        else:
+            result.extend(list(Broker.objs.values()))
+        return result
+
+    @staticmethod
+    def get(orig):
+        "return object by matching repr."
+        return Broker.objs.get(orig)
 
 
 "errors"

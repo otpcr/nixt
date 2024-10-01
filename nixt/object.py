@@ -8,6 +8,9 @@
 import json
 
 
+"object"
+
+
 class Object:
 
     "Object"
@@ -18,6 +21,7 @@ class Object:
 
     def __getstate__(self):
         "no pickle."
+        return dumps(self)
 
     def __iter__(self):
         "iterate over the object."
@@ -32,9 +36,9 @@ class Object:
         return str(self.__dict__)
 
 
-class Default(Object):
+class Obj(Object):
 
-    "Default"
+    "default values"
 
     def __getattr__(self, key):
         return self.__dict__.get(key, "")
@@ -266,8 +270,8 @@ def search(obj, selector, matching=None):
 
 def __dir__():
     return (
-        'Default',
         'Object',
+        'Obj',
         'construct',
         'edit',
         'format',

@@ -17,7 +17,7 @@ import _thread
 
 
 from ..command import Commands, Event, command
-from ..object  import Default, Object, edit, keys, format
+from ..object  import  Object, Obj, edit, keys, format
 from ..persist import last, sync
 from ..runtime import Broker, Client, Logging, debug, later, launch
 
@@ -41,7 +41,7 @@ def init():
     return irc
 
 
-class Config(Default):
+class Config(Obj):
 
     "Config"
 
@@ -61,7 +61,7 @@ class Config(Default):
     verbose = False
 
     def __init__(self):
-        Default.__init__(self)
+        Obj.__init__(self)
         self.channel = self.channel or Config.channel
         self.commands = self.commands or Config.commands
         self.nick = self.nick or Config.nick
@@ -168,13 +168,13 @@ class IRC(Client, Output):
         self.buffer = []
         self.cfg = Config()
         self.channels = []
-        self.events = Default()
+        self.events = Obj()
         self.events.authed = threading.Event()
         self.events.connected = threading.Event()
         self.events.joined = threading.Event()
         self.events.ready = threading.Event()
         self.sock = None
-        self.state = Default()
+        self.state = Obj()
         self.state.dostop = False
         self.state.error = ""
         self.state.keeprunning = False

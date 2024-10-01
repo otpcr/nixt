@@ -12,11 +12,23 @@ import time
 import _thread
 
 
+from .object  import Obj
 from .runtime import debug, later, launch
+
+
+"defines"
 
 
 NAME      = __file__.rsplit("/", maxsplit=2)[-2]
 STARTTIME = time.time()
+
+
+"configuration"
+
+
+class Config(Obj):
+
+    "Config"
 
 
 "utilities"
