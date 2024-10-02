@@ -21,7 +21,7 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.command import Commands, command, scanner
-from nixt.main    import Client, Config, modnames, parse
+from nixt.main    import Client, Config, modnames, parse, scanner
 from nixt.object  import Obj, keys
 from nixt.persist import modpath
 from nixt.runtime import Broker, Event, Reactor, later, launch

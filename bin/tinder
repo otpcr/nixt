@@ -17,16 +17,22 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.command import Commands, Event, command, parse
-from nixt.main    import NAME, STARTTIME, Config
-from nixt.modules import face
+from nixt.command import Commands, command, parse, scanner
+from nixt.main    import NAME, STARTTIME, Client, Config
 from nixt.object  import Object, Obj
-from nixt.persist import Workdir, laps, skel
-from nixt.runtime import Client, Errors, errors, later, launch
+from nixt.persist import Workdir, laps, modpath, skel
+from nixt.runtime import Errors, Event, later, launch
 
 
-if os.path.exists('mods'):
-    from mods import face as MODS
+NAME      = __file__.rsplit("/", maxsplit=1)[-1]
+PATH      = os.path.abspath(os.path.dirname(modpath()))
+STARTTIME = time.time()
+
+
+sys.path.insert(0, PATH)
+
+
+from mods import face
 
 
 cfg = Config()
@@ -131,6 +137,7 @@ def main():
     "main"
     Workdir.wdr = ".test"
     parse(cfg, " ".join(sys.argv[1:]))
+    scanner(face)
     nrcommands = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()
@@ -157,6 +164,9 @@ def main():
         if not Errors.errors:
             print("no errors")
 
+
 if __name__ == "__main__":
     wrap(main)
-    errors(print)
+    for err in Errors.errors:
+        for line in err:
+            print(line)
