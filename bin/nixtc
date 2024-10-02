@@ -1,36 +1,24 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=R,W0105,C0413,W0611,W0718
+# pylint: disable=C0413,W0105,W0718
 
 
 "cli"
 
-
-import getpass
-import inspect
 import os
-import pathlib
-import pwd
 import readline
 import sys
 import termios
 import time
-import threading
-import _thread
 
 
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.command import Commands, command, parse, scanner
-from nixt.main    import NAME, Config, forever, init
+from nixt.command import Config, command, parse, scanner
 from nixt.modules import face
-from nixt.object  import Obj, keys
-from nixt.persist import modpath
-from nixt.runtime import Broker, Errors, Event, Reactor, later, launch
-
-
-STARTTIME = time.time()
+from nixt.runtime import Broker, Errors, Event, Reactor
+from nixt.runtime import NAME, forever, later, init
 
 
 cfg = Config()
@@ -122,21 +110,9 @@ def wrap(func):
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old2)
 
 
-"commands"
-
-
-def cmd(event):
-    "list commands."
-    event.reply(",".join(sorted(keys(Commands.cmds))))
-
-
-"main"
-
-
 def main():
     "main"
     readline.redisplay()
-    Commands.add(cmd)
     parse(cfg, " ".join(sys.argv[1:]))
     if "v" in cfg.opts:
         banner()

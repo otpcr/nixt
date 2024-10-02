@@ -198,6 +198,7 @@ class IRC(Reactor, Output):
         self.register('PRIVMSG', cb_privmsg)
         self.register('QUIT', cb_quit)
         self.register("366", cb_ready)
+        Broker.add(self)
 
     def announce(self, txt):
         "announce on all channels."

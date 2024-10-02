@@ -5,4 +5,4 @@
 "NIXT"
 
 
-from . import command, main, object, persist, runtime
+from . import command, object, persist, runtime

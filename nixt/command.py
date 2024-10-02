@@ -10,6 +10,7 @@ import inspect
 
 
 from .object  import Obj
+from .persist import pidname
 from .runtime import later
 
 
@@ -23,6 +24,11 @@ class Commands:
     def add(func):
         "add command."
         Commands.cmds[func.__name__] = func
+
+
+class Config(Obj):
+
+    "Config"
 
 
 def command(bot, evt):
@@ -121,8 +127,10 @@ def scanner(*pkgs):
 def __init__():
     return (
         'Commands',
+        'Config',
         'command',
         'parse',
+        'pidname',
         'scan',
         'scanner'
     )

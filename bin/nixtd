@@ -8,6 +8,8 @@
 
 import getpass
 import os
+import pathlib
+import pwd
 import sys
 import time
 
@@ -15,19 +17,11 @@ import time
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.command import Commands, scanner
-from nixt.main    import forever, init, pidfile, privileges
+from nixt.command import Commands, pidname, scanner
 from nixt.modules import face
 from nixt.object  import Obj, keys
-from nixt.persist import modpath, pidname
-from nixt.runtime import Broker, Errors, Event, Reactor, later, launch
-
-
-"defines"
-
-
-NAME      = __file__.rsplit("/", maxsplit=1)[-1]
-STARTTIME = time.time()
+from nixt.runtime import Broker, Errors, Event, Reactor
+from nixt.runtime import forever, later, launch, init
 
 
 "utilities"
@@ -54,6 +48,23 @@ def daemon(verbose=False):
     os.nice(10)
 
 
+def pidfile(filename):
+    "write the pid to a file."
+    if os.path.exists(filename):
+        os.unlink(filename)
+    path = pathlib.Path(filename)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(filename, "w", encoding="utf-8") as fds:
+        fds.write(str(os.getpid()))
+
+
+def privileges(username):
+    "privileges."
+    pwnam = pwd.getpwnam(username)
+    os.setgid(pwnam.pw_gid)
+    os.setuid(pwnam.pw_uid)
+
+
 def wrap(func):
     "reset console."
     try:
@@ -77,12 +88,13 @@ def cmd(event):
 
 def main():
     "main"
-    daemon(True)
+    daemon()
     privileges(getpass.getuser())
     pidfile(pidname())
     Commands.add(cmd)
     scanner(face)
-    init(face)
+    for _mod, thr in init(face):
+        thr.join()
     forever()
 
 

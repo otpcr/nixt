@@ -13,6 +13,13 @@ import types
 import _thread
 
 
+"defines"
+
+
+NAME = __file__.split("/", maxsplit=2)[-2]
+STARTTIME = time.time()
+
+
 "events"
 
 
@@ -322,7 +329,6 @@ def init(*pkgs):
     return mods
 
 
-
 def later(exc):
     "add an exception"
     excp = exc.with_traceback(exc.__traceback__)
@@ -331,11 +337,31 @@ def later(exc):
         Errors.errors.append(fmt)
 
 
+def modnames(*args):
+    "return module names."
+    res = []
+    for arg in args:
+        res.extend([x for x in dir(arg) if not x.startswith("__")])
+    return sorted(res)
+
+
+def wrap(func):
+    "reset console."
+    try:
+        func()
+    except (KeyboardInterrupt, EOFError):
+        pass
+    except Exception as ex:
+        later(ex)
+
+
 "interface"
 
 
 def __dir__():
     return (
+        'NAME',
+        'STARTTIME',
         'Broker',
         'Client',
         'Errors',
@@ -347,5 +373,7 @@ def __dir__():
         'later',
         'launch',
         'init',
-        'named'
+        'modnames',
+        'named',
+        'wrap'
     )
