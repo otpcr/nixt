@@ -44,7 +44,7 @@ paylock = _thread.allocate_lock()
 param = Object()
 param.cmd = [""]
 param.dpl = ["hnrss title,url"]
-param.fnd = ["log", "todo", "rss", "config"]
+param.fnd = ["log", "todo", "rss", "config", "urls"]
 param.imp = ["tests/feeds.opml"]
 param.log = ["bla"]
 param.mod = [""]
@@ -52,12 +52,9 @@ param.mre = [""]
 param.nme = ["hnrss hackernews"]
 param.pwd = ["bla mekker"]
 param.rem = ["hnrss"]
-param.req = [""]
 param.res = [""]
-param.rss = ["http://hnrss.org/newest",]
-param.tdo = ["mekker"]
-param.tmr = ["13:00 bla", "23:59 mekker"]
-param.udp = ["mekker"]
+param.rss = ["http://hnrss.org/newest", ""]
+param.tdo = ["mekker", ""]
 param.ver = [""]
 
 
@@ -79,6 +76,7 @@ class CLI(Client):
         "check verboise."
         if "v" in cfg.opts:
             print(txt)
+            sys.stdout.flush()
 
 
 def banner():
@@ -152,7 +150,6 @@ def main():
     for thr in thrs:
         thr.join()
     consume(events)
-    clt.wait()
     if "v" in cfg.opts:
         endtime = time.time()
         lap = laps(endtime-STARTTIME)

@@ -10,7 +10,7 @@ import inspect
 
 
 from .object  import Obj
-from .persist import pidname
+from .persist import pidfile, pidname
 from .runtime import later
 
 
@@ -130,6 +130,7 @@ def __init__():
         'Config',
         'command',
         'parse',
+        'pidfile',
         'pidname',
         'scan',
         'scanner'

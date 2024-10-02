@@ -16,22 +16,7 @@ sys.path.insert(0, os.getcwd())
 
 from nixt.command import Commands, Config, command, parse, scanner
 from nixt.modules import face
-from nixt.runtime import Client, Event
-
-
-NAME = __file__.rsplit("/", maxsplit=1)[-1]
-TXT = """[Unit]
-Description=%s
-After=network-online.target
-
-[Service]
-Type=simple
-User=%s
-Group=%s
-ExecStart=/home/%s/.local/bin/%ss
-
-[Install]
-WantedBy=multi-user.target"""
+from nixt.runtime import NAME, Client, Event
 
 
 cfg = Config()
@@ -59,11 +44,23 @@ def main():
     scanner(face)
     cli = CLI()
     evt = Event()
-    evt.orig = repr(cli)
     evt.txt = cfg.txt
-    evt.type = "event"
     command(cli, evt)
     evt.wait()
+
+
+TXT = """[Unit]
+Description=%s
+After=network-online.target
+
+[Service]
+Type=simple
+User=%s
+Group=%s
+ExecStart=/home/%s/.local/bin/%ss
+
+[Install]
+WantedBy=multi-user.target"""
 
 
 if __name__ == "__main__":

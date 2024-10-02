@@ -8,7 +8,6 @@
 
 import getpass
 import os
-import pathlib
 import pwd
 import sys
 
@@ -16,7 +15,7 @@ import sys
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.command import pidname, scanner
+from nixt.command import pidfile, pidname, scanner
 from nixt.modules import face
 from nixt.runtime import Errors
 from nixt.runtime import forever, init, wrap
@@ -50,16 +49,6 @@ def errors():
             print(line)
 
 
-def pidfile(filename):
-    "write the pid to a file."
-    if os.path.exists(filename):
-        os.unlink(filename)
-    path = pathlib.Path(filename)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(filename, "w", encoding="utf-8") as fds:
-        fds.write(str(os.getpid()))
-
-
 def privileges(username):
     "privileges."
     pwnam = pwd.getpwnam(username)
@@ -73,8 +62,7 @@ def main():
     privileges(getpass.getuser())
     pidfile(pidname())
     scanner(face)
-    for _mod, thr in init(face):
-        thr.join()
+    init(face)
     forever()
 
 

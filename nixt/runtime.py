@@ -39,6 +39,9 @@ class Event:
     def __getattr__(self, key):
         return self.__dict__.get(key, "")
 
+    def __str__(self):
+        return str(self.__dict__)
+
     def ready(self):
         "flag event as ready."
         self._ready.set()
@@ -52,6 +55,7 @@ class Event:
         self._ready.wait()
         if self._thr:
             self._thr.join()
+
 
 "reactor"
 
@@ -69,7 +73,7 @@ class Reactor:
         "call callback based on event type."
         func = self.cbs.get(evt.type, None)
         if func:
-            launch(func, self, evt, name=evt.txt and evt.txt.split()[0])
+            evt._thr = launch(func, self, evt, name=evt.txt and evt.txt.split()[0])
 
     def loop(self):
         "proces events until interrupted."
@@ -99,12 +103,6 @@ class Reactor:
     def stop(self):
         "stop the event loop."
         self.stopped.set()
-
-    def wait(self):
-        "wait till empty queue."
-        while not self.stopped.is_set():
-            if not self.queue.qsize():
-                break
 
 
 class Client(Reactor):
