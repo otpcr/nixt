@@ -6,7 +6,6 @@
 
 
 import base64
-import logging
 import os
 import queue
 import socket
@@ -17,6 +16,7 @@ import time
 import _thread
 
 
+from ..command import command
 from ..object  import Object, Obj, edit, keys, format
 from ..persist import last, sync
 from ..runtime import Broker, Event, Reactor, later, launch
@@ -32,7 +32,7 @@ def debug(txt):
     for ign in IGNORE:
         if ign in txt:
             return
-    logging.log(logging.WARN, txt)
+    print(txt)
 
 
 saylock = _thread.allocate_lock()
@@ -606,6 +606,8 @@ def cb_privmsg(bot, evt):
             return
         if evt.txt:
             evt.txt = evt.txt[0].lower() + evt.txt[1:]
+        if evt.txt:
+            command(bot, evt)
 
 
 def cb_quit(bot, evt):

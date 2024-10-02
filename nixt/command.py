@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=R,W0105,C0413,W0611
+# pylint: disable=R,W0105,C0413,W0611,W0718
 
 
 "command"
@@ -9,7 +9,8 @@
 import inspect
 
 
-from .object import Obj
+from .object  import Obj
+from .runtime import later
 
 
 class Commands:
@@ -104,7 +105,7 @@ def scan(mod):
             Commands.add(cmd)
 
 
-def scanner(*pkgs, disable=""):
+def scanner(*pkgs):
     "scan modules for commands and classes"
     mds = []
     for pkg in pkgs:

@@ -8,11 +8,11 @@ import threading
 import time
 
 
-STARTTIME = time.time()
-
-
 from ..object  import Object, update
 from ..persist import laps
+
+
+STARTTIME = time.time()
 
 
 def thr(event):

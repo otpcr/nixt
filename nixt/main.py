@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R,W0105,C0413,W0611
+# pylint: disable=R,W0105,C0413,W0611,W0718
 
 
 "main"
@@ -7,7 +7,6 @@
 
 import getpass
 import inspect
-import logging
 import os
 import pathlib
 import pwd
@@ -27,21 +26,11 @@ from .runtime import Broker, Event, Reactor, later, launch
 
 NAME = __file__.rsplit(os.sep, maxsplit=2)[-2]
 STARTTIME = time.time()
-LEVELS = {
-    'debug': logging.DEBUG,
-    'info': logging.INFO,
-    'warning': logging.WARNING,
-    'warn': logging.WARNING,
-    'error': logging.ERROR,
-    'critical': logging.CRITICAL
-}
-
-"config"
 
 
 class Config(Obj):
 
-     "Config"
+    "Config"
 
 
 "client"
@@ -71,28 +60,6 @@ class Client(Reactor):
 
 
 "utilities"
-
-
-def banner():
-    "show banner."
-    tme = time.ctime(time.time()).replace("  ", " ")
-    logging.error(f"{NAME.upper()} since {tme}")
-
-
-def enable(level):
-    logging.basicConfig(stream=sys.stderr)
-    format_plain = "%(message)s"
-    datefmt = '%H:%M:%S'
-    formatter = logging.Formatter(format_plain, datefmt=datefmt)
-    lvl = LEVELS.get(level or "error")
-    root = logging.getLogger()
-    if root and root.handlers:
-        for handler in root.handlers:
-            root.removeHandler(handler)
-    ch = logging.StreamHandler()
-    ch.setLevel(lvl)
-    ch.setFormatter(formatter)
-    root.addHandler(ch)
 
 
 def forever():
@@ -218,8 +185,6 @@ def __dir__():
         'STARTTIME',
         'Client',
         'Config',
-        'banner',
-        'enable',
         'forever',
         'init',
         'modnames',

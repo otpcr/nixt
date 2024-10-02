@@ -298,6 +298,31 @@ def fmat(exc):
                               )
 
 
+def forever():
+    "it doesn't stop, until ctrl-c"
+    while True:
+        try:
+            time.sleep(1.0)
+        except (KeyboardInterrupt, EOFError):
+            _thread.interrupt_main()
+
+
+def init(*pkgs):
+    "run the init function in modules."
+    mods = []
+    for pkg in pkgs:
+        for modname in dir(pkg):
+            if modname.startswith("__"):
+                continue
+            modi = getattr(pkg, modname)
+            if "init" not in dir(modi):
+                continue
+            thr = launch(modi.init)
+            mods.append((modi, thr))
+    return mods
+
+
+
 def later(exc):
     "add an exception"
     excp = exc.with_traceback(exc.__traceback__)
@@ -318,7 +343,9 @@ def __dir__():
         'Repeater',
         'Thread',
         'Timer',
+        'forever',
         'later',
         'launch',
+        'init',
         'named'
     )

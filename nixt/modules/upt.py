@@ -7,10 +7,10 @@
 import time
 
 
-STARTTIME = time.time()
-
-
 from ..persist import laps
+
+
+STARTTIME = time.time()
 
 
 def upt(event):

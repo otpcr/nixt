@@ -53,6 +53,7 @@ def long(name):
 
 
 def modpath():
+    "return path to modules."
     return os.path.join(Workdir.wdr, "mods")
 
 
