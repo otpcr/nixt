@@ -16,7 +16,7 @@ import time
 import _thread
 
 
-from ..command import Config, command
+from ..command import command
 from ..object  import Object, Obj, edit, keys, format
 from ..persist import last, sync
 from ..runtime import NAME, Broker, Event, Reactor, later, launch

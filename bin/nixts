@@ -3,7 +3,7 @@
 # pylint: disable=C0413,W0105
 
 
-"daemon"
+"service"
 
 
 import getpass
@@ -24,8 +24,8 @@ from nixt.runtime import forever, init, wrap
 
 def errors():
     "print errors."
-    for error in Errors.errors:
-        for line in error:
+    for err in Errors.errors:
+        for line in err:
             print(line)
 
 
@@ -33,17 +33,17 @@ def pidfile(filename):
     "write the pid to a file."
     if os.path.exists(filename):
         os.unlink(filename)
-    path = pathlib.Path(filename)
-    path.parent.mkdir(parents=True, exist_ok=True)
+    path2 = pathlib.Path(filename)
+    path2.parent.mkdir(parents=True, exist_ok=True)
     with open(filename, "w", encoding="utf-8") as fds:
         fds.write(str(os.getpid()))
 
 
 def privileges(username):
     "privileges."
-    pwnam = pwd.getpwnam(username)
-    os.setgid(pwnam.pw_gid)
-    os.setuid(pwnam.pw_uid)
+    pwnam2 = pwd.getpwnam(username)
+    os.setgid(pwnam2.pw_gid)
+    os.setuid(pwnam2.pw_uid)
 
 
 def main():

@@ -3,7 +3,7 @@
 # pylint: disable=C0413,W0105,W0718
 
 
-"cli"
+"console"
 
 
 import os
@@ -18,7 +18,7 @@ sys.path.insert(0, os.getcwd())
 
 from nixt.command import Config, command, parse, scanner
 from nixt.modules import face
-from nixt.runtime import Broker, Client, Errors, Event, Reactor
+from nixt.runtime import Client, Errors, Event
 from nixt.runtime import NAME, forever, later, init
 
 
