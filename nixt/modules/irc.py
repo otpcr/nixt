@@ -17,9 +17,9 @@ import time
 import _thread
 
 
-from nixt.object  import Object, Obj, edit, keys, format
-from nixt.persist import last, sync
-from nixt.runtime import Broker, Event, Reactor, later, launch
+from ..object  import Object, Obj, edit, keys, format
+from ..persist import last, sync
+from ..runtime import Broker, Event, Reactor, later, launch
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]

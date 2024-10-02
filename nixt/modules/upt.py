@@ -10,7 +10,7 @@ import time
 STARTTIME = time.time()
 
 
-from nixt.persist import laps
+from ..persist import laps
 
 
 def upt(event):
