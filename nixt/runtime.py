@@ -16,7 +16,7 @@ import _thread
 "defines"
 
 
-NAME = __file__.split("/", maxsplit=2)[-2]
+NAME = __file__.rsplit("/", maxsplit=2)[-2]
 STARTTIME = time.time()
 
 
