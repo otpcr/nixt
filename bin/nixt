@@ -22,13 +22,12 @@ sys.path.insert(0, os.getcwd())
 
 from nixt.command import Commands, command, scanner
 from nixt.main    import Client, Config, modnames, parse, scanner
+from nixt.modules import face
 from nixt.object  import Obj, keys
-from nixt.persist import modpath
 from nixt.runtime import Broker, Event, Reactor, later, launch
 
 
 NAME      = __file__.rsplit("/", maxsplit=1)[-1]
-PATH      = os.path.abspath(os.path.dirname(modpath()))
 STARTTIME = time.time()
 TXT = """[Unit]
 Description=%s
@@ -42,12 +41,6 @@ ExecStart=/home/%s/.local/bin/%ss
 
 [Install]
 WantedBy=multi-user.target"""
-
-
-sys.path.insert(0, PATH)
-
-
-from mods import face
 
 
 cfg = Config()

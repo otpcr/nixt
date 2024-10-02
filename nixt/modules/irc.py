@@ -6,6 +6,7 @@
 
 
 import base64
+import logging
 import os
 import queue
 import socket
@@ -16,18 +17,22 @@ import time
 import _thread
 
 
-from nixt.object  import  Object, Obj, edit, keys, format
+from nixt.object  import Object, Obj, edit, keys, format
 from nixt.persist import last, sync
 from nixt.runtime import Broker, Event, Reactor, later, launch
 
 
+IGNORE = ["PING", "PONG", "PRIVMSG"]
 NAME = Reactor.__module__.split(".", maxsplit=2)[-2]
 VERBOSE = False
 
 
 def debug(txt):
     "echo to screen" 
-    print(txt)
+    for ign in IGNORE:
+        if ign in txt:
+            return
+    logging.log(logging.WARN, txt)
 
 
 saylock = _thread.allocate_lock()
@@ -38,7 +43,7 @@ def init():
     irc = IRC()
     irc.start()
     irc.events.ready.wait()
-    debug(f'IRC {format(Config, skip="password")}')
+    debug(f'{format(Config, skip="edited,password")}')
     return irc
 
 

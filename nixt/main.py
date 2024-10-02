@@ -2,11 +2,12 @@
 # pylint: disable=R,W0105,C0413,W0611
 
 
-"cli"
+"main"
 
 
 import getpass
 import inspect
+import logging
 import os
 import pathlib
 import pwd
@@ -16,24 +17,26 @@ import threading
 import _thread
 
 
-sys.path.insert(0, os.getcwd())
+from .command import Commands, command, scanner
+from .object  import Obj, keys
+from .runtime import Broker, Event, Reactor, later, launch
 
 
-from nixt.command import Commands, command, scanner
-from nixt.object  import Obj, keys
-from nixt.persist import modpath
-from nixt.runtime import Broker, Event, Reactor, later, launch
+"defines"
 
 
-NAME      = __file__.rsplit("/", maxsplit=1)[-1]
-PATH      = os.path.abspath(os.path.dirname(modpath()))
+NAME = __file__.rsplit(os.sep, maxsplit=2)[-2]
 STARTTIME = time.time()
+LEVELS = {
+    'debug': logging.DEBUG,
+    'info': logging.INFO,
+    'warning': logging.WARNING,
+    'warn': logging.WARNING,
+    'error': logging.ERROR,
+    'critical': logging.CRITICAL
+}
 
-
-sys.path.insert(0, PATH)
-
-
-from mods import face
+"config"
 
 
 class Config(Obj):
@@ -68,6 +71,28 @@ class Client(Reactor):
 
 
 "utilities"
+
+
+def banner():
+    "show banner."
+    tme = time.ctime(time.time()).replace("  ", " ")
+    logging.error(f"{NAME.upper()} since {tme}")
+
+
+def enable(level):
+    logging.basicConfig(stream=sys.stderr)
+    format_plain = "%(message)s"
+    datefmt = '%H:%M:%S'
+    formatter = logging.Formatter(format_plain, datefmt=datefmt)
+    lvl = LEVELS.get(level or "error")
+    root = logging.getLogger()
+    if root and root.handlers:
+        for handler in root.handlers:
+            root.removeHandler(handler)
+    ch = logging.StreamHandler()
+    ch.setLevel(lvl)
+    ch.setFormatter(formatter)
+    root.addHandler(ch)
 
 
 def forever():
@@ -184,13 +209,22 @@ def wrap(func, outer):
         later(ex)
 
 
+"interface"
+
+
 def __dir__():
     return (
+        'NAME',
+        'STARTTIME',
+        'Client',
+        'Config',
+        'banner',
+        'enable',
         'forever',
         'init',
         'modnames',
         'parse',
         'pidfile',
-        'orivileges',
+        'privileges',
         'wrap'
     )
