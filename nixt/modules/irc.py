@@ -16,15 +16,13 @@ import time
 import _thread
 
 
-from ..command import command
+from ..command import Config, command
 from ..object  import Object, Obj, edit, keys, format
 from ..persist import last, sync
-from ..runtime import Broker, Event, Reactor, later, launch
+from ..runtime import NAME, Broker, Event, Reactor, later, launch
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]
-NAME = Reactor.__module__.split(".", maxsplit=2)[-2]
-VERBOSE = False
 
 
 def debug(txt):
@@ -32,7 +30,6 @@ def debug(txt):
     for ign in IGNORE:
         if ign in txt:
             return
-    print(txt)
 
 
 saylock = _thread.allocate_lock()
