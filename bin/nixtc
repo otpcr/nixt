@@ -297,7 +297,7 @@ def main():
         banner()
     scanner(face)
     if "i" in cfg.opts:
-        for _mod, thr in init(face, MODS):
+        for _mod, thr in init(face):
             if "w" in cfg.opts:
                 thr.join()
     csl = Console()

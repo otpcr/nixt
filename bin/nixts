@@ -1,41 +1,44 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
+# pylint: disable=R,W0105,C0413,W0611
 
 
-"service"
+"cli"
 
 
 import getpass
-
-
-from nixt.main    import forever, init, pidfile, privileges, wrap
-from nixt.modules import face
-from nixt.persist import pidname
-
-
-def main():
-    "main"
-    privileges(getpass.getuser())
-    name = pidname()
-    pidfile(name)
-    init(face)
-    forever()
-
-
-if __name__ == "__main__":
-    wrap(main, print)
-# This file is placed in the Public Domain.
-# pylint: disable=R,W0105,W0718
-
-
-"command"
-
-
+import inspect
+import os
+import pathlib
+import pwd
+import readline
+import sys
+import termios
+import time
 import threading
+import _thread
 
 
-from .object  import Obj
-from .runtime import later
+sys.path.insert(0, os.getcwd())
+
+
+from nixt.object  import Obj, keys
+from nixt.persist import modpath, pidname
+from nixt.runtime import Broker, Errors, Event, Reactor, later, launch
+
+
+NAME      = __file__.rsplit("/", maxsplit=1)[-1]
+PATH      = os.path.abspath(os.path.dirname(modpath()))
+STARTTIME = time.time()
+
+
+sys.path.insert(0, PATH)
+
+
+from mods import face
+
+
+"client"
 
 
 class Commands:
@@ -62,40 +65,6 @@ def command(bot, evt):
         except Exception as ex:
             later(ex)
     evt.ready()
-
-
-"event"
-
-
-class Event:
-
-    "Event"
-
-    def __init__(self):
-        self._ready  = threading.Event()
-        self._thr    = None
-        self.channel = ""
-        self.orig    = ""
-        self.result  = []
-        self.txt     = ""
-        self.type    = "command"
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-    def ready(self):
-        "flag event as ready."
-        self._ready.set()
-
-    def reply(self, txt):
-        "add text to the result."
-        self.result.append(txt)
-
-    def wait(self):
-        "wait for results."
-        self._ready.wait()
-        if self._thr:
-            self._thr.join()
 
 
 def parse(obj, txt=None):
@@ -155,38 +124,26 @@ def parse(obj, txt=None):
     return obj
 
 
-"interface"
+def scan(mod):
+    "scan module for commands."
+    for key, cmd in inspect.getmembers(mod, inspect.isfunction):
+        if key.startswith("cb"):
+            continue
+        if 'event' in cmd.__code__.co_varnames:
+            Commands.add(cmd)
 
 
-def __dir__():
-    return (
-        'Commands',
-        'Event',
-        'command',
-        'parse'
-    )
-# This file is placed in the Public Domain.
-# pylint: disable=R,W0105,W0718,E1102
-
-
-"utilities for main"
-
-
-import os
-import pathlib
-import pwd
-import time
-import _thread
-
-
-from .runtime import later, launch
-
-
-"defines"
-
-
-NAME      = __file__.rsplit("/", maxsplit=2)[-2]
-STARTTIME = time.time()
+def scanner(*pkgs, disable=""):
+    "scan modules for commands and classes"
+    mds = []
+    for pkg in pkgs:
+        for modname in modnames(pkg):
+            module = getattr(pkg, modname, None)
+            if not module:
+                continue
+            scan(module)
+            mds.append(module)
+    return mds
 
 
 "utilities"
@@ -239,28 +196,47 @@ def privileges(username):
     os.setuid(pwnam.pw_uid)
 
 
-def wrap(func, outer):
+def wrap(func):
     "reset console."
+    old2 = None
+    try:
+        old2 = termios.tcgetattr(sys.stdin.fileno())
+    except termios.error:
+        pass
     try:
         func()
     except (KeyboardInterrupt, EOFError):
-        outer("")
+        print("")
     except Exception as ex:
         later(ex)
+    finally:
+        if old2:
+            termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old2)
 
 
-"interface"
+"commands"
 
 
-def __dir__():
-    return (
-        'NAME',
-        'STARTTIME',
-        'Logging',
-        'debug',
-        'forever',
-        'init',
-        'modnames',
-        'pidfile',
-        'privileges'
-    )
+def cmd(event):
+    "list commands."
+    event.reply(",".join(sorted(keys(Commands.cmds))))
+
+
+"main"
+
+
+def main():
+    "main"
+    privileges(getpass.getuser())
+    pidfile(pidname())
+    Commands.add(cmd)
+    scanner(face)
+    init(face)
+    forever()
+
+
+if __name__ == "__main__":
+    wrap(main)
+    for error in Errors.errors:
+        for line in error:
+            print(line)

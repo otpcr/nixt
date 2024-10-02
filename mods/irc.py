@@ -27,6 +27,7 @@ VERBOSE = False
 
 def debug(txt):
     "echo to screen" 
+    print(txt)
 
 
 saylock = _thread.allocate_lock()
