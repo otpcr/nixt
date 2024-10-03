@@ -32,6 +32,9 @@ class Object:
         return str(self.__dict__)
 
 
+"default values"
+
+
 class Obj(Object):
 
     "default values"
