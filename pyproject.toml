@@ -6,11 +6,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nixt"
-version = "55"
+version = "56"
 authors = [
     {name = "Bart Thate", email = "record11719@gmail.com" },
 ]
-description = "NIXT"
+description = "you have been nixt."
 readme = "README.rst"
 license = { text="Public Domain"}
 classifiers=[
