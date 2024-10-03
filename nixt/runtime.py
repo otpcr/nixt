@@ -20,111 +20,69 @@ NAME = __file__.rsplit("/", maxsplit=2)[-2]
 STARTTIME = time.time()
 
 
-"events"
+"broker"
 
 
-class Event:
+class Broker:
 
-    "Event"
+    "Broker"
 
-    def __init__(self):
-        self._ready  = threading.Event()
-        self._thr    = None
-        self.channel = ""
-        self.orig    = ""
-        self.result  = []
-        self.txt     = ""
-        self.type    = "event"
+    objs = {}
 
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
+    @staticmethod
+    def add(obj):
+        "add object."
+        Broker.objs[repr(obj)] = obj
 
-    def __str__(self):
-        return str(self.__dict__)
+    @staticmethod
+    def announce(txt, kind=None):
+        "announce text on brokered objects."
+        for obj in Broker.all(kind):
+            if "announce" in dir(obj):
+                obj.announce(txt)
 
-    def ready(self):
-        "flag event as ready."
-        self._ready.set()
+    @staticmethod
+    def all(kind=None):
+        "return all objects."
+        result = []
+        if kind is not None:
+            for key in [x for x in Broker.objs if kind in x]:
+                result.append(Broker.get(key))
+        else:
+            result.extend(list(Broker.objs.values()))
+        return result
 
-    def reply(self, txt):
-        "add text to the result."
-        self.result.append(txt)
-
-    def wait(self):
-        "wait for results."
-        self._ready.wait()
-        if self._thr:
-            self._thr.join()
-
-
-"reactor"
+    @staticmethod
+    def get(orig):
+        "return object by matching repr."
+        return Broker.objs.get(orig)
 
 
-class Reactor:
-
-    "Reactor"
-
-    def __init__(self):
-        self.cbs      = {}
-        self.queue    = queue.Queue()
-        self.stopped  = threading.Event()
-
-    def callback(self, evt):
-        "call callback based on event type."
-        func = self.cbs.get(evt.type, None)
-        if func:
-            evt._thr = launch(func, self, evt, name=evt.txt and evt.txt.split()[0])
-
-    def loop(self):
-        "proces events until interrupted."
-        while not self.stopped.is_set():
-            try:
-                evt = self.poll()
-                self.callback(evt)
-            except (KeyboardInterrupt, EOFError):
-                _thread.interrupt_main()
-
-    def poll(self):
-        "function to return event."
-        return self.queue.get()
-
-    def put(self, evt):
-        "put event into the queue."
-        self.queue.put_nowait(evt)
-
-    def register(self, typ, cbs):
-        "register callback for a type."
-        self.cbs[typ] = cbs
-
-    def start(self):
-        "start the event loop."
-        launch(self.loop)
-
-    def stop(self):
-        "stop the event loop."
-        self.stopped.set()
+"errors"
 
 
-class Client(Reactor):
+class Errors:
 
-    "Client"
+    "Errors"
 
-    def __init__(self):
-        Reactor.__init__(self)
-        Broker.add(self)
+    errors = []
 
-    def display(self, evt):
-        "show results into a channel."
-        for txt in evt.result:
-            self.say(evt.channel, txt)
 
-    def say(self, _channel, txt):
-        "echo on verbose."
-        self.raw(txt)
+def fmat(exc):
+    "format an exception"
+    return traceback.format_exception(
+                               type(exc),
+                               exc,
+                               exc.__traceback__
+                              )
 
-    def raw(self, txt):
-        "print to screen."
-        raise NotImplementedError
+
+def later(exc):
+    "add an exception"
+    excp = exc.with_traceback(exc.__traceback__)
+    fmt = fmat(excp)
+    if fmt not in Errors.errors:
+        Errors.errors.append(fmt)
 
 
 "threads"
@@ -197,6 +155,109 @@ def named(obj):
     return None
 
 
+"reactor"
+
+
+class Reactor:
+
+    "Reactor"
+
+    def __init__(self):
+        self.cbs      = {}
+        self.queue    = queue.Queue()
+        self.stopped  = threading.Event()
+
+    def callback(self, evt):
+        "call callback based on event type."
+        func = self.cbs.get(evt.type, None)
+        if func:
+            evt._thr = launch(func, self, evt, name=evt.txt and evt.txt.split()[0])
+
+    def loop(self):
+        "proces events until interrupted."
+        while not self.stopped.is_set():
+            try:
+                evt = self.poll()
+                self.callback(evt)
+            except (KeyboardInterrupt, EOFError):
+                _thread.interrupt_main()
+
+    def poll(self):
+        "function to return event."
+        return self.queue.get()
+
+    def put(self, evt):
+        "put event into the queue."
+        self.queue.put_nowait(evt)
+
+    def register(self, typ, cbs):
+        "register callback for a type."
+        self.cbs[typ] = cbs
+
+    def start(self):
+        "start the event loop."
+        launch(self.loop)
+
+    def stop(self):
+        "stop the event loop."
+        self.stopped.set()
+
+
+class Client(Reactor):
+
+    "Client"
+
+    def __init__(self):
+        Reactor.__init__(self)
+        Broker.add(self)
+
+    def display(self, evt):
+        "show results into a channel."
+        for txt in evt.result:
+            self.say(evt.channel, txt)
+
+    def say(self, _channel, txt):
+        "echo on verbose."
+        self.raw(txt)
+
+    def raw(self, txt):
+        "print to screen."
+        raise NotImplementedError
+
+
+class Event:
+
+    "Event"
+
+    def __init__(self):
+        self._ready  = threading.Event()
+        self._thr    = None
+        self.channel = ""
+        self.orig    = ""
+        self.result  = []
+        self.txt     = ""
+        self.type    = "event"
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    def ready(self):
+        "flag event as ready."
+        self._ready.set()
+
+    def reply(self, txt):
+        "add text to the result."
+        self.result.append(txt)
+
+    def wait(self):
+        "wait for results."
+        self._ready.wait()
+        if self._thr:
+            self._thr.join()
+
 
 "timers"
 
@@ -246,113 +307,6 @@ class Repeater(Timer):
         super().run()
 
 
-"broker"
-
-
-class Broker:
-
-    "Broker"
-
-    objs = {}
-
-    @staticmethod
-    def add(obj):
-        "add object."
-        Broker.objs[repr(obj)] = obj
-
-    @staticmethod
-    def announce(txt, kind=None):
-        "announce text on brokered objects."
-        for obj in Broker.all(kind):
-            if "announce" in dir(obj):
-                obj.announce(txt)
-
-    @staticmethod
-    def all(kind=None):
-        "return all objects."
-        result = []
-        if kind is not None:
-            for key in [x for x in Broker.objs if kind in x]:
-                result.append(Broker.get(key))
-        else:
-            result.extend(list(Broker.objs.values()))
-        return result
-
-    @staticmethod
-    def get(orig):
-        "return object by matching repr."
-        return Broker.objs.get(orig)
-
-
-"errors"
-
-
-class Errors:
-
-    "Errors"
-
-    errors = []
-
-
-def fmat(exc):
-    "format an exception"
-    return traceback.format_exception(
-                               type(exc),
-                               exc,
-                               exc.__traceback__
-                              )
-
-
-def forever():
-    "it doesn't stop, until ctrl-c"
-    while True:
-        try:
-            time.sleep(1.0)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-
-
-def init(*pkgs):
-    "run the init function in modules."
-    mods = []
-    for pkg in pkgs:
-        for modname in dir(pkg):
-            if modname.startswith("__"):
-                continue
-            modi = getattr(pkg, modname)
-            if "init" not in dir(modi):
-                continue
-            thr = launch(modi.init)
-            mods.append((modi, thr))
-    return mods
-
-
-def later(exc):
-    "add an exception"
-    excp = exc.with_traceback(exc.__traceback__)
-    fmt = fmat(excp)
-    if fmt not in Errors.errors:
-        Errors.errors.append(fmt)
-
-
-def modnames(*args):
-    "return module names."
-    res = []
-    for arg in args:
-        res.extend([x for x in dir(arg) if not x.startswith("__")])
-    return sorted(res)
-
-
-def wrap(func):
-    "reset console."
-    try:
-        func()
-    except (KeyboardInterrupt, EOFError):
-        pass
-    except Exception as ex:
-        later(ex)
-
-
 "interface"
 
 
@@ -367,11 +321,7 @@ def __dir__():
         'Repeater',
         'Thread',
         'Timer',
-        'forever',
         'later',
         'launch',
-        'init',
-        'modnames',
         'named',
-        'wrap'
     )

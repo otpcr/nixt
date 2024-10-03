@@ -10,6 +10,7 @@ import os
 import queue
 import socket
 import ssl
+import sys
 import textwrap
 import threading
 import time
@@ -25,11 +26,15 @@ from ..runtime import NAME, Broker, Event, Reactor, later, launch
 IGNORE = ["PING", "PONG", "PRIVMSG"]
 
 
+output = None
+
+
 def debug(txt):
-    "echo to screen" 
     for ign in IGNORE:
         if ign in txt:
             return
+    if output:
+        output(txt)
 
 
 saylock = _thread.allocate_lock()
