@@ -40,7 +40,6 @@ METHODS = [
     '__class__',
     '__contains__',
     '__delattr__',
-    '__delitem__',
     '__dict__',
     '__dir__',
     '__doc__',
@@ -48,7 +47,6 @@ METHODS = [
     '__format__',
     '__ge__',
     '__getattribute__',
-    '__getitem__',
     '__getstate__',
     '__gt__',
     '__hash__',
@@ -65,7 +63,6 @@ METHODS = [
     '__reduce_ex__',
     '__repr__',
     '__setattr__',
-    '__setitem__',
     '__sizeof__',
     '__str__',
     '__subclasshook__',
@@ -83,7 +80,6 @@ class TestInterface(unittest.TestCase):
         for mod in PACKAGE:
             mod1 = getattr(nixt, mod, None)
             if not mod1:
-                print(f"missing {mod}")
                 okd = False
                 break
         self.assertTrue(okd)
@@ -92,9 +88,9 @@ class TestInterface(unittest.TestCase):
         "test methods interface."
         okd = True
         obj = Object()
-        for meth in dir(obj):
-            if meth not in METHODS:
-                print(f"missing method {meth}")
+        dirr = dir(obj)
+        for meth in METHODS:
+            if meth not in dirr:
                 okd = False
         self.assertTrue(okd)
 

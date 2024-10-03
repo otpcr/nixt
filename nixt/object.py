@@ -19,10 +19,6 @@ class Object:
         "verify containment."
         return key in dir(self)
 
-    def __getstate__(self):
-        "no pickle."
-        return dumps(self)
-
     def __iter__(self):
         "iterate over the object."
         return iter(self.__dict__)
