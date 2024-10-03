@@ -6,9 +6,6 @@
 "command"
 
 
-import inspect
-
-
 from .object  import Obj
 from .persist import pidfile, pidname
 from .runtime import later
@@ -102,28 +99,6 @@ def parse(obj, txt=None):
     return obj
 
 
-def scan(mod):
-    "scan module for commands."
-    for key, cmd in inspect.getmembers(mod, inspect.isfunction):
-        if key.startswith("cb"):
-            continue
-        if 'event' in cmd.__code__.co_varnames:
-            Commands.add(cmd)
-
-
-def scanner(*pkgs):
-    "scan modules for commands and classes"
-    mds = []
-    for pkg in pkgs:
-        for modname in dir(pkg):
-            module = getattr(pkg, modname, None)
-            if not module:
-                continue
-            scan(module)
-            mds.append(module)
-    return mds
-
-
 def __dir__():
     return (
         'Commands',
@@ -131,7 +106,5 @@ def __dir__():
         'command',
         'parse',
         'pidfile',
-        'pidname',
-        'scan',
-        'scanner'
+        'pidname'
     )

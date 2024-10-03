@@ -8,6 +8,7 @@
 import time
 
 
+from ..command import Commands
 from ..object  import format
 from ..persist import find, fntime, laps, long, skel, store, types
 
@@ -33,3 +34,6 @@ def fnd(event):
         nmr += 1
     if not nmr:
         event.reply("no result")
+
+
+Commands.add(fnd)

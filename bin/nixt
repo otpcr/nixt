@@ -11,7 +11,7 @@ import os
 import sys
 
 
-from nixt.command import Commands, Config, command, parse, scanner
+from nixt.command import Commands, Config, command, parse
 from nixt.modules import face
 from nixt.runtime import NAME, Client, Event
 
@@ -38,7 +38,6 @@ def main():
     "main"
     Commands.add(srv)
     parse(cfg, " ".join(sys.argv[1:]))
-    scanner(face)
     cli = CLI()
     evt = Event()
     evt.txt = cfg.txt

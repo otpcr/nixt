@@ -14,7 +14,7 @@ import time
 import _thread
 
 
-from nixt.command import pidfile, pidname, scanner
+from nixt.command import pidfile, pidname
 from nixt.modules import face as faced
 from nixt.runtime import Errors, later, launch
 
@@ -71,7 +71,6 @@ def main():
     "main"
     privileges(getpass.getuser())
     pidfile(pidname())
-    scanner(faced)
     init(faced)
     forever()
 

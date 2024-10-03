@@ -8,6 +8,7 @@
 import time
 
 
+from ..command import Commands
 from ..object  import Object
 from ..persist import find, fntime, laps, sync
 
@@ -43,6 +44,9 @@ def dne(event):
         event.reply("nothing todo")
 
 
+Commands.add(dne)
+
+
 def tdo(event):
     "add todo."
     if not event.rest:
@@ -58,3 +62,6 @@ def tdo(event):
     obj.txt = event.rest
     sync(obj)
     event.reply('ok')
+
+
+Commands.add(tdo)

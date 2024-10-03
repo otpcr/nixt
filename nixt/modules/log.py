@@ -8,6 +8,7 @@
 import time
 
 
+from ..command import Commands
 from ..object  import Object
 from ..persist import find, laps, sync, fntime
 
@@ -36,3 +37,6 @@ def log(event):
     obj.txt = event.rest
     sync(obj)
     event.reply('ok')
+
+
+Commands.add(log)

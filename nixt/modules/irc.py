@@ -17,7 +17,7 @@ import time
 import _thread
 
 
-from ..command import command
+from ..command import Commands, command
 from ..object  import Object, Obj, edit, keys, format
 from ..persist import last, sync
 from ..runtime import NAME, Broker, Event, Reactor, later, launch
@@ -640,6 +640,9 @@ def cfg(event):
         event.reply('ok')
 
 
+Commands.add(cfg)
+
+
 def mre(event):
     "show from output cache."
     if not event.channel:
@@ -660,6 +663,9 @@ def mre(event):
     event.reply(f'{size} more in cache')
 
 
+Commands.add(mre)
+
+
 def pwd(event):
     "create a base64 password."
     if len(event.args) != 2:
@@ -672,3 +678,6 @@ def pwd(event):
     base = base64.b64encode(enc)
     dcd = base.decode('ascii')
     event.reply(dcd)
+
+
+Commands.add(pwd)

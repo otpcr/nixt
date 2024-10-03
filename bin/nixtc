@@ -14,7 +14,7 @@ import time
 import _thread
 
 
-from nixt.command import Config, command, parse, scanner
+from nixt.command import Config, command, parse
 from nixt.modules import face
 from nixt.runtime import NAME, Client, Errors, Event, later, launch
 
@@ -110,7 +110,6 @@ def main():
     if "v" in cfg.opts:
         banner()
         face.irc.output = print
-    scanner(face)
     if "i" in cfg.opts:
         for _mod, thr in init(face):
             if "w" in cfg.opts:
