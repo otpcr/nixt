@@ -11,9 +11,6 @@ import os
 import sys
 
 
-sys.path.insert(0, os.getcwd())
-
-
 from nixt.command import Commands, Config, command, parse, scanner
 from nixt.modules import face
 from nixt.runtime import NAME, Client, Event
