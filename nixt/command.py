@@ -124,7 +124,7 @@ def scanner(*pkgs):
     return mds
 
 
-def __init__():
+def __dir__():
     return (
         'Commands',
         'Config',

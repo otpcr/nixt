@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R,W0105
+# pylint: disable=R,W0105,W0719
 
 
 "persistence"
@@ -19,14 +19,6 @@ from .object  import Obj, dump, load, search, update
 lock     = _thread.allocate_lock()
 disklock = _thread.allocate_lock()
 p        = os.path.join
-
-
-"exceptions"
-
-
-class ReadError(Exception):
-
-    "error reading json file."
 
 
 "workdir"
@@ -246,7 +238,7 @@ def read(obj, pth):
             try:
                 update(obj, load(ofile))
             except json.decoder.JSONDecodeError as ex:
-                raise ReadError(pth) from ex
+                raise Exception(pth) from ex
 
 
 def sync(obj, pth=None):
