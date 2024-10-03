@@ -63,10 +63,9 @@ class Config(Obj):
     sasl = False
     server = 'localhost'
     servermodes = ''
-    sleep = 60
+    sleep = 120
     username = NAME
     users = False
-    verbose = False
 
     def __init__(self):
         Obj.__init__(self)

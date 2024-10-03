@@ -109,6 +109,7 @@ def main():
     parse(cfg, " ".join(sys.argv[1:]))
     if "v" in cfg.opts:
         banner()
+        face.irc.output = print
     scanner(face)
     if "i" in cfg.opts:
         for _mod, thr in init(face):
