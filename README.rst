@@ -23,7 +23,7 @@ N I X T
 
 ::
 
-    you have been nixt.
+    You have been nixt.
 
 
 **INSTALL**
