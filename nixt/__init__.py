@@ -3,4 +3,8 @@
 # ruff: noqa: F401
 
 
-"You have been nixt."
+"NIXT"
+
+
+__doc__ = __file__.rsplit("/", maxsplit=2)[-2].upper()
+
