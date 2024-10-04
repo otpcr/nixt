@@ -16,10 +16,12 @@ import time
 import _thread
 
 
-from ..command import NAME, Broker, Commands, command
-from ..object  import Object, Obj, edit, keys, format
-from ..persist import last, sync
-from ..runtime import Event, Reactor, later, launch
+from nixt.object  import Object, Obj, edit, keys, format
+from nixt.persist import last, sync
+from nixt.runtime import Event, Reactor, later, launch
+
+
+from .command  import NAME, Broker, Commands, command
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]

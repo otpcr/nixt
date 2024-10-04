@@ -7,11 +7,10 @@
 import time
 
 
-from ..command import Commands
-from ..persist import laps
+from nixt.persist import laps
 
 
-STARTTIME = time.time()
+from .command  import STARTTIME, Commands
 
 
 def upt(event):

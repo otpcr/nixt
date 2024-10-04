@@ -4,8 +4,10 @@
 "list of commands"
 
 
-from ..command import Commands
-from ..object  import keys
+from nixt.object import keys
+
+
+from .command    import Commands
 
 
 def cmd(event):

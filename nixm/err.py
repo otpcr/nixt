@@ -4,9 +4,10 @@
 "show errors"
 
 
-from ..command import Commands
-from ..runtime import Errors
+from nixt.runtime import Errors
 
+
+from .command  import Commands
 
 def err(event):
     "show errors."

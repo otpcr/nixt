@@ -9,8 +9,8 @@
 import time
 
 
-from .object  import Obj
-from .runtime import Client, later
+from nixt.object  import Obj
+from nixt.runtime import Client, later
 
 
 NAME = __file__.rsplit("/", maxsplit=2)[-2]

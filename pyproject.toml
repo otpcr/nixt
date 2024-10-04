@@ -6,11 +6,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nixt"
-version = "62"
+version = "70"
 authors = [
     {name = "Bart Thate", email = "record11719@gmail.com" },
 ]
-description = "You have been nixt."
+description = "NIXT"
 readme = "README.rst"
 license = { text="Public Domain"}
 classifiers=[
@@ -27,13 +27,6 @@ classifiers=[
 "source" = "https://github.com/otpcr/nixt"
 
 [tool.setuptools]
-script-files = [
-   'bin/nixt',
-   'bin/nixtc',
-   'bin/nixtd',
-   'bin/nixts'
-]   
 packages = [
    'nixt',
-   'nixt.modules'
 ]

@@ -14,8 +14,10 @@ import sys
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.command import NAME, CLI, Commands, command
-from nixt.modules import face
+from nixm.command import NAME, CLI, Commands, command
+from nixm         import face
+
+
 from nixt.runtime import Event
 
 
