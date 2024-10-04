@@ -6,8 +6,58 @@
 "command"
 
 
+import time
+
+
 from .object  import Obj
 from .runtime import later
+
+
+NAME = __file__.rsplit("/", maxsplit=2)[-2]
+STARTTIME = time.time()
+
+
+class Config:
+
+    "Config"
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
+
+
+class Broker:
+
+    "Broker"
+
+    objs = {}
+
+    @staticmethod
+    def add(obj):
+        "add object."
+        Broker.objs[repr(obj)] = obj
+
+    @staticmethod
+    def announce(txt, kind=None):
+        "announce text on brokered objects."
+        for obj in Broker.all(kind):
+            if "announce" in dir(obj):
+                obj.announce(txt)
+
+    @staticmethod
+    def all(kind=None):
+        "return all objects."
+        result = []
+        if kind is not None:
+            for key in [x for x in Broker.objs if kind in x]:
+                result.append(Broker.get(key))
+        else:
+            result.extend(list(Broker.objs.values()))
+        return result
+
+    @staticmethod
+    def get(orig):
+        "return object by matching repr."
+        return Broker.objs.get(orig)
 
 
 class Commands:
@@ -20,6 +70,9 @@ class Commands:
     def add(func):
         "add command."
         Commands.cmds[func.__name__] = func
+
+
+"methods"
 
 
 def command(bot, evt):
@@ -98,7 +151,9 @@ def parse(obj, txt=None):
 
 def __dir__():
     return (
+        'Broker',
         'Commands',
+        'Config',
         'command',
         'parse'
     )

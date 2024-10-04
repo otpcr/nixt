@@ -16,10 +16,10 @@ import time
 import _thread
 
 
-from ..command import Commands, command
+from ..command import NAME, Broker, Commands, command
 from ..object  import Object, Obj, edit, keys, format
 from ..persist import last, sync
-from ..runtime import NAME, Broker, Event, Reactor, later, launch
+from ..runtime import Event, Reactor, later, launch
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]

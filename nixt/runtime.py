@@ -13,24 +13,6 @@ import types
 import _thread
 
 
-"defines"
-
-
-NAME = __file__.rsplit("/", maxsplit=2)[-2]
-STARTTIME = time.time()
-
-
-"config"
-
-
-class Config:
-
-    "Config"
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-
 "errors"
 
 
@@ -58,45 +40,107 @@ def later(exc):
         Errors.errors.append(fmt)
 
 
-"broker"
+"reactor"
 
 
-class Broker:
+class Reactor:
 
-    "Broker"
+    "Reactor"
 
-    objs = {}
+    def __init__(self):
+        self.cbs      = {}
+        self.queue    = queue.Queue()
+        self.stopped  = threading.Event()
 
-    @staticmethod
-    def add(obj):
-        "add object."
-        Broker.objs[repr(obj)] = obj
+    def callback(self, evt):
+        "call callback based on event type."
+        func = self.cbs.get(evt.type, None)
+        if func:
+            evt._thr = launch(func, self, evt)
 
-    @staticmethod
-    def announce(txt, kind=None):
-        "announce text on brokered objects."
-        for obj in Broker.all(kind):
-            if "announce" in dir(obj):
-                obj.announce(txt)
+    def loop(self):
+        "proces events until interrupted."
+        while not self.stopped.is_set():
+            try:
+                evt = self.poll()
+                self.callback(evt)
+            except (KeyboardInterrupt, EOFError):
+                _thread.interrupt_main()
 
-    @staticmethod
-    def all(kind=None):
-        "return all objects."
-        result = []
-        if kind is not None:
-            for key in [x for x in Broker.objs if kind in x]:
-                result.append(Broker.get(key))
-        else:
-            result.extend(list(Broker.objs.values()))
-        return result
+    def poll(self):
+        "function to return event."
+        return self.queue.get()
 
-    @staticmethod
-    def get(orig):
-        "return object by matching repr."
-        return Broker.objs.get(orig)
+    def put(self, evt):
+        "put event into the queue."
+        self.queue.put_nowait(evt)
+
+    def register(self, typ, cbs):
+        "register callback for a type."
+        self.cbs[typ] = cbs
+
+    def start(self):
+        "start the event loop."
+        launch(self.loop)
+
+    def stop(self):
+        "stop the event loop."
+        self.stopped.set()
 
 
-"thread"
+class Client(Reactor):
+
+    "Client"
+
+    def display(self, evt):
+        "show results into a channel."
+        for txt in evt.result:
+            self.say(evt.channel, txt)
+
+    def say(self, _channel, txt):
+        "echo on verbose."
+        self.raw(txt)
+
+    def raw(self, txt):
+        "print to screen."
+        raise NotImplementedError
+
+
+class Event:
+
+    "Event"
+
+    def __init__(self):
+        self._ready  = threading.Event()
+        self._thr    = None
+        self.channel = ""
+        self.orig    = ""
+        self.result  = []
+        self.txt     = ""
+        self.type    = "event"
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    def ready(self):
+        "flag event as ready."
+        self._ready.set()
+
+    def reply(self, txt):
+        "add text to the result."
+        self.result.append(txt)
+
+    def wait(self):
+        "wait for results."
+        self._ready.wait()
+        if self._thr:
+            self._thr.join()
+
+
+"threads"
 
 
 class Thread(threading.Thread):
@@ -166,157 +210,6 @@ def named(obj):
     return None
 
 
-"reactor"
-
-
-class Reactor:
-
-    "Reactor"
-
-    def __init__(self):
-        self.cbs      = {}
-        self.queue    = queue.Queue()
-        self.stopped  = threading.Event()
-
-    def callback(self, evt):
-        "call callback based on event type."
-        func = self.cbs.get(evt.type, None)
-        if func:
-            evt._thr = launch(func, self, evt)
-
-    def loop(self):
-        "proces events until interrupted."
-        while not self.stopped.is_set():
-            try:
-                evt = self.poll()
-                self.callback(evt)
-            except (KeyboardInterrupt, EOFError):
-                _thread.interrupt_main()
-
-    def poll(self):
-        "function to return event."
-        return self.queue.get()
-
-    def put(self, evt):
-        "put event into the queue."
-        self.queue.put_nowait(evt)
-
-    def register(self, typ, cbs):
-        "register callback for a type."
-        self.cbs[typ] = cbs
-
-    def start(self):
-        "start the event loop."
-        launch(self.loop)
-
-    def stop(self):
-        "stop the event loop."
-        self.stopped.set()
-
-
-class Client(Reactor):
-
-    "Client"
-
-    def __init__(self):
-        Reactor.__init__(self)
-        Broker.add(self)
-
-    def display(self, evt):
-        "show results into a channel."
-        for txt in evt.result:
-            self.say(evt.channel, txt)
-
-    def say(self, _channel, txt):
-        "echo on verbose."
-        self.raw(txt)
-
-    def raw(self, txt):
-        "print to screen."
-        raise NotImplementedError
-
-
-class Event:
-
-    "Event"
-
-    def __init__(self):
-        self._ready  = threading.Event()
-        self._thr    = None
-        self.channel = ""
-        self.orig    = ""
-        self.result  = []
-        self.txt     = ""
-        self.type    = "event"
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-    def __str__(self):
-        return str(self.__dict__)
-
-    def ready(self):
-        "flag event as ready."
-        self._ready.set()
-
-    def reply(self, txt):
-        "add text to the result."
-        self.result.append(txt)
-
-    def wait(self):
-        "wait for results."
-        self._ready.wait()
-        if self._thr:
-            self._thr.join()
-
-
-"timers"
-
-
-class Timer:
-
-    "Timer"
-
-    def __init__(self, sleep, func, *args, thrname=None, **kwargs):
-        self.args  = args
-        self.func  = func
-        self.kwargs = kwargs
-        self.sleep = sleep
-        self.name  = thrname or kwargs.get("name", named(func))
-        self.state = {}
-        self.timer = None
-
-    def run(self):
-        "run the payload in a thread."
-        self.state["latest"] = time.time()
-        launch(self.func, *self.args)
-
-    def start(self):
-        "start timer."
-        timer = threading.Timer(self.sleep, self.run)
-        timer.name   = self.name
-        timer.sleep  = self.sleep
-        timer.state  = self.state
-        timer.func   = self.func
-        timer.state["starttime"] = time.time()
-        timer.state["latest"]    = time.time()
-        timer.start()
-        self.timer   = timer
-
-    def stop(self):
-        "stop timer."
-        if self.timer:
-            self.timer.cancel()
-
-
-class Repeater(Timer):
-
-    "Repeater"
-
-    def run(self):
-        launch(self.start)
-        super().run()
-
 
 "utilities"
 
@@ -365,9 +258,7 @@ def __dir__():
         'Config',
         'Errors',
         'Reactor',
-        'Repeater',
         'Thread',
-        'Timer',
         'forever',
         'init',
         'later',

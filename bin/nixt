@@ -14,8 +14,8 @@ import sys
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.command import Commands, command
-from nixt.runtime import NAME, Client, Event
+from nixt.command import NAME, Commands, command
+from nixt.runtime import Client, Event
 
 
 "defines"
