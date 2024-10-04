@@ -12,7 +12,7 @@ from nixt.object  import Object
 from nixt.persist import find, fntime, laps, sync
 
 
-from .command  import Commands
+from ..command  import Commands
 
 
 class NoDate(Exception):

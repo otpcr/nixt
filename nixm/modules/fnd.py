@@ -12,7 +12,7 @@ from nixt.object  import format
 from nixt.persist import find, fntime, laps, long, skel, types
 
 
-from .command  import Commands
+from ..command  import Commands
 
 
 def fnd(event):

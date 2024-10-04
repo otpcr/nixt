@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # This file is placed in the Public Domain.
 # pylint: disable=C0413,W0105
 
@@ -15,9 +14,11 @@ import sys
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.modules import face as faced
 from nixt.persist import pidfile, pidname
 from nixt.runtime import Errors, forever, init, wrap
+
+
+from .modules import face as faced
 
 
 def errors():
@@ -32,9 +33,6 @@ def privileges(username):
     pwnam2 = pwd.getpwnam(username)
     os.setgid(pwnam2.pw_gid)
     os.setuid(pwnam2.pw_uid)
-
-
-"main"
 
 
 def main():

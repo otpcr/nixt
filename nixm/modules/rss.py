@@ -26,7 +26,7 @@ from nixt.runtime import launch
 from nixt.timers  import Repeater
 
 
-from .command  import Broker, Commands
+from ..command  import Broker, Commands
 
 
 DEBUG = False

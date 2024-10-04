@@ -21,7 +21,7 @@ from nixt.persist import last, sync
 from nixt.runtime import Event, Reactor, later, launch
 
 
-from .command  import NAME, Broker, Commands, command
+from ..command  import NAME, Broker, Commands, command
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]

@@ -7,7 +7,8 @@
 from nixt.runtime import Errors
 
 
-from .command  import Commands
+from ..command  import Commands
+
 
 def err(event):
     "show errors."

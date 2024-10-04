@@ -12,7 +12,7 @@ from nixt.object  import Object, update
 from nixt.persist import laps
 
 
-from .command  import STARTTIME, Commands
+from ..command  import STARTTIME, Commands
 
 
 def thr(event):

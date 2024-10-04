@@ -12,7 +12,7 @@ from nixt.object  import Object
 from nixt.persist import find, laps, sync, fntime
 
 
-from .command  import Commands
+from ..command  import Commands
 
 
 class Log(Object):

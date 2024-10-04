@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # This file is placed in the Public Domain.
 # pylint: disable=C0413,W0105,W0611
 
@@ -14,11 +13,20 @@ import sys
 sys.path.insert(0, os.getcwd())
 
 
-from nixm.command import NAME, CLI, Commands, command
-from nixm         import face
-
-
 from nixt.runtime import Event
+
+
+from .command import NAME, CLI, Commands, command
+from .modules import face
+
+
+class CLIS(CLI):
+
+    "CLI"
+
+    def raw(self, txt):
+        "print text."
+        print(txt)
 
 
 TXT = """[Unit]
@@ -35,15 +43,6 @@ ExecStart=/home/%s/.local/bin/%ss
 WantedBy=multi-user.target"""
 
 
-class CLIS(CLI):
-
-    "CLI"
-
-    def raw(self, txt):
-        "print text."
-        print(txt)
-
-
 def srv(event):
     "create service file (pipx)."
     name  = getpass.getuser()
@@ -51,9 +50,6 @@ def srv(event):
 
 
 Commands.add(srv)
-
-
-"main"
 
 
 def main():
