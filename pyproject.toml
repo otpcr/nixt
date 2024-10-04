@@ -37,15 +37,3 @@ packages = [
    'nixt',
    'nixt.modules'
 ]
-
-[tool.setuptools.data-files]
-"share/doc/nixt/" =  [
-    'files/RECONSIDER.rst',
-    'files/bevestigd.jpg',
-    'files/bevestigd.pdf',
-    'files/informed.jpg',
-    'files/EM_Ack_OTP-CR-117_19.pdf',
-    'files/EM_T04_OTP-CR-117_19.pdf',
-    'files/EM_T07_OTP-CR-117_19_001.pdf',
-    'files/Kamer.pdf'
-]
