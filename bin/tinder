@@ -18,7 +18,7 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixm.command import NAME, STARTTIME, Commands, Config, command, parse
-from nixm         import face
+from nixm.modules import face
 from nixt.object  import Object
 from nixt.persist import Workdir, laps, skel
 from nixt.runtime import Client, Errors, Event, later, launch
