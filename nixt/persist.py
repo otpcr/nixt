@@ -46,27 +46,16 @@ def modpath():
     return os.path.join(Workdir.wdr, "mods")
 
 
-def pidfile(filename):
-    "write the pid to a file."
-    if os.path.exists(filename):
-        os.unlink(filename)
-    path2 = pathlib.Path(filename)
-    path2.parent.mkdir(parents=True, exist_ok=True)
-    with open(filename, "w", encoding="utf-8") as fds:
-        fds.write(str(os.getpid()))
 
 
 def pidname():
     "return pidfile path."
-    return os.path.join(Workdir.wdr, f"{Workdir.name}.pid")
+    return p(Workdir.wdr, f"{Workdir.name}.pid")
 
 
 def skel():
     "create directory,"
     stor = p(Workdir.wdr, "store", "")
-    path = pathlib.Path(stor)
-    path.mkdir(parents=True, exist_ok=True)
-    stor = p(Workdir.wdr, "mods", "")
     path = pathlib.Path(stor)
     path.mkdir(parents=True, exist_ok=True)
     return path
@@ -181,6 +170,16 @@ def laps(seconds, short=True):
         txt += f"{sec}s"
     txt = txt.strip()
     return txt
+
+
+def pidfile(filename):
+    "write the pid to a file."
+    if os.path.exists(filename):
+        os.unlink(filename)
+    path2 = pathlib.Path(filename)
+    path2.parent.mkdir(parents=True, exist_ok=True)
+    with open(filename, "w", encoding="utf-8") as fds:
+        fds.write(str(os.getpid()))
 
 
 def strip(pth, nmr=3):

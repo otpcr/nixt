@@ -7,7 +7,6 @@
 
 
 from .object  import Obj
-from .persist import pidfile, pidname
 from .runtime import later
 
 

@@ -18,16 +18,16 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.command import Commands, command, parse
-from nixt.modules import face
-from nixt.object  import Config, Object
+from nixt.object  import Object
 from nixt.persist import Workdir, laps, skel
-from nixt.runtime import NAME, STARTTIME, Client, Errors, Event, later, launch
+from nixt.runtime import NAME, STARTTIME, Client, Config, Errors, Event
+from nixt.runtime import later, launch
+
+
+"defines"
 
 
 cfg = Config()
-
-
-face.rss.DEBUG = True
 
 
 LAP = 1
@@ -58,6 +58,9 @@ param.tdo = ["mekker", ""]
 param.ver = [""]
 
 
+"cli"
+
+
 class CLI(Client):
 
     "command line interface."
@@ -77,6 +80,9 @@ class CLI(Client):
         if "v" in cfg.opts:
             print(txt)
             sys.stdout.flush()
+
+
+"utilities"
 
 
 def banner():
@@ -129,9 +135,16 @@ def wrap(function):
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old3)
 
 
+"main"
+
+
+from nixt.modules import face
+
+
 def main():
     "main"
     Workdir.wdr = ".test"
+    face.rss.DEBUG = True
     parse(cfg, " ".join(sys.argv[1:]))
     nrcommands = len(Commands.cmds) or 1
     if "v" in cfg.opts:

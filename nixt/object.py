@@ -51,6 +51,9 @@ def construct(obj, *args, **kwargs):
         update(obj, kwargs)
 
 
+"methods"
+
+
 def items(obj):
     "return the items of an object."
     if isinstance(obj,type({})):
@@ -77,6 +80,9 @@ def update(obj, data):
 def values(obj):
     "return values of an object."
     return obj.__dict__.values()
+
+
+"decoder"
 
 
 class ObjectDecoder(json.JSONDecoder):
@@ -117,6 +123,9 @@ def loads(string, *args, **kw):
     kw["cls"] = ObjectDecoder
     kw["object_hook"] = hook
     return json.loads(string, *args, **kw)
+
+
+"encoder"
 
 
 class ObjectEncoder(json.JSONEncoder):
