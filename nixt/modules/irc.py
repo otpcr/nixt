@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R,W0105,W0201,W0613,w0622,W0718,E1102
+# pylint: disable=R,C0103,W0105,W0201,W0613,w0622,W0718,E1102
 
 
 "internet relay chat"
@@ -10,7 +10,6 @@ import os
 import queue
 import socket
 import ssl
-import sys
 import textwrap
 import threading
 import time
@@ -30,6 +29,7 @@ output = None
 
 
 def debug(txt):
+    "log text."
     for ign in IGNORE:
         if ign in txt:
             return

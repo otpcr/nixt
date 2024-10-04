@@ -9,14 +9,13 @@
 import getpass
 import os
 import pwd
-import sys
-import time
-import _thread
 
 
-from nixt.command import pidfile, pidname
-from nixt.modules import face as faced
-from nixt.runtime import Errors, later, launch
+from nixt.persist import pidfile, pidname
+from nixt.runtime import Errors, forever, init, wrap
+
+
+"utilities"
 
 
 def errors():
@@ -26,30 +25,6 @@ def errors():
             print(line)
 
 
-def forever():
-    "it doesn't stop, until ctrl-c"
-    while True:
-        try:
-            time.sleep(1.0)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-
-
-def init(*pkgs):
-    "run the init function in modules."
-    mods = []
-    for pkg in pkgs:
-        for modname in dir(pkg):
-            if modname.startswith("__"):
-                continue
-            modi = getattr(pkg, modname)
-            if "init" not in dir(modi):
-                continue
-            thr = launch(modi.init)
-            mods.append((modi, thr))
-    return mods
-
-
 def privileges(username):
     "privileges."
     pwnam2 = pwd.getpwnam(username)
@@ -57,14 +32,10 @@ def privileges(username):
     os.setuid(pwnam2.pw_uid)
 
 
-def wrap(func):
-    "reset console."
-    try:
-        func()
-    except (KeyboardInterrupt, EOFError):
-        pass
-    except Exception as ex:
-        later(ex)
+"main"
+
+
+from nixt.modules import face as faced
 
 
 def main():

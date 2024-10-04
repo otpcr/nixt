@@ -23,11 +23,6 @@ class Commands:
         Commands.cmds[func.__name__] = func
 
 
-class Config(Obj):
-
-    "Config"
-
-
 def command(bot, evt):
     "check for and run a command."
     parse(evt, evt.txt)
@@ -99,12 +94,12 @@ def parse(obj, txt=None):
     return obj
 
 
+"interface"
+
+
 def __dir__():
     return (
         'Commands',
-        'Config',
         'command',
-        'parse',
-        'pidfile',
-        'pidname'
+        'parse'
     )

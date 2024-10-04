@@ -6,17 +6,15 @@
 "console"
 
 
-import os
 import readline
 import sys
 import termios
 import time
-import _thread
 
 
-from nixt.command import Config, command, parse
-from nixt.modules import face
-from nixt.runtime import NAME, Client, Errors, Event, later, launch
+from nixt.command import command, parse
+from nixt.runtime import NAME, Client, Config, Errors, Event
+from nixt.runtime import forever, init, later
 
 
 cfg = Config()
@@ -46,6 +44,9 @@ class Console(Client):
         print(txt)
 
 
+"utilities"
+
+
 def banner():
     "show banner."
     tme = time.ctime(time.time()).replace("  ", " ")
@@ -59,30 +60,6 @@ def errors():
             print(line)
     if not Errors.errors and "v" in cfg.opts:
         print("no errors")
-
-
-def forever():
-    "it doesn't stop, until ctrl-c"
-    while True:
-        try:
-            time.sleep(1.0)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-
-
-def init(*pkgs):
-    "run the init function in modules."
-    mods = []
-    for pkg in pkgs:
-        for modname in dir(pkg):
-            if modname.startswith("__"):
-                continue
-            modi = getattr(pkg, modname)
-            if "init" not in dir(modi):
-                continue
-            thr = launch(modi.init)
-            mods.append((modi, thr))
-    return mods
 
 
 def wrap(func):
@@ -101,6 +78,12 @@ def wrap(func):
     finally:
         if old2:
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old2)
+
+
+"main"
+
+
+from nixt.modules import face
 
 
 def main():

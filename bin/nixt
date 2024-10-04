@@ -1,22 +1,34 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C0413
+# pylint: disable=C0413,W0105,W0611
 
 
 "cli"
 
 
 import getpass
-import os
 import sys
 
 
-from nixt.command import Commands, Config, command, parse
-from nixt.modules import face
-from nixt.runtime import NAME, Client, Event
+from nixt.command import Commands, command, parse
+from nixt.runtime import NAME, Client, Config, Event
 
 
 cfg = Config()
+
+
+TXT = """[Unit]
+Description=%s
+After=network-online.target
+
+[Service]
+Type=simple
+User=%s
+Group=%s
+ExecStart=/home/%s/.local/bin/%ss
+
+[Install]
+WantedBy=multi-user.target"""
 
 
 class CLI(Client):
@@ -34,6 +46,12 @@ def srv(event):
     event.reply(TXT % (NAME.upper(), name, name, name, NAME))
 
 
+"main"
+
+
+from nixt.modules import face
+
+
 def main():
     "main"
     Commands.add(srv)
@@ -43,20 +61,6 @@ def main():
     evt.txt = cfg.txt
     command(cli, evt)
     evt.wait()
-
-
-TXT = """[Unit]
-Description=%s
-After=network-online.target
-
-[Service]
-Type=simple
-User=%s
-Group=%s
-ExecStart=/home/%s/.local/bin/%ss
-
-[Install]
-WantedBy=multi-user.target"""
 
 
 if __name__ == "__main__":

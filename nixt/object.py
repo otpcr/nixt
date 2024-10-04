@@ -2,13 +2,10 @@
 # pylint: disable=R,W0105,W0621,W0622
 
 
-"clean namespace"
+"a clean namespace"
 
 
 import json
-
-
-"object"
 
 
 class Object:
@@ -32,18 +29,12 @@ class Object:
         return str(self.__dict__)
 
 
-"default values"
-
-
 class Obj(Object):
 
     "default values"
 
     def __getattr__(self, key):
         return self.__dict__.get(key, "")
-
-
-"methods"
 
 
 def construct(obj, *args, **kwargs):
@@ -88,9 +79,6 @@ def values(obj):
     return obj.__dict__.values()
 
 
-"decoder"
-
-
 class ObjectDecoder(json.JSONDecoder):
 
     "ObjectDecoder"
@@ -129,9 +117,6 @@ def loads(string, *args, **kw):
     kw["cls"] = ObjectDecoder
     kw["object_hook"] = hook
     return json.loads(string, *args, **kw)
-
-
-"encoder"
 
 
 class ObjectEncoder(json.JSONEncoder):
@@ -180,7 +165,7 @@ def dumps(*args, **kw):
     return json.dumps(*args, **kw)
 
 
-"utilities"
+"methods"
 
 
 def edit(obj, setter, skip=False):
@@ -269,7 +254,6 @@ def search(obj, selector, matching=None):
 
 def __dir__():
     return (
-        'Config',
         'Object',
         'Obj',
         'construct',

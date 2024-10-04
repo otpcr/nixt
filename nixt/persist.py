@@ -21,9 +21,6 @@ disklock = _thread.allocate_lock()
 p        = os.path.join
 
 
-"workdir"
-
-
 class Workdir:
 
     "Workdir"
@@ -93,18 +90,13 @@ def whitelist(clz):
     Workdir.fqns.append(fqn(clz))
 
 
-"utilitites"
+"utilities"
 
 
 def cdir(pth):
     "create directory."
     path = pathlib.Path(pth)
     path.parent.mkdir(parents=True, exist_ok=True)
-
-
-def ident(obj):
-    "return an id for an object."
-    return p(fqn(obj), *str(datetime.datetime.now()).split())
 
 
 def find(mtc, selector=None, index=None, deleted=False, matching=False):
@@ -149,14 +141,6 @@ def fntime(daystr):
     if rest:
         timed += float('.' + rest)
     return timed
-
-
-def fqn(obj):
-    "return full qualified name of an object."
-    kin = str(type(obj)).split()[-1][1:-2]
-    if kin == "type":
-        kin = f"{obj.__module__}.{obj.__name__}"
-    return kin
 
 
 def laps(seconds, short=True):
@@ -213,6 +197,19 @@ def fetch(obj, pth):
         pth2 = store(pth)
         read(obj, pth2)
         return os.sep.join(pth.split(os.sep)[-3:])
+
+
+def fqn(obj):
+    "return full qualified name of an object."
+    kin = str(type(obj)).split()[-1][1:-2]
+    if kin == "type":
+        kin = f"{obj.__module__}.{obj.__name__}"
+    return kin
+
+
+def ident(obj):
+    "return an id for an object."
+    return p(fqn(obj), *str(datetime.datetime.now()).split())
 
 
 def last(obj, selector=None):
