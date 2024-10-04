@@ -15,11 +15,9 @@ import sys
 sys.path.insert(0, os.getcwd())
 
 
+from nixt.modules import face
 from nixt.persist import pidfile, pidname
 from nixt.runtime import Errors, forever, init, wrap
-
-
-"utilities"
 
 
 def daemon(verbose=False):
@@ -58,9 +56,6 @@ def privileges(username):
 
 
 "main"
-
-
-from nixt.modules import face
 
 
 def main():

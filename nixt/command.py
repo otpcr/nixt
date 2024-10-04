@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=R,W0105,C0413,W0611,W0718
+# pylint: disable=R,W0105,C0413,W0223,W0611,W0718
 
 
 "command"
@@ -10,19 +10,16 @@ import time
 
 
 from .object  import Obj
-from .runtime import later
+from .runtime import Client, later
 
 
 NAME = __file__.rsplit("/", maxsplit=2)[-2]
 STARTTIME = time.time()
 
 
-class Config:
+class Config(Obj):
 
     "Config"
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
 
 
 class Broker:
@@ -58,6 +55,17 @@ class Broker:
     def get(orig):
         "return object by matching repr."
         return Broker.objs.get(orig)
+
+
+
+class CLI(Client):
+
+    "CLI"
+
+    def __init__(self):
+        Client.__init__(self)
+        Broker.add(self)
+        self.register("event", command)
 
 
 class Commands:
@@ -151,6 +159,7 @@ def parse(obj, txt=None):
 
 def __dir__():
     return (
+        'CLI',
         'Broker',
         'Commands',
         'Config',

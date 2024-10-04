@@ -17,11 +17,10 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.command import Commands, command, parse
+from nixt.command import NAME, STARTTIME, Commands, Config, command, parse
 from nixt.object  import Object
 from nixt.persist import Workdir, laps, skel
-from nixt.runtime import NAME, STARTTIME, Client, Config, Errors, Event
-from nixt.runtime import later, launch
+from nixt.runtime import Client, Errors, Event, later, launch
 
 
 "defines"

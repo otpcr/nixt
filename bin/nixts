@@ -15,11 +15,9 @@ import sys
 sys.path.insert(0, os.getcwd())
 
 
+from nixt.modules import face as faced
 from nixt.persist import pidfile, pidname
 from nixt.runtime import Errors, forever, init, wrap
-
-
-"utilities"
 
 
 def errors():
@@ -37,9 +35,6 @@ def privileges(username):
 
 
 "main"
-
-
-from nixt.modules import face as faced
 
 
 def main():

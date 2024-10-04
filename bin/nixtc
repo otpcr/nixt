@@ -16,24 +16,21 @@ import time
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.command import NAME, Config, command, parse
-from nixt.runtime import Client, Errors, Event, forever, init, later
+from nixt.command import NAME, CLI, Config, parse
+from nixt.modules import face
+from nixt.runtime import Errors, Event, forever, init, later
 
 
 cfg = Config()
 
 
-class Console(Client):
+class Console(CLI):
 
     "Console"
 
-    def __init__(self):
-        Client.__init__(self)
-        self.register("event", command)
-
     def callback(self, evt):
         "wait for result."
-        Client.callback(self, evt)
+        CLI.callback(self, evt)
         evt.wait()
 
     def poll(self):
@@ -45,9 +42,6 @@ class Console(Client):
     def raw(self, txt):
         "print text."
         print(txt)
-
-
-"utilities"
 
 
 def banner():
@@ -86,7 +80,6 @@ def wrap(func):
 "main"
 
 
-from nixt.modules import face
 
 
 def main():

@@ -14,11 +14,9 @@ import sys
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.command import NAME, Commands, command
-from nixt.runtime import Client, Event
-
-
-"defines"
+from nixt.command import NAME, CLI, Commands, command
+from nixt.modules import face
+from nixt.runtime import Event
 
 
 TXT = """[Unit]
@@ -35,10 +33,7 @@ ExecStart=/home/%s/.local/bin/%ss
 WantedBy=multi-user.target"""
 
 
-"client"
-
-
-class CLI(Client):
+class CLIS(CLI):
 
     "CLI"
 
@@ -59,12 +54,9 @@ Commands.add(srv)
 "main"
 
 
-from nixt.modules import face
-
-
 def main():
     "main"
-    cli = CLI()
+    cli = CLIS()
     evt = Event()
     evt.txt = " ".join(sys.argv[1:])
     command(cli, evt)
