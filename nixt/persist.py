@@ -13,12 +13,15 @@ import time
 import _thread
 
 
-from .object  import Obj, dump, load, search, update
+from .object import Obj, dump, load, search, update
 
 
 lock     = _thread.allocate_lock()
 disklock = _thread.allocate_lock()
 p        = os.path.join
+
+
+"workdir"
 
 
 class Workdir:
