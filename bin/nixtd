@@ -12,6 +12,9 @@ import pwd
 import sys
 
 
+sys.path.insert(0, os.getcwd())
+
+
 from nixt.persist import pidfile, pidname
 from nixt.runtime import Errors, forever, init, wrap
 
