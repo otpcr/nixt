@@ -360,8 +360,6 @@ def wrap(func):
 
 def __dir__():
     return (
-        'NAME',
-        'STARTTIME',
         'Broker',
         'Client',
         'Config',

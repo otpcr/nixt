@@ -26,7 +26,7 @@ class Workdir:
     "Workdir"
 
     fqns = []
-    name = Obj.__module__.split(".", maxsplit=2)[-1]
+    name = Obj.__module__.split(".", maxsplit=2)[-2]
     wdr = os.path.expanduser(f"~/.{name}")
 
 
@@ -39,13 +39,6 @@ def long(name):
             res = names
             break
     return res
-
-
-def modpath():
-    "return path to modules."
-    return os.path.join(Workdir.wdr, "mods")
-
-
 
 
 def pidname():
@@ -260,22 +253,16 @@ def write(obj, pth):
 
 def __dir__():
     return (
-        'ReadError',
         'Workdir',
         'find',
-        'fns',
         'fetch',
         'last',
         'laps',
-        'long',
-        'mods',
         'pidfile',
         'pidname',
         'read',
         'skel',
-        'store',
         'sync',
         'types',
-        'whitelist',
         'write'
     )

@@ -6,7 +6,7 @@ N I X T
 
 ::
 
-   NIXT - you have been nixt.
+   NIXT - You have been nixt.
 
 
 **SYNOPSIS**

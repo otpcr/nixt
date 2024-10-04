@@ -10,11 +10,11 @@ import getpass
 import sys
 
 
-from nixt.command import Commands, command, parse
-from nixt.runtime import NAME, Client, Config, Event
+from nixt.command import Commands, command
+from nixt.runtime import NAME, Client, Event
 
 
-cfg = Config()
+"defines"
 
 
 TXT = """[Unit]
@@ -29,6 +29,9 @@ ExecStart=/home/%s/.local/bin/%ss
 
 [Install]
 WantedBy=multi-user.target"""
+
+
+"client"
 
 
 class CLI(Client):
@@ -46,6 +49,9 @@ def srv(event):
     event.reply(TXT % (NAME.upper(), name, name, name, NAME))
 
 
+Commands.add(srv)
+
+
 "main"
 
 
@@ -54,11 +60,9 @@ from nixt.modules import face
 
 def main():
     "main"
-    Commands.add(srv)
-    parse(cfg, " ".join(sys.argv[1:]))
     cli = CLI()
     evt = Event()
-    evt.txt = cfg.txt
+    evt.txt = " ".join(sys.argv[1:])
     command(cli, evt)
     evt.wait()
 

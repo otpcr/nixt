@@ -10,7 +10,7 @@ import time
 
 from ..command import Commands
 from ..object  import format
-from ..persist import find, fntime, laps, long, skel, store, types
+from ..persist import find, fntime, laps, long, skel, types
 
 
 def fnd(event):
@@ -23,11 +23,6 @@ def fnd(event):
         return
     otype = event.args[0]
     clz = long(otype)
-    if "." not in clz:
-        for fnm in store():
-            claz = fnm.split(".")[-1]
-            if otype == claz.lower():
-                clz = fnm
     nmr = 0
     for fnm, obj in find(clz, event.gets):
         event.reply(f"{nmr} {format(obj)} {laps(time.time()-fntime(fnm))}")

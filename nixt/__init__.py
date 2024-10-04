@@ -3,7 +3,4 @@
 # ruff: noqa: F401
 
 
-"NIXT"
-
-
-from . import command, object, persist, runtime
+"You have been nixt."
