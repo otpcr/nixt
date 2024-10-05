@@ -21,9 +21,6 @@ disklock = _thread.allocate_lock()
 p        = os.path.join
 
 
-"workdir"
-
-
 class Workdir:
 
     "Workdir"
