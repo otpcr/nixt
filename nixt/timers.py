@@ -9,7 +9,7 @@ import time
 import threading
 
 
-from .thread  import launch, named
+from .runtime  import launch, named
 
 
 class Timer:
@@ -55,9 +55,6 @@ class Repeater(Timer):
     def run(self):
         launch(self.start)
         super().run()
-
-
-"interface"
 
 
 def __dir__():

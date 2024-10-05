@@ -4,7 +4,7 @@
 "show errors"
 
 
-from nixt.errors import Errors
+from nixt.runtime import Errors
 
 
 from ..command  import Commands

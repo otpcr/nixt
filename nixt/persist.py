@@ -2,7 +2,7 @@
 # pylint: disable=R,W0105,W0719
 
 
-"persistence"
+"persist to disk"
 
 
 import datetime

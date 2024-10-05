@@ -22,7 +22,7 @@ from urllib.parse import quote_plus, urlencode
 
 from nixt.object  import Object, Obj, format, update
 from nixt.persist import find, fntime, laps, last, sync
-from nixt.thread  import launch
+from nixt.runtime import launch
 from nixt.timers  import Repeater
 
 

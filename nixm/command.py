@@ -10,10 +10,8 @@ import time
 import _thread
 
 
-from nixt.errors  import later
 from nixt.object  import Obj
-from nixt.runtime import Client
-from nixt.thread  import launch
+from nixt.runtime import Client, later, launch
 
 
 NAME = __file__.rsplit("/", maxsplit=2)[-2]
