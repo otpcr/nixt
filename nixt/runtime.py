@@ -205,7 +205,7 @@ def __dir__():
     return (
         'Client',
         'Event',
-        'Reactor'
+        'Reactor',
         'Errors',
         'Thread',
         'format',
