@@ -44,8 +44,6 @@ N I X T
 **INSTALL**
 
 
-installation is done with pip
-
 ::
 
     $ pip install nixt
@@ -55,7 +53,7 @@ installation is done with pip
 
 ::
 
-    source is at ``https://github.com/otpcr/nixt``
+    source is at https://github.com/otpcr/nixt
 
 
 **AUTHOR**
