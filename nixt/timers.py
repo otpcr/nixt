@@ -9,7 +9,7 @@ import time
 import threading
 
 
-from .runtime import launch, named
+from .thread  import launch, named
 
 
 class Timer:

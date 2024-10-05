@@ -7,10 +7,13 @@
 
 
 import time
+import _thread
 
 
+from nixt.errors  import later
 from nixt.object  import Obj
-from nixt.runtime import Client, later
+from nixt.runtime import Client
+from nixt.thread  import launch
 
 
 NAME = __file__.rsplit("/", maxsplit=2)[-2]
@@ -78,9 +81,6 @@ class Commands:
     def add(func):
         "add command."
         Commands.cmds[func.__name__] = func
-
-
-"methods"
 
 
 def command(bot, evt):
@@ -154,7 +154,39 @@ def parse(obj, txt=None):
     return obj
 
 
-"interface"
+
+def forever():
+    "it doesn't stop, until ctrl-c"
+    while True:
+        try:
+            time.sleep(1.0)
+        except (KeyboardInterrupt, EOFError):
+            _thread.interrupt_main()
+
+
+def init(*pkgs):
+    "run the init function in modules."
+    mods = []
+    for pkg in pkgs:
+        for modname in dir(pkg):
+            if modname.startswith("__"):
+                continue
+            modi = getattr(pkg, modname)
+            if "init" not in dir(modi):
+                continue
+            thr = launch(modi.init)
+            mods.append((modi, thr))
+    return mods
+
+
+def wrap(func):
+    "reset console."
+    try:
+        func()
+    except (KeyboardInterrupt, EOFError):
+        pass
+    except Exception as ex:
+        later(ex)
 
 
 def __dir__():
@@ -164,5 +196,8 @@ def __dir__():
         'Commands',
         'Config',
         'command',
-        'parse'
+        'forever',
+        'init',
+        'parse',
+        'wrap'
     )

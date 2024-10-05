@@ -7,41 +7,11 @@
 
 import queue
 import threading
-import time
-import traceback
-import types
 import _thread
 
 
-"errors"
-
-
-class Errors:
-
-    "Errors"
-
-    errors = []
-
-
-def fmat(exc):
-    "format an exception"
-    return traceback.format_exception(
-                               type(exc),
-                               exc,
-                               exc.__traceback__
-                              )
-
-
-def later(exc):
-    "add an exception"
-    excp = exc.with_traceback(exc.__traceback__)
-    fmt = fmat(excp)
-    if fmt not in Errors.errors:
-        Errors.errors.append(fmt)
-
-
-"reactor"
-
+from .thread import launch
+ 
 
 class Reactor:
 
@@ -140,129 +110,9 @@ class Event:
             self._thr.join()
 
 
-"threads"
-
-
-class Thread(threading.Thread):
-
-    "Thread"
-
-    def __init__(self, func, thrname, *args, daemon=True, **kwargs):
-        super().__init__(None, self.run, thrname, (), {}, daemon=daemon)
-        self.name      = thrname
-        self.queue     = queue.Queue()
-        self.result    = None
-        self.starttime = time.time()
-        self.queue.put_nowait((func, args))
-
-    def __contains__(self, key):
-        return key in self.__dict__
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        yield from dir(self)
-
-    def size(self):
-        "return qsize"
-        return self.queue.qsize()
-
-    def join(self, timeout=None):
-        "join this thread."
-        super().join(timeout)
-        return self.result
-
-    def run(self):
-        "run this thread's payload."
-        try:
-            func, args = self.queue.get()
-            self.result = func(*args)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-        except Exception as ex:
-            later(ex)
-
-
-def launch(func, *args, **kwargs):
-    "launch a thread."
-    name = kwargs.get("name", named(func))
-    thread = Thread(func, name, *args, **kwargs)
-    thread.start()
-    return thread
-
-
-def named(obj):
-    "return a full qualified name of an object/function/module."
-    if isinstance(obj, types.ModuleType):
-        return obj.__name__
-    typ = type(obj)
-    if '__builtins__' in dir(typ):
-        return obj.__name__
-    if '__self__' in dir(obj):
-        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj) and '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj):
-        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
-    if '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    return None
-
-
-
-"utilities"
-
-
-def forever():
-    "it doesn't stop, until ctrl-c"
-    while True:
-        try:
-            time.sleep(1.0)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-
-
-def init(*pkgs):
-    "run the init function in modules."
-    mods = []
-    for pkg in pkgs:
-        for modname in dir(pkg):
-            if modname.startswith("__"):
-                continue
-            modi = getattr(pkg, modname)
-            if "init" not in dir(modi):
-                continue
-            thr = launch(modi.init)
-            mods.append((modi, thr))
-    return mods
-
-
-def wrap(func):
-    "reset console."
-    try:
-        func()
-    except (KeyboardInterrupt, EOFError):
-        pass
-    except Exception as ex:
-        later(ex)
-
-
-"interface"
-
-
 def __dir__():
     return (
-        'Broker',
         'Client',
-        'Config',
-        'Errors',
-        'Reactor',
-        'Thread',
-        'forever',
-        'init',
-        'later',
-        'launch',
-        'named',
-        'wrap'
+        'EVent',
+        'Reactor'
     )
