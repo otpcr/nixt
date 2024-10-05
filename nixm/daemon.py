@@ -15,9 +15,10 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.persist import pidfile, pidname
-from nixt.runtime import Errors, forever, init, wrap
+from nixt.runtime import Errors
 
 
+from .command import forever, init, wrap
 from .modules import face
 
 
