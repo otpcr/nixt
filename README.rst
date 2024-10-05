@@ -13,10 +13,10 @@ N I X T
 
 ::
 
-    >>> from nixt.object import Object
+    >>> from nixt.object import Object, dumps, loads
     >>> o = Object()
     >>> o.a = "b"
-    >>> loads(dumps(o)
+    >>> print(loads(dumps(o)))
     {'a': 'b'}
 
 
