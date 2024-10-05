@@ -14,8 +14,8 @@ import sys
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.errors  import Errors
 from nixt.persist import pidfile, pidname
+from nixt.runtime import Errors
 
 
 from .command import forever, init, wrap
