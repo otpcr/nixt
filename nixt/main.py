@@ -4,13 +4,17 @@
 "main"
 
 
+import os
+import sys
 import time
 import _thread
 
 
+from .persist import modname
 from .runtime import launch
 
 
+MODS = None
 NAME = __file__.rsplit("/", maxsplit=2)[-2]
 STARTTIME = time.time()
 
@@ -52,6 +56,19 @@ def init(*pkgs):
             thr = launch(modi.init)
             mods.append((modi, thr))
     return mods
+
+
+def readmods():
+    "read modules."
+    MODS = None
+    if os.path.exists("mods"):
+        from mods import face as MODS
+    else:
+        modpath = modname()
+        sys.path.insert(0, modpath)
+        if os.path.exists(p(modpath, "face.py")):
+            from mods import face as MODS
+    return MODS
 
 
 def spl(txt):
