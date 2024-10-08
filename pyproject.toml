@@ -30,14 +30,13 @@ classifiers=[
 "source" = "https://github.com/otpcr/nixt"
 
 
-[project.scripts]
-"nixt"  = "nixt.cli:main"
-"nixtc" = "nixt.console:wrapped"
-"nixtd" = "nixt.daemon:main"
-"nixts" = "nixt.service:main"
-
-
 [tool.setuptools]
+script-files = [
+    'bin/nixt',
+    'bin/nixtc',
+    'bin/nixtd',
+    'bin/nixts'
+]
 packages = [
    'nixt',
 ]
