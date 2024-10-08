@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # This file is placed in the Public Domain.
 # pylint: disable=C0413,W0105,W0718
 
@@ -13,26 +12,33 @@ import termios
 import time
 
 
-sys.path.insert(0, os.getcwd())
-
-
-from nixt.runtime import Errors, Event, later
-
-
-from .command import NAME, CLI, Config, forever, later, init, parse
-from .modules import face
+from .broker  import Broker
+from .command import command, parse
+from .main    import NAME, boot, forever, init
+from .runtime import Client, Config, Errors, Event, later
 
 
 cfg = Config()
 
 
-class Console(CLI):
+if os.path.exists("mods"):
+    from mods import face as MODS
+else:
+    MODS = None    
+
+
+class Console(Client):
 
     "Console"
 
+    def __init__(self):
+        Client.__init__(self)
+        Broker.add(self)
+        self.register("event", command)
+
     def callback(self, evt):
         "wait for result."
-        CLI.callback(self, evt)
+        Client.callback(self, evt)
         evt.wait()
 
     def poll(self):
@@ -79,20 +85,17 @@ def wrap(func):
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old2)
 
 
-"main"
-
-
-
-
 def main():
     "main"
     readline.redisplay()
     parse(cfg, " ".join(sys.argv[1:]))
+    boot(MODS)
     if "v" in cfg.opts:
         banner()
-        face.irc.output = print
+        if MODS:
+            MODS.irc.output = print
     if "i" in cfg.opts:
-        for _mod, thr in init(face):
+        for _mod, thr in init(MODS):
             if "w" in cfg.opts:
                 thr.join()
     csl = Console()

@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nixt"
-version = "70"
+version = "80"
 authors = [
     {name = "Bart Thate", email = "record11719@gmail.com" },
 ]
@@ -28,6 +28,13 @@ classifiers=[
 "home" = "https://pypi.org/project/nixt"
 "bugs" = "https://github.com/otpcr/nixt/issues"
 "source" = "https://github.com/otpcr/nixt"
+
+
+[project.scripts]
+"nixt"  = "nixt.cli:main"
+"nixtc" = "nixt.console:wrapped"
+"nixtd" = "nixt.daemon:main"
+"nixts" = "nixt.service:main"
 
 
 [tool.setuptools]

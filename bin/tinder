@@ -17,17 +17,21 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixm.command import NAME, STARTTIME, Commands, Config, command, parse
-from nixm.modules import face
+from nixt.command import Commands, command, parse
+from nixt.main    import NAME, STARTTIME, boot
 from nixt.object  import Object
 from nixt.persist import Workdir, laps, skel
-from nixt.runtime import Client, Errors, Event, later, launch
-
-
-"defines"
+from nixt.runtime import Client, Config, Errors, Event
+from nixt.runtime import later, launch
 
 
 cfg = Config()
+
+
+if os.path.exists("mods"):
+    from mods import face as MODS
+else:
+    MODS = None    
 
 
 LAP = 1
@@ -58,9 +62,6 @@ param.tdo = ["mekker", ""]
 param.ver = [""]
 
 
-"cli"
-
-
 class CLI(Client):
 
     "command line interface."
@@ -80,9 +81,6 @@ class CLI(Client):
         if "v" in cfg.opts:
             print(txt)
             sys.stdout.flush()
-
-
-"utilities"
 
 
 def banner():
@@ -135,16 +133,13 @@ def wrap(function):
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old3)
 
 
-"main"
-
-
-
-
 def main():
     "main"
     Workdir.wdr = ".test"
-    face.rss.DEBUG = True
+    if MODS:
+        MODS.rss.DEBUG = True
     parse(cfg, " ".join(sys.argv[1:]))
+    boot(MODS)
     nrcommands = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()

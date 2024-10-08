@@ -11,15 +11,16 @@ import pwd
 import sys
 
 
-sys.path.insert(0, os.getcwd())
-
-
-from nixt.persist import pidfile, pidname
-from nixt.runtime import Errors
-
-
-from .command import forever, init, wrap
+from .main    import boot
 from .modules import face
+from .persist import pidfile, pidname
+from .runtime import Errors, forever, init, wrap
+
+
+if os.path.exists("mods"):
+    from mods import face as MODS
+else:
+    MODS = None    
 
 
 def daemon(verbose=False):
@@ -60,9 +61,10 @@ def privileges(username):
 def main():
     "main"
     daemon()
+    boot(face)
     privileges(getpass.getuser())
     pidfile(pidname())
-    init(face)
+    init(MODS)
     forever()
 
 

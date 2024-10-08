@@ -8,18 +8,18 @@
 import getpass
 import os
 import pwd
-import sys
 
 
-sys.path.insert(0, os.getcwd())
-
-
-from nixt.persist import pidfile, pidname
-from nixt.runtime import Errors
-
-
-from .command import forever, init, wrap
+from .command import boot
 from .modules import face as faced
+from .persist import pidfile, pidname
+from .runtime import Errors, forever, init, wrap
+
+
+if os.path.exists("mods"):
+    from mods import face as MODS
+else:
+    MODS = None    
 
 
 def errors():
@@ -40,6 +40,7 @@ def main():
     "main"
     privileges(getpass.getuser())
     pidfile(pidname())
+    boot(MODS)
     init(faced)
     forever()
 

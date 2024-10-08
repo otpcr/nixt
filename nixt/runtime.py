@@ -13,6 +13,14 @@ import types
 import _thread
 
 
+class Config:
+
+    "Config"
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
+
+
 class Errors:
 
     "Errors"
@@ -246,10 +254,10 @@ class Repeater(Timer):
         super().run()
 
 
-
 def __dir__():
     return (
         'Client',
+        'Config',
         'Event',
         'Reactor',
         'Errors',
@@ -259,5 +267,5 @@ def __dir__():
         'format',
         'later',
         'launch',
-        'named'
+        'named',
     )
