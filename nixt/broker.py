@@ -40,9 +40,6 @@ class Broker:
         return Broker.objs.get(orig)
 
 
-"interface"
-
-
 def __dir__():
     return (
         'Broker',

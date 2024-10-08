@@ -209,6 +209,9 @@ class Event:
             self._thr.join()
 
 
+"timers"
+
+
 class Timer:
 
     "Timer"
@@ -267,5 +270,5 @@ def __dir__():
         'format',
         'later',
         'launch',
-        'named',
+        'named'
     )
