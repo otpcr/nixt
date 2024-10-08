@@ -13,16 +13,23 @@ import sys
 from nixt.broker  import Broker
 from nixt.command import command, parse
 from nixt.main    import boot
+from nixt.persist import modname
 from nixt.runtime import Client, Config, Errors, Event
 
 
 cfg = Config()
+modpath = modname()
+p = os.path.join
 
 
 if os.path.exists("mods"):
     from mods import face as MODS
 else:
-    MODS = None    
+    sys.path.insert(0, modpath)
+    if os.path.exists(p(modpath, "face.py")):
+        from mods import face as MODS
+    else:
+        MODS = None    
 
 
 class CLI(Client):

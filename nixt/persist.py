@@ -41,6 +41,11 @@ def long(name):
     return res
 
 
+def modname():
+    "return pidfile path."
+    return p(Workdir.wdr, "mods")
+
+
 def pidname():
     "return pidfile path."
     return p(Workdir.wdr, f"{Workdir.name}.pid")
@@ -255,6 +260,7 @@ def __dir__():
         'fetch',
         'last',
         'laps',
+        'modname',
         'pidfile',
         'pidname',
         'read',
