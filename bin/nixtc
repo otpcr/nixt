@@ -15,7 +15,7 @@ import time
 
 from nixt.broker  import Broker
 from nixt.command import command, parse
-from nixt.main    import NAME, boot, forever, init
+from nixt.main    import NAME, boot, forever, init, readmods
 from nixt.runtime import Client, Config, Errors, Event, later
 
 
@@ -90,6 +90,7 @@ def main():
     "main"
     readline.redisplay()
     parse(cfg, " ".join(sys.argv[1:]))
+    MODS = readmods()
     boot(MODS)
     if "v" in cfg.opts:
         banner()
