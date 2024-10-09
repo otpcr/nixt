@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.13
 # This file is placed in the Public Domain.
 # pylint: disable=C0413,W0105,W0718
 
@@ -18,7 +18,7 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.command import Commands, command, parse
-from nixt.main    import NAME, STARTTIME, boot
+from nixt.main    import NAME, STARTTIME, boot, readmods
 from nixt.object  import Object
 from nixt.persist import Workdir, laps, skel
 from nixt.runtime import Client, Config, Errors, Event
@@ -26,12 +26,6 @@ from nixt.runtime import later, launch
 
 
 cfg = Config()
-
-
-if os.path.exists("mods"):
-    from mods import face as MODS
-else:
-    MODS = None    
 
 
 LAP = 1
@@ -136,9 +130,10 @@ def wrap(function):
 def main():
     "main"
     Workdir.wdr = ".test"
+    parse(cfg, " ".join(sys.argv[1:]))
+    MODS = readmods()
     if MODS:
         MODS.rss.DEBUG = True
-    parse(cfg, " ".join(sys.argv[1:]))
     boot(MODS)
     nrcommands = len(Commands.cmds) or 1
     if "v" in cfg.opts:

@@ -22,12 +22,6 @@ from nixt.runtime import Client, Config, Errors, Event, later
 cfg = Config()
 
 
-if os.path.exists("mods"):
-    from mods import face as MODS
-else:
-    MODS = None    
-
-
 class Console(Client):
 
     "Console"
@@ -64,8 +58,6 @@ def errors():
     for error in Errors.errors:
         for line in error:
             print(line)
-    if not Errors.errors and "v" in cfg.opts:
-        print("no errors")
 
 
 def wrap(func):

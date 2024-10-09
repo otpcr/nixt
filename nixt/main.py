@@ -64,13 +64,10 @@ def init(*pkgs):
 def readmods():
     "read modules."
     MODS = None
-    if os.path.exists("mods"):
-        from mods import face as MODS
-    else:
+    if not os.path.exists("mods"):
         modpath = modname()
         sys.path.insert(0, os.path.dirname(modpath))
-        if os.path.exists(p(modpath, "face.py")):
-            from mods import face as MODS
+    import mods as MODS
     return MODS
 
 
