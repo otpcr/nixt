@@ -19,6 +19,9 @@ NAME = __file__.rsplit("/", maxsplit=2)[-2]
 STARTTIME = time.time()
 
 
+p = os.path.join
+
+
 def boot(*pkgs, mods=None):
     "run the init function in modules."
     wanted = spl(mods or "")
@@ -65,7 +68,7 @@ def readmods():
         from mods import face as MODS
     else:
         modpath = modname()
-        sys.path.insert(0, modpath)
+        sys.path.insert(0, os.path.dirname(modpath))
         if os.path.exists(p(modpath, "face.py")):
             from mods import face as MODS
     return MODS
