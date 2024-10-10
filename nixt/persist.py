@@ -103,7 +103,6 @@ def find(mtc, selector=None, index=None, deleted=False, matching=False):
     for fnm in sorted(fns(clz), key=fntime):
         obj = Cache.get(fnm)
         if obj:
-            print(fnm)
             yield (fnm, obj)
             continue
         obj = Obj()
