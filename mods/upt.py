@@ -8,9 +8,11 @@
 import time
 
 
-from nixt.modules import Commands
 from nixt.persist import laps
 from nixt.runtime import STARTTIME
+
+
+from .command import Commands
 
 
 def register():

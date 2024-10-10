@@ -5,6 +5,7 @@
 "runtime"
 
 
+import os
 import queue
 import threading
 import time
@@ -288,6 +289,39 @@ def init(*pkgs):
     return mods
 
 
+def readmods(path):
+    "read modules."
+    mods = None
+    if not os.path.exists("mods"):
+        sys.path.insert(0, os.path.dirname(path))
+    import mods
+    return mods
+
+
+def scan(*pkgs, mods=None):
+    "run the init function in modules."
+    wanted = spl(mods or "")
+    for pkg in pkgs:
+        for mod in dir(pkg):
+            if wanted and mod not in wanted:
+                continue
+            if mod.startswith("__"):
+                continue
+            modi = getattr(pkg, mod)
+            if "register" not in dir(modi):
+                continue
+            modi.register()
+
+
+def spl(txt):
+    "split comma separated string into a list."
+    try:
+        result = txt.split(',')
+    except (TypeError, ValueError):
+        result = txt
+    return [x for x in result if x]
+
+
 def wrap(func):
     "reset console."
     try:
@@ -316,5 +350,8 @@ def __dir__():
         'launch',
         'init',
         'named',
+        'readmods',
+        'scan',
+        'spl',
         'wrap'
     )

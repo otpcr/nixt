@@ -5,8 +5,10 @@
 "list of commands"
 
 
-from nixt.modules import Commands
 from nixt.object  import keys
+
+
+from .command import Commands
 
 
 def register():

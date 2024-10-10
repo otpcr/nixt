@@ -13,12 +13,13 @@ import sys
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.modules import command, scan
 from nixt.object  import parse
-from nixt.runtime import Client, Config, Errors, Event
+from nixt.persist import modname
+from nixt.runtime import Client, Config, Errors, Event, readmods
 
 
 cfg = Config()
+mods = readmods(modname())
 
 
 class CLI(Client):
@@ -27,7 +28,8 @@ class CLI(Client):
 
     def __init__(self):
         Client.__init__(self)
-        self.register("event", command)
+        if mods:
+            self.register("event", mods.command)
 
     def raw(self, txt):
         "print text."
@@ -41,24 +43,14 @@ def errors():
             print(line)
 
 
-def readmods():
-    "read modules."
-    mods = None
-    if not os.path.exists("mods"):
-        modpath = modname()
-        sys.path.insert(0, os.path.dirname(modpath))
-    import mods
-    return mods
-
-
 def main():
     "main"
     parse(cfg, " ".join(sys.argv[1:]))
-    scan(readmods())
+    mods.command.scan(mods)
     cli = CLI()
     evt = Event()
     evt.txt = cfg.txt
-    command(cli, evt)
+    mods.command.command(cli, evt)
     evt.wait()
 
 

@@ -8,8 +8,10 @@
 import getpass
 
 
-from nixt.modules import Commands
 from nixt.runtime import NAME
+
+
+from .command import Commands
 
 
 def register():

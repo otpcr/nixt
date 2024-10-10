@@ -8,10 +8,11 @@
 import time
 
 
-from nixt.modules import Commands
 from nixt.object  import Object
 from nixt.persist import find, laps, sync, fntime
 
+
+from .command import Commands
 
 "defines"
 

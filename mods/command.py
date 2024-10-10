@@ -5,8 +5,8 @@
 "command"
 
 
-from ..object  import Obj, parse
-from ..runtime import later
+from nixt.object  import Obj, parse
+from nixt.runtime import later
 
 
 class Commands:
