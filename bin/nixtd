@@ -12,16 +12,12 @@ import pwd
 import sys
 
 
-from nixt.main    import boot
-from nixt.modules import face
-from nixt.persist import pidfile, pidname
+sys.path.insert(0, os.getcwd())
+
+
+from nixt.command import scan
+from nixt.persist import modname, pidfile, pidname
 from nixt.runtime import Errors, forever, init, wrap
-
-
-if os.path.exists("mods"):
-    from mods import face as MODS
-else:
-    MODS = None    
 
 
 def daemon(verbose=False):
@@ -59,13 +55,24 @@ def privileges(username):
     os.setuid(pwnam.pw_uid)
 
 
+def readmods():
+    "read modules."
+    MODS3 = None
+    if not os.path.exists("mods"):
+        modpath = modname()
+        sys.path.insert(0, os.path.dirname(modpath))
+    import mods as MODS3
+    return MODS3
+
+
 def main():
     "main"
-    daemon()
-    boot(face)
+    daemon(True)
     privileges(getpass.getuser())
     pidfile(pidname())
-    init(MODS)
+    mods = readmods()
+    scan(mods)
+    init(mods)
     forever()
 
 

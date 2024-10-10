@@ -13,6 +13,10 @@ import types
 import _thread
 
 
+NAME = __file__.rsplit("/", maxsplit=2)[-2]
+STARTTIME = time.time()
+
+
 class Config:
 
     "Config"
@@ -257,8 +261,47 @@ class Repeater(Timer):
         super().run()
 
 
+"utilities"
+
+
+def forever():
+    "it doesn't stop, until ctrl-c"
+    while True:
+        try:
+            time.sleep(1.0)
+        except (KeyboardInterrupt, EOFError):
+            _thread.interrupt_main()
+
+
+def init(*pkgs):
+    "run the init function in modules."
+    mods = []
+    for pkg in pkgs:
+        for modname in dir(pkg):
+            if modname.startswith("__"):
+                continue
+            modi = getattr(pkg, modname)
+            if "init" not in dir(modi):
+                continue
+            thr = launch(modi.init)
+            mods.append((modi, thr))
+    return mods
+
+
+def wrap(func):
+    "reset console."
+    try:
+        func()
+    except (KeyboardInterrupt, EOFError):
+        pass
+    except Exception as ex:
+        later(ex)
+
+
 def __dir__():
     return (
+        'NAME',
+        'STARTTIME',
         'Client',
         'Config',
         'Event',
@@ -267,8 +310,11 @@ def __dir__():
         'Repeater',
         'Thread',
         'Timer',
+        'forever',
         'format',
         'later',
         'launch',
-        'named'
+        'init',
+        'named',
+        'wrap'
     )

@@ -18,10 +18,9 @@ import _thread
 
 from nixt.broker  import Broker
 from nixt.command import Commands, command
-from nixt.main    import NAME
 from nixt.object  import Object, Obj, edit, keys, format
 from nixt.persist import last, sync
-from nixt.runtime import Event, Reactor, later, launch
+from nixt.runtime import NAME, Event, Reactor, later, launch
 
 
 "defines"

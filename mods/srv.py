@@ -9,7 +9,7 @@ import getpass
 
 
 from nixt.command import Commands
-from nixt.main    import NAME
+from nixt.runtime import NAME
 
 
 def register():

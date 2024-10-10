@@ -35,6 +35,9 @@ def command(bot, evt):
     evt.ready()
 
 
+"utilities"
+
+
 def parse(obj, txt=None):
     "parse a string for a command."
     if txt is None:
@@ -92,9 +95,35 @@ def parse(obj, txt=None):
     return obj
 
 
+def scan(*pkgs, mods=None):
+    "run the init function in modules."
+    wanted = spl(mods or "")
+    for pkg in pkgs:
+        for mod in dir(pkg):
+            if wanted and mod not in wanted:
+                continue
+            if mod.startswith("__"):
+                continue
+            modi = getattr(pkg, mod)
+            if "register" not in dir(modi):
+                continue
+            modi.register()
+
+
+def spl(txt):
+    "split comma separated string into a list."
+    try:
+        result = txt.split(',')
+    except (TypeError, ValueError):
+        result = txt
+    return [x for x in result if x]
+
+
 def __dir__():
     return (
         'Commands',
         'command',
-        'parse'
+        'parse',
+        'scan',
+        'spl'
     )

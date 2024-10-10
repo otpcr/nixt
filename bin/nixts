@@ -9,18 +9,15 @@
 import getpass
 import os
 import pwd
+import sys
 
 
-from nixt.command import boot
-from nixt.modules import face as faced
+sys.path.insert(0, os.getcwd())
+
+
+from nixt.command import scan
 from nixt.persist import pidfile, pidname
 from nixt.runtime import Errors, forever, init, wrap
-
-
-if os.path.exists("mods"):
-    from mods import face as MODS
-else:
-    MODS = None    
 
 
 def errors():
@@ -37,12 +34,23 @@ def privileges(username):
     os.setuid(pwnam2.pw_uid)
 
 
+def readmods():
+    "read modules."
+    MODS4 = None
+    if not os.path.exists("mods"):
+        modpath = modname()
+        sys.path.insert(0, os.path.dirname(modpath))
+    import mods as MODS4
+    return MODS4
+
+
 def main():
     "main"
     privileges(getpass.getuser())
     pidfile(pidname())
-    boot(MODS)
-    init(faced)
+    mods = readmods()
+    scan(mods)
+    init(mods)
     forever()
 
 

@@ -21,8 +21,7 @@ from urllib.parse import quote_plus, urlencode
 
 
 from nixt.broker  import Broker
-from nixt.command import Commands
-from nixt.main    import spl
+from nixt.command import Commands, spl
 from nixt.object  import Object, Obj, format, update
 from nixt.persist import find, fntime, laps, last, sync
 from nixt.runtime import Repeater, launch

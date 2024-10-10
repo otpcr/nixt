@@ -13,10 +13,13 @@ import termios
 import time
 
 
+sys.path.insert(0, os.getcwd())
+
+
 from nixt.broker  import Broker
-from nixt.command import command, parse
-from nixt.main    import NAME, boot, forever, init, readmods
-from nixt.runtime import Client, Config, Errors, Event, later
+from nixt.command import command, parse, scan
+from nixt.runtime import NAME, Client, Config, Errors, Event
+from nixt.runtime import forever, init, later
 
 
 cfg = Config()
@@ -60,6 +63,16 @@ def errors():
             print(line)
 
 
+def readmods():
+    "read modules."
+    MODS2 = None
+    if not os.path.exists("mods"):
+        modpath = modname()
+        sys.path.insert(0, os.path.dirname(modpath))
+    import mods as MODS2
+    return MODS2
+
+
 def wrap(func):
     "reset console."
     old2 = None
@@ -80,16 +93,16 @@ def wrap(func):
 
 def main():
     "main"
-    readline.redisplay()
     parse(cfg, " ".join(sys.argv[1:]))
-    MODS = readmods()
-    boot(MODS)
+    mods = readmods()
+    scan(mods)
     if "v" in cfg.opts:
+        readline.redisplay()
         banner()
-        if MODS:
-            MODS.irc.output = print
+        if mods:
+            mods.irc.output = print
     if "i" in cfg.opts:
-        for _mod, thr in init(MODS):
+        for _mod, thr in init(mods):
             if "w" in cfg.opts:
                 thr.join()
     csl = Console()

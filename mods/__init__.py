@@ -14,6 +14,8 @@ def importdir(path, package="mods"):
     for fnm in os.listdir(path):
         if fnm.startswith("__"):
             continue
+        if fnm.endswith("~"):
+            continue
         pname = path.rsplit(os.sep, maxsplit=1)[-1]
         name = f"{pname}.{fnm[:-3]}"
         mods.append(importlib.import_module(name, package))

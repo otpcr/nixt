@@ -14,8 +14,7 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.broker  import Broker
-from nixt.command import command, parse
-from nixt.main    import boot, readmods
+from nixt.command import command, parse, scan
 from nixt.runtime import Client, Config, Errors, Event
 
 
@@ -43,11 +42,20 @@ def errors():
             print(line)
 
 
+def readmods():
+    "read modules."
+    MODS = None
+    if not os.path.exists("mods"):
+        modpath = modname()
+        sys.path.insert(0, os.path.dirname(modpath))
+    import mods as MODS
+    return MODS
+
+
 def main():
     "main"
     parse(cfg, " ".join(sys.argv[1:]))
-    MODS = readmods()
-    boot(MODS)
+    scan(readmods())
     cli = CLI()
     evt = Event()
     evt.txt = cfg.txt
