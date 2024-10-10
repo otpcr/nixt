@@ -8,7 +8,7 @@
 import time
 
 
-from nixt.command import Commands
+from nixt.modules import Commands
 from nixt.persist import laps
 from nixt.runtime import STARTTIME
 

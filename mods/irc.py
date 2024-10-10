@@ -16,10 +16,9 @@ import time
 import _thread
 
 
-from nixt.broker  import Broker
-from nixt.command import Commands, command
+from nixt.modules import Commands, command
 from nixt.object  import Object, Obj, edit, keys, format
-from nixt.persist import last, sync
+from nixt.persist import Cache, ident, last, sync
 from nixt.runtime import NAME, Event, Reactor, later, launch
 
 
@@ -180,6 +179,7 @@ class IRC(Reactor, Output):
         self.events.connected = threading.Event()
         self.events.joined = threading.Event()
         self.events.ready = threading.Event()
+        self.idents = []
         self.sock = None
         self.state = Obj()
         self.state.dostop = False
@@ -199,7 +199,8 @@ class IRC(Reactor, Output):
         self.register('PRIVMSG', cb_privmsg)
         self.register('QUIT', cb_quit)
         self.register("366", cb_ready)
-        Broker.add(self)
+        self.ident = ident(self)
+        Cache.add(self.ident, self)
 
     def announce(self, txt):
         "announce on all channels."
@@ -651,7 +652,7 @@ def mre(event):
     if not event.channel:
         event.reply('channel is not set.')
         return
-    bot = Broker.get(event.orig)
+    bot = Cache.get(event.orig)
     if 'cache' not in dir(bot):
         event.reply('bot is missing cache')
         return

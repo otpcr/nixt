@@ -20,10 +20,9 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from nixt.broker  import Broker
-from nixt.command import Commands, spl
+from nixt.modules import Commands, spl
 from nixt.object  import Object, Obj, format, update
-from nixt.persist import find, fntime, laps, last, sync
+from nixt.persist import Cache, find, fntime, laps, last, sync
 from nixt.runtime import Repeater, launch
 
 
@@ -147,7 +146,8 @@ class Fetcher(Object):
             txt = f'[{feedname}] '
         for obj in result:
             txt2 = txt + self.display(obj)
-            Broker.announce(txt2)
+            for obj in Cache.typed("IRC"):
+                obj.announce(txt2)
         return counter
 
     def run(self, silent=False):

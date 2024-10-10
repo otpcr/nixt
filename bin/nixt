@@ -13,8 +13,8 @@ import sys
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.broker  import Broker
-from nixt.command import command, parse, scan
+from nixt.modules import command, scan
+from nixt.object  import parse
 from nixt.runtime import Client, Config, Errors, Event
 
 
@@ -27,7 +27,6 @@ class CLI(Client):
 
     def __init__(self):
         Client.__init__(self)
-        Broker.add(self)
         self.register("event", command)
 
     def raw(self, txt):
@@ -44,12 +43,12 @@ def errors():
 
 def readmods():
     "read modules."
-    MODS = None
+    mods = None
     if not os.path.exists("mods"):
         modpath = modname()
         sys.path.insert(0, os.path.dirname(modpath))
-    import mods as MODS
-    return MODS
+    import mods
+    return mods
 
 
 def main():

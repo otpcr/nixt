@@ -5,7 +5,7 @@
 "list of commands"
 
 
-from nixt.command import Commands
+from nixt.modules import Commands
 from nixt.object  import keys
 
 

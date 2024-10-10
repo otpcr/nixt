@@ -40,6 +40,14 @@ class Cache:
         with cachelock:
             return Cache.objs.get(path)
 
+    @staticmethod
+    def typed(match):
+        with cachelock:
+            for key in Cache.objs.keys():
+                if match not in key:
+                    continue
+                yield self.objs.get(key)
+
 
 class Workdir:
 

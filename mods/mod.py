@@ -8,7 +8,7 @@
 import os
 
 
-from nixt.command import Commands
+from nixt.modules import Commands
 
 
 def register():
