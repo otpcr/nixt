@@ -17,11 +17,10 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.command import Commands, command, parse
-from nixt.main    import NAME, STARTTIME, boot, readmods
+from nixt.command import Commands, command, parse, scan
 from nixt.object  import Object
 from nixt.persist import Workdir, laps, skel
-from nixt.runtime import Client, Config, Errors, Event
+from nixt.runtime import NAME, STARTTIME, Client, Config, Errors, Event
 from nixt.runtime import later, launch
 
 
@@ -109,6 +108,16 @@ def payload(clt):
     return nmr
 
 
+def readmods():
+    "read modules."
+    MODS = None
+    if not os.path.exists("mods"):
+        modpath = modname()
+        sys.path.insert(0, os.path.dirname(modpath))
+    import mods as MODS
+    return MODS
+
+
 def wrap(function):
     "reset console."
     old3 = None
@@ -131,10 +140,10 @@ def main():
     "main"
     Workdir.wdr = ".test"
     parse(cfg, " ".join(sys.argv[1:]))
-    MODS = readmods()
-    if MODS:
-        MODS.rss.DEBUG = True
-    boot(MODS)
+    mods = readmods()
+    if mods:
+        mods.rss.DEBUG = True
+    scan(mods)
     nrcommands = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()

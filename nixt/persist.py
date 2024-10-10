@@ -16,9 +16,29 @@ import _thread
 from .object import Obj, dump, load, search, update
 
 
-lock     = _thread.allocate_lock()
-disklock = _thread.allocate_lock()
-p        = os.path.join
+cachelock = _thread.allocate_lock()
+disklock  = _thread.allocate_lock()
+lock      = _thread.allocate_lock()
+p         = os.path.join
+
+
+class Cache:
+
+    "Broker"
+
+    objs = {}
+
+    @staticmethod
+    def add(path, obj):
+        "add object."
+        with cachelock:
+            Cache.objs[path] = obj
+
+    @staticmethod
+    def get(path):
+        "return object by matching path."
+        with cachelock:
+            return Cache.objs.get(path)
 
 
 class Workdir:
@@ -28,6 +48,9 @@ class Workdir:
     fqns = []
     name = Obj.__module__.split(".", maxsplit=2)[-2]
     wdr = os.path.expanduser(f"~/.{name}")
+
+
+"paths"
 
 
 def long(name):
@@ -51,25 +74,12 @@ def pidname():
     return p(Workdir.wdr, f"{Workdir.name}.pid")
 
 
-def skel():
-    "create directory,"
-    stor = p(Workdir.wdr, "store", "")
-    path = pathlib.Path(stor)
-    path.mkdir(parents=True, exist_ok=True)
-    return path
-
-
 def store(pth=""):
     "return objects directory."
     stor = p(Workdir.wdr, "store", "")
     if not os.path.exists(stor):
         skel()
     return p(Workdir.wdr, "store", pth)
-
-
-def types():
-    "return types stored."
-    return os.listdir(store())
 
 
 def whitelist(clz):
@@ -91,8 +101,14 @@ def find(mtc, selector=None, index=None, deleted=False, matching=False):
     clz = long(mtc)
     nrs = -1
     for fnm in sorted(fns(clz), key=fntime):
+        obj = Cache.get(fnm)
+        if obj:
+            print(fnm)
+            yield (fnm, obj)
+            continue
         obj = Obj()
         fetch(obj, fnm)
+        Cache.add(fnm, obj)
         if not deleted and '__deleted__' in obj and obj.__deleted__:
             continue
         if selector and not search(obj, selector, matching):
@@ -180,9 +196,22 @@ def pidfile(filename):
         fds.write(str(os.getpid()))
 
 
+def skel():
+    "create directory,"
+    stor = p(Workdir.wdr, "store", "")
+    path = pathlib.Path(stor)
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
 def strip(pth, nmr=3):
     "reduce to path with directory."
     return os.sep.join(pth.split(os.sep)[-nmr:])
+
+
+def types():
+    "return types stored."
+    return os.listdir(store())
 
 
 "methods"
@@ -251,6 +280,9 @@ def write(obj, pth):
         cdir(pth)
         with open(pth, 'w', encoding='utf-8') as ofile:
             dump(obj, ofile, indent=4)
+
+
+"interface"
 
 
 def __dir__():
