@@ -22,7 +22,7 @@ from nixt.runtime import NAME, Client, Config, Errors, Event
 from nixt.runtime import forever, later
 
 
-cfg = Config()
+Cfg = Config()
 
 
 if not os.path.exists("mods"):
@@ -30,13 +30,10 @@ if not os.path.exists("mods"):
 
 
 try:
-    import mods
+    import mods as modr
 except ModuleNotFoundError:
     print("modules not found.")
     os._exit(0)
-
-
-from mods import init, scan
 
 
 class Console(Client):
@@ -45,7 +42,7 @@ class Console(Client):
 
     def __init__(self):
         Client.__init__(self)
-        self.register("event", mods.command)
+        self.register("event", modr.command)
 
     def callback(self, evt):
         "wait for result."
@@ -96,15 +93,15 @@ def wrap(func):
 
 def main():
     "main"
-    parse(cfg, " ".join(sys.argv[1:]))
-    scan(mods)
-    if mods and "v" in cfg.opts:
+    parse(Cfg, " ".join(sys.argv[1:]))
+    modr.scan(modr)
+    if "v" in Cfg.opts:
         readline.redisplay()
         banner()
-        mods.irc.output = print
-    if mods and "i" in cfg.opts:
-        for _mod, thr in init(mods):
-            if "w" in cfg.opts:
+        modr.irc.output = print
+    if "i" in Cfg.opts:
+        for _mod, thr in modr.init(modr):
+            if "w" in Cfg.opts:
                 thr.join()
     csl = Console()
     csl.start()

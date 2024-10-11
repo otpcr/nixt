@@ -24,7 +24,7 @@ if not os.path.exists("mods"):
 
 
 try:
-    import mods
+    import mods as modi
 except ModuleNotFoundError:
     print("modules not found.")
     os._exit(1)
@@ -48,8 +48,8 @@ def main():
     "main"
     privileges(getpass.getuser())
     pidfile(pidname())
-    mods.scan(mods)
-    mods.init(mods)
+    modi.scan(modi)
+    modi.init(modi)
     forever()
 
 

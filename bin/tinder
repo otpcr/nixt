@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.13
 # This file is placed in the Public Domain.
-# pylint: disable=C0413,W0105,W0718
+# pylint: disable=C0413,W0105,W0212,W0718
 
 
 "tinder"
@@ -18,8 +18,8 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.object  import Object, parse
-from nixt.persist import Workdir, laps, skel
-from nixt.runtime import NAME, STARTTIME, Client, Config, Errors, Event
+from nixt.persist import Workdir, laps, modname, skel
+from nixt.runtime import STARTTIME, NAME, Client, Config, Errors, Event
 from nixt.runtime import later, launch
 
 
@@ -33,7 +33,7 @@ if not os.path.exists("mods"):
 try:
     import mods
 except ModuleNotFoundError:
-    print("modules not found.")
+    print("modules not found")
     os._exit(1)
 
 
@@ -119,16 +119,6 @@ def payload(clt):
             events.append(evt)
             nmr += 1
     return nmr
-
-
-def readmods():
-    "read modules."
-    MODS = None
-    if not os.path.exists("mods"):
-        modpath = modname()
-        sys.path.insert(0, os.path.dirname(modpath))
-    import mods as MODS
-    return MODS
 
 
 def wrap(function):

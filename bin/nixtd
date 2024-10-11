@@ -20,17 +20,15 @@ from nixt.runtime import Errors, forever, wrap
 
 
 if not os.path.exists("mods"):
-    sys.path.insert(0, os.path.dirname(modname()))
+    path = modname()
+    sys.path.insert(0, os.path.dirname(path))
 
 
 try:
-    import mods
+    import mods as modz
 except ModuleNotFoundError:
     print("modules not found.")
     os._exit(1)
-
-
-from mods import init, scan
 
 
 def daemon(verbose=False):
@@ -73,8 +71,8 @@ def main():
     daemon(True)
     privileges(getpass.getuser())
     pidfile(pidname())
-    scan(mods)
-    init(mods)
+    modz.scan(modz)
+    modz.init(modz)
     forever()
 
 
