@@ -12,7 +12,7 @@ from nixt.object  import Object
 from nixt.persist import find, fntime, laps, sync
 
 
-from .command import Commands
+from . import Commands
 
 
 def register():

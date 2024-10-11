@@ -25,7 +25,7 @@ from nixt.persist import Cache, find, fntime, laps, last, sync
 from nixt.runtime import Repeater, launch
 
 
-from .command import Commands, spl
+from . import Commands, spl
 
 
 DEBUG = False

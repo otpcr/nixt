@@ -11,7 +11,7 @@ import getpass
 from nixt.runtime import NAME
 
 
-from .command import Commands
+from . import Commands
 
 
 def register():

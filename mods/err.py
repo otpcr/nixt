@@ -8,7 +8,7 @@
 from nixt.runtime import Errors
 
 
-from .command import Commands
+from . import Commands
 
 
 def register():

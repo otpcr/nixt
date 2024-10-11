@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C0413,W0105,W0718
+# pylint: disable=C0413,W0105,W0212,W0718
 
 
 "console"
@@ -19,11 +19,24 @@ sys.path.insert(0, os.getcwd())
 from nixt.object  import parse
 from nixt.persist import modname
 from nixt.runtime import NAME, Client, Config, Errors, Event
-from nixt.runtime import forever, init, later, readmods, scan
+from nixt.runtime import forever, later
 
 
 cfg = Config()
-mods = readmods(modname())
+
+
+if not os.path.exists("mods"):
+    sys.path.insert(0, os.path.dirname(modname()))
+
+
+try:
+    import mods
+except ModuleNotFoundError:
+    print("modules not found.")
+    os._exit(0)
+
+
+from mods import init, scan
 
 
 class Console(Client):
@@ -32,7 +45,7 @@ class Console(Client):
 
     def __init__(self):
         Client.__init__(self)
-        self.register("event", mods.command.command)
+        self.register("event", mods.command)
 
     def callback(self, evt):
         "wait for result."
@@ -85,12 +98,11 @@ def main():
     "main"
     parse(cfg, " ".join(sys.argv[1:]))
     scan(mods)
-    if "v" in cfg.opts:
+    if mods and "v" in cfg.opts:
         readline.redisplay()
         banner()
-        if mods:
-            mods.irc.output = print
-    if "i" in cfg.opts:
+        mods.irc.output = print
+    if mods and "i" in cfg.opts:
         for _mod, thr in init(mods):
             if "w" in cfg.opts:
                 thr.join()

@@ -8,7 +8,7 @@
 from nixt.object  import keys
 
 
-from .command import Commands
+from . import Commands
 
 
 def register():

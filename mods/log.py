@@ -12,17 +12,12 @@ from nixt.object  import Object
 from nixt.persist import find, laps, sync, fntime
 
 
-from .command import Commands
-
-"defines"
+from . import Commands
 
 
 def register():
     "register commands."
     Commands.add(log)
-
-
-"classes"
 
 
 class Log(Object):
@@ -32,9 +27,6 @@ class Log(Object):
     def __init__(self):
         super().__init__()
         self.txt = ''
-
-
-"commands"
 
 
 def log(event):

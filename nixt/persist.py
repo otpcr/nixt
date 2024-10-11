@@ -24,7 +24,7 @@ p         = os.path.join
 
 class Cache:
 
-    "Broker"
+    "Cache"
 
     objs = {}
 
@@ -42,8 +42,9 @@ class Cache:
 
     @staticmethod
     def typed(match):
+        "return objects with match in path."
         with cachelock:
-            for key in Cache.objs.keys():
+            for key in Cache.objs:
                 if match not in key:
                     continue
                 yield Cache.objs.get(key)

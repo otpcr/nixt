@@ -15,11 +15,17 @@ sys.path.insert(0, os.getcwd())
 
 from nixt.object  import parse
 from nixt.persist import modname
-from nixt.runtime import Client, Config, Errors, Event, readmods
+from nixt.runtime import Client, Config, Errors, Event
 
 
 cfg = Config()
-mods = readmods(modname())
+
+
+if not os.path.exists("mods"):
+    sys.path.insert(0, os.path.dirname(modname()))
+
+
+import mods
 
 
 class CLI(Client):
@@ -42,11 +48,11 @@ def errors():
 def main():
     "main"
     parse(cfg, " ".join(sys.argv[1:]))
-    mods.command.scan(mods)
+    mods.scan(mods)
     cli = CLI()
     evt = Event()
     evt.txt = cfg.txt
-    mods.command.command(cli, evt)
+    mods.command(cli, evt)
     evt.wait()
 
 
