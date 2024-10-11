@@ -8,7 +8,7 @@
 import os
 
 
-from . import Commands
+from ..main import Commands
 
 
 def register():

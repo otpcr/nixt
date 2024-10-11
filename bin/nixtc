@@ -13,27 +13,15 @@ import termios
 import time
 
 
-sys.path.insert(0, os.getcwd())
-
-
+from nixt.main    import NAME, Config, command, forever, scan, init
+from nixt.modules import face
 from nixt.object  import parse
 from nixt.persist import modname
-from nixt.runtime import NAME, Client, Config, Errors, Event
-from nixt.runtime import forever, later
+from nixt.runtime import Client, Errors, Event
+from nixt.runtime import later
 
 
 Cfg = Config()
-
-
-if not os.path.exists("mods"):
-    sys.path.insert(0, os.path.dirname(modname()))
-
-
-try:
-    import mods as modr
-except ModuleNotFoundError:
-    print("modules not found.")
-    os._exit(0)
 
 
 class Console(Client):
@@ -42,7 +30,7 @@ class Console(Client):
 
     def __init__(self):
         Client.__init__(self)
-        self.register("event", modr.command)
+        self.register("event", command)
 
     def callback(self, evt):
         "wait for result."
@@ -94,13 +82,13 @@ def wrap(func):
 def main():
     "main"
     parse(Cfg, " ".join(sys.argv[1:]))
-    modr.scan(modr)
+    scan(face)
     if "v" in Cfg.opts:
         readline.redisplay()
         banner()
-        modr.irc.output = print
+        face.irc.output = print
     if "i" in Cfg.opts:
-        for _mod, thr in modr.init(modr):
+        for _mod, thr in init(face):
             if "w" in Cfg.opts:
                 thr.join()
     csl = Console()

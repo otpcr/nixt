@@ -76,7 +76,7 @@ p.s.
 """
 
 
-from . import Commands
+from ..main import Commands
 
 
 def register():

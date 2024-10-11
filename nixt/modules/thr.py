@@ -9,12 +9,10 @@ import threading
 import time
 
 
+from nixt.main import Commands
 from nixt.object  import Object, update
 from nixt.persist import laps
 from nixt.runtime import STARTTIME
-
-
-from . import Commands
 
 
 def register():

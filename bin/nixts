@@ -12,22 +12,10 @@ import pwd
 import sys
 
 
-sys.path.insert(0, os.getcwd())
-
-
+from nixt.main    import forever, init, scan, wrap
+from nixt.modules import face
 from nixt.persist import modname, pidfile, pidname
-from nixt.runtime import Errors, forever, wrap
-
-
-if not os.path.exists("mods"):
-    sys.path.insert(0, os.path.dirname(modname()))
-
-
-try:
-    import mods as modi
-except ModuleNotFoundError:
-    print("modules not found.")
-    os._exit(1)
+from nixt.runtime import Errors
 
 
 def errors():
@@ -48,8 +36,8 @@ def main():
     "main"
     privileges(getpass.getuser())
     pidfile(pidname())
-    modi.scan(modi)
-    modi.init(modi)
+    scan(face)
+    init(face)
     forever()
 
 

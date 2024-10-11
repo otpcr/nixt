@@ -17,14 +17,6 @@ NAME = __file__.rsplit("/", maxsplit=2)[-2]
 STARTTIME = time.time()
 
 
-class Config:
-
-    "Config"
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-
 class Errors:
 
     "Errors"

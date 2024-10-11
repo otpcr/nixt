@@ -8,11 +8,9 @@
 import time
 
 
-from nixt.object  import format
-from nixt.persist import find, fntime, laps, long, skel, types
-
-
-from . import Commands
+from ..main    import Commands
+from ..object  import format
+from ..persist import find, fntime, laps, long, skel, types
 
 
 def register():

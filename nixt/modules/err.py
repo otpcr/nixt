@@ -5,10 +5,8 @@
 "show errors"
 
 
-from nixt.runtime import Errors
-
-
-from . import Commands
+from ..main    import Commands
+from ..runtime import Errors
 
 
 def register():

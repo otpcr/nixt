@@ -15,8 +15,9 @@ import sys
 sys.path.insert(0, os.getcwd())
 
 
+from nixt.main    import forever, wrap
 from nixt.persist import modname, pidfile, pidname
-from nixt.runtime import Errors, forever, wrap
+from nixt.runtime import Errors
 
 
 if not os.path.exists("mods"):
