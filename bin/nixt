@@ -26,10 +26,6 @@ class CLI(Client):
 
     "CLI"
 
-    def __init__(self):
-        Client.__init__(self)
-        if mods:
-            self.register("event", mods.command)
 
     def raw(self, txt):
         "print text."

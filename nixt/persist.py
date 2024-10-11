@@ -46,7 +46,7 @@ class Cache:
             for key in Cache.objs.keys():
                 if match not in key:
                     continue
-                yield self.objs.get(key)
+                yield Cache.objs.get(key)
 
 
 class Workdir:
