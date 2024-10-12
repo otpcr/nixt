@@ -27,6 +27,13 @@ from nixt.runtime import Client, Errors, Event, later, launch
 cfg = Config()
 
 
+if os.path.exists("mods"):
+    import mods.face as MODS
+    MODS.rss.DEBUG = True
+else:
+    MODS = None
+
+
 LAP = 1
 NRS = 1
 NRCOMMAND = 1
@@ -130,7 +137,8 @@ def main():
     "main"
     Workdir.wdr = ".test"
     parse(cfg, " ".join(sys.argv[1:]))
-    scan(face)
+    scan(MODS, face)
+    print(Commands.cmds)
     nrcommands = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()

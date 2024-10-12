@@ -38,13 +38,6 @@ def init():
     return irc
 
 
-def register():
-    "register commands."
-    Commands.add(cfg)
-    Commands.add(mre)
-    Commands.add(pwd)
-
-
 class Config(Obj):
 
     "Config"
@@ -676,3 +669,13 @@ def pwd(event):
     base = base64.b64encode(enc)
     dcd = base.decode('ascii')
     event.reply(dcd)
+
+
+"register"
+
+
+def register():
+    "register commands."
+    Commands.add(cfg)
+    Commands.add(mre)
+    Commands.add(pwd)

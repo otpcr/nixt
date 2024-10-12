@@ -13,11 +13,6 @@ from nixt.object  import fmt
 from nixt.persist import find, fntime, laps, long, skel, types
 
 
-def register():
-    "register commands."
-    Commands.add(fnd)
-
-
 def fnd(event):
     "locate objects."
     skel()
@@ -34,3 +29,11 @@ def fnd(event):
         nmr += 1
     if not nmr:
         event.reply("no result")
+
+
+"register"
+
+
+def register():
+    "register commands."
+    Commands.add(fnd)

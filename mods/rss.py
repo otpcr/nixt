@@ -49,17 +49,6 @@ def init():
     return fetcher
 
 
-def register():
-    "register commands."
-    Commands.add(dpl)
-    Commands.add(exp)
-    Commands.add(imp)
-    Commands.add(nme)
-    Commands.add(rem)
-    Commands.add(res)
-    Commands.add(rss)
-    Commands.add(syn)
-
 
 class Feed(Obj):
 
@@ -525,3 +514,18 @@ def syn(event):
         thr.join()
         nrs += 1
     event.reply(f"{nrs} feeds synced")
+
+
+"register"
+
+
+def register():
+    "register commands."
+    Commands.add(dpl)
+    Commands.add(exp)
+    Commands.add(imp)
+    Commands.add(nme)
+    Commands.add(rem)
+    Commands.add(res)
+    Commands.add(rss)
+    Commands.add(syn)

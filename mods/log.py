@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R
+# pylint: disable=R,W0105
 
 
 "log text"
@@ -8,14 +8,9 @@
 import time
 
 
-from nixt.main import Commands
+from nixt.main    import Commands
 from nixt.object  import Object
 from nixt.persist import find, laps, sync, fntime
-
-
-def register():
-    "register commands."
-    Commands.add(log)
 
 
 class Log(Object):
@@ -42,3 +37,11 @@ def log(event):
     obj.txt = event.rest
     sync(obj)
     event.reply('ok')
+
+
+"register"
+
+
+def register():
+    "register commands."
+    Commands.add(log)

@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=W0105
 
 
 "running threads."
@@ -11,11 +12,6 @@ import time
 from nixt.main    import STARTTIME, Commands
 from nixt.object  import Object, update
 from nixt.persist import laps
-
-
-def register():
-    "register commands."
-    Commands.add(thr)
 
 
 def thr(event):
@@ -43,3 +39,11 @@ def thr(event):
         event.reply(' '.join(res))
     else:
         event.reply('no threads')
+
+
+"register"
+
+
+def register():
+    "register commands."
+    Commands.add(thr)

@@ -3,7 +3,7 @@
 # ruff: noqa: F401
 
 
-"all modules"
+"interface"
 
 
 from . import cmd, err, fnd, irc, log, mod, req, rss, srv, tdo, thr, upt

@@ -11,11 +11,14 @@ from nixt.main    import STARTTIME, Commands
 from nixt.persist import laps
 
 
-def register():
-    "register commands."
-    Commands.add(upt)
-
-
 def upt(event):
     "show uptime"
     event.reply(laps(time.time()-STARTTIME))
+
+
+"register"
+
+
+def register():
+    "register commands."
+    Commands.add(upt)

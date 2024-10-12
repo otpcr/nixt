@@ -13,13 +13,19 @@ from .object  import Obj, parse
 from .runtime import later, launch
 
 
-NAME = __file__.rsplit("/", maxsplit=2)[-2]
-STARTTIME = time.time()
+"defines"
 
 
 class Config(Obj):
 
     "Config"
+
+
+NAME = __file__.rsplit("/", maxsplit=2)[-2]
+STARTTIME = time.time()
+
+
+"commands"
 
 
 class Commands:
@@ -80,12 +86,15 @@ def scan(*pkgs, mods=None):
     "run the init function in modules."
     wanted = spl(mods or "")
     for pkg in pkgs:
+        print(pkg)
         for mod in dir(pkg):
+            print(mod)
             if wanted and mod not in wanted:
                 continue
             if mod.startswith("__"):
                 continue
             modi = getattr(pkg, mod)
+            print(dir(modi))
             if "register" not in dir(modi):
                 continue
             modi.register()

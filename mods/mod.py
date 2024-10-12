@@ -10,11 +10,6 @@ import os
 from nixt.main import Commands
 
 
-def register():
-    "register commands."
-    Commands.add(mod)
-
-
 def mod(event):
     "show available modules."
     path = os.path.dirname(__file__)
@@ -28,3 +23,11 @@ def mod(event):
             continue
         mods.append(mdd[:-3])
     event.reply(",".join(sorted(mods)))
+
+
+"register"
+
+
+def register():
+    "register commands."
+    Commands.add(mod)

@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R
+# pylint: disable=R,W0105
 
 
 "todo list"
@@ -8,15 +8,9 @@
 import time
 
 
-from nixt.main import Commands
+from nixt.main    import Commands
 from nixt.object  import Object
 from nixt.persist import find, fntime, laps, sync
-
-
-def register():
-    "register commands."
-    Commands.add(dne)
-    Commands.add(tdo)
 
 
 class Todo(Object):
@@ -60,3 +54,12 @@ def tdo(event):
     obj.txt = event.rest
     sync(obj)
     event.reply('ok')
+
+
+"register"
+
+
+def register():
+    "register commands."
+    Commands.add(dne)
+    Commands.add(tdo)

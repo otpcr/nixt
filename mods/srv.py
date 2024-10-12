@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0413,W0611
+# pylint: disable=C0413,W0105,W0611
 
 
 "create service file"
@@ -9,11 +9,6 @@ import getpass
 
 
 from nixt.main import NAME, Commands
-
-
-def register():
-    "register commands."
-    Commands.add(srv)
 
 
 TXT = """[Unit]
@@ -34,3 +29,11 @@ def srv(event):
     "create service file (pipx)."
     name  = getpass.getuser()
     event.reply(TXT % (NAME.upper(), name, name, name, NAME))
+
+
+"register"
+
+
+def register():
+    "register commands."
+    Commands.add(srv)
