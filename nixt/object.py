@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R,W0105,W0621,W0622
+# pylint: disable=R,W0105
 
 
 "a clean namespace"
@@ -200,7 +200,7 @@ def edit(obj, setter, skip=False):
             setattr(obj, key, val)
 
 
-def format(obj, args=None, skip=None, plain=False):
+def fmt(obj, args=None, skip=None, plain=False):
     "format an object to a printable string."
     if args is None:
         args = keys(obj)
@@ -324,7 +324,7 @@ def __dir__():
         'Obj',
         'construct',
         'edit',
-        'format',
+        'fmt',
         'fqn',
         'dumps',
         'keys',

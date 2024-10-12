@@ -9,7 +9,7 @@ import time
 
 
 from nixt.main    import Commands
-from nixt.object  import format
+from nixt.object  import fmt
 from nixt.persist import find, fntime, laps, long, skel, types
 
 
@@ -30,7 +30,7 @@ def fnd(event):
     clz = long(otype)
     nmr = 0
     for fnm, obj in find(clz, event.gets):
-        event.reply(f"{nmr} {format(obj)} {laps(time.time()-fntime(fnm))}")
+        event.reply(f"{nmr} {fmt(obj)} {laps(time.time()-fntime(fnm))}")
         nmr += 1
     if not nmr:
         event.reply("no result")

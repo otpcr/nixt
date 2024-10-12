@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R,W0105,W0212,W0622,W0718,E1102
+# pylint: disable=R,W0105,W0212,W0718
 
 
 "runtime"
@@ -23,7 +23,7 @@ class Errors:
     errors = []
 
 
-def format(exc):
+def fmat(exc):
     "format an exception"
     return traceback.format_exception(
                                type(exc),
@@ -35,7 +35,7 @@ def format(exc):
 def later(exc):
     "add an exception"
     excp = exc.with_traceback(exc.__traceback__)
-    fmt = format(excp)
+    fmt = fmat(excp)
     if fmt not in Errors.errors:
         Errors.errors.append(fmt)
 

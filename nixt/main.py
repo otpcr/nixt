@@ -1,8 +1,8 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R,W0105,W0718
+# pylint: disable=R0903,W0105,W0718
 
 
-"command"
+"main program helpers"
 
 
 import time
@@ -13,22 +13,13 @@ from .object  import Obj, parse
 from .runtime import later, launch
 
 
-"defines"
-
-
 NAME = __file__.rsplit("/", maxsplit=2)[-2]
 STARTTIME = time.time()
-
-
-"config"
 
 
 class Config(Obj):
 
     "Config"
-
-
-"commands"
 
 
 class Commands:

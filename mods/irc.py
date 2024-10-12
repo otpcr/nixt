@@ -17,7 +17,7 @@ import _thread
 
 
 from nixt.main    import NAME, Commands, command
-from nixt.object  import Object, Obj, edit, keys, format
+from nixt.object  import Object, Obj, edit, fmt, keys
 from nixt.persist import Cache, ident, last, sync
 from nixt.runtime import Event, Reactor, later, launch
 
@@ -34,7 +34,7 @@ def init():
     irc = IRC()
     irc.start()
     irc.events.ready.wait()
-    debug(f'{format(Config, skip="edited,password")}')
+    debug(f'{fmt(Config, skip="edited,password")}')
     return irc
 
 
@@ -632,7 +632,7 @@ def cfg(event):
     last(config)
     if not event.sets:
         event.reply(
-                    format(
+                    fmt(
                         config,
                         keys(config),
                         skip='control,password,realname,sleep,username'.split(",")

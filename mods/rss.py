@@ -20,8 +20,8 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from nixt.main import Commands, spl
-from nixt.object  import Object, Obj, format, update
+from nixt.main    import Commands, spl
+from nixt.object  import Object, Obj, fmt, update
 from nixt.persist import Cache, find, fntime, laps, last, sync
 from nixt.runtime import Repeater, launch
 
@@ -495,7 +495,7 @@ def rss(event):
         for fnm, feed in find('rss'):
             nrs += 1
             elp = laps(time.time()-fntime(fnm))
-            txt = format(feed)
+            txt = fmt(feed)
             event.reply(f'{nrs} {txt} {elp}')
         if not nrs:
             event.reply('no rss feed found.')
