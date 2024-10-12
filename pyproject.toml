@@ -38,23 +38,24 @@ script-files = [
     'bin/nixts'
 ]
 packages = [
-    "nixt",
+    'nixt',
+    'nixt.modules'
 ]
 
 
 [tool.setuptools.data-files]
 "share/nixt/mods/" = [
-    "mods/__init__.py",
-    "mods/cmd.py",
-    "mods/err.py",
-    "mods/fnd.py",
-    "mods/irc.py",
-    "mods/log.py",
-    "mods/mod.py",
-    "mods/req.py",
-    "mods/rss.py",
-    "mods/srv.py",
-    "mods/tdo.py",
-    "mods/thr.py",
-    "mods/upt.py"
+    'mods/__init__.py',
+    'mods/cmd.py',
+    'mods/err.py',
+    'mods/fnd.py',
+    'mods/irc.py',
+    'mods/log.py',
+    'mods/mod.py',
+    'mods/req.py',
+    'mods/rss.py',
+    'mods/srv.py',
+    'mods/tdo.py',
+    'mods/thr.py',
+    'mods/upt.py'
 ]

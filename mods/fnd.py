@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.[B
-# pylint: disable=W0622
+# pylint: disable=W0105,W0622
 
 
 "find"
