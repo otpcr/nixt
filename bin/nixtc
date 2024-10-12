@@ -6,7 +6,6 @@
 "console"
 
 
-import os
 import readline
 import sys
 import termios
@@ -16,9 +15,7 @@ import time
 from nixt.main    import NAME, Config, command, forever, scan, init
 from nixt.modules import face
 from nixt.object  import parse
-from nixt.persist import modname
-from nixt.runtime import Client, Errors, Event
-from nixt.runtime import later
+from nixt.runtime import Client, Errors, Event, later
 
 
 Cfg = Config()
@@ -86,7 +83,6 @@ def main():
     if "v" in Cfg.opts:
         readline.redisplay()
         banner()
-        face.irc.output = print
     if "i" in Cfg.opts:
         for _mod, thr in init(face):
             if "w" in Cfg.opts:

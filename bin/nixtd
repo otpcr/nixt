@@ -12,24 +12,10 @@ import pwd
 import sys
 
 
-sys.path.insert(0, os.getcwd())
-
-
-from nixt.main    import forever, wrap
-from nixt.persist import modname, pidfile, pidname
+from nixt.main    import forever, init, scan, wrap
+from nixt.modules import face
+from nixt.persist import pidfile, pidname
 from nixt.runtime import Errors
-
-
-if not os.path.exists("mods"):
-    path = modname()
-    sys.path.insert(0, os.path.dirname(path))
-
-
-try:
-    import mods as modz
-except ModuleNotFoundError:
-    print("modules not found.")
-    os._exit(1)
 
 
 def daemon(verbose=False):
@@ -69,11 +55,11 @@ def privileges(username):
 
 def main():
     "main"
-    daemon(True)
+    daemon()
     privileges(getpass.getuser())
     pidfile(pidname())
-    modz.scan(modz)
-    modz.init(modz)
+    scan(face)
+    init(face)
     forever()
 
 

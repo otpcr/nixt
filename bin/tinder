@@ -17,27 +17,14 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
+from nixt.main    import NAME, STARTTIME, Commands, Config, command, scan
+from nixt.modules import face
 from nixt.object  import Object, parse
-from nixt.persist import Workdir, laps, modname, skel
-from nixt.runtime import STARTTIME, NAME, Client, Config, Errors, Event
-from nixt.runtime import later, launch
+from nixt.persist import Workdir, laps, skel
+from nixt.runtime import Client, Errors, Event, later, launch
 
 
 cfg = Config()
-
-
-if not os.path.exists("mods"):
-    sys.path.insert(0, os.path.dirname(modname()))
-
-
-try:
-    import mods
-except ModuleNotFoundError:
-    print("modules not found")
-    os._exit(1)
-
-
-from mods import Commands, command
 
 
 LAP = 1
@@ -143,8 +130,7 @@ def main():
     "main"
     Workdir.wdr = ".test"
     parse(cfg, " ".join(sys.argv[1:]))
-    mods.rss.DEBUG = True
-    mods.scan(mods)
+    scan(face)
     nrcommands = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()

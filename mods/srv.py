@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0413,W0105,W0611
+# pylint: disable=C0413,W0611
 
 
 "create service file"
@@ -8,8 +8,7 @@
 import getpass
 
 
-from ..main import Commands
-from ..runtime import NAME
+from nixt.main import NAME, Commands
 
 
 def register():

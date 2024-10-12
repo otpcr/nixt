@@ -22,6 +22,9 @@ lock      = _thread.allocate_lock()
 p         = os.path.join
 
 
+"cache"
+
+
 class Cache:
 
     "Cache"
@@ -48,6 +51,9 @@ class Cache:
                 if match not in key:
                     continue
                 yield Cache.objs.get(key)
+
+
+"workdir"
 
 
 class Workdir:

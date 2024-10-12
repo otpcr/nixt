@@ -13,8 +13,7 @@ import types
 import _thread
 
 
-NAME = __file__.rsplit("/", maxsplit=2)[-2]
-STARTTIME = time.time()
+"errors"
 
 
 class Errors:
@@ -39,6 +38,9 @@ def later(exc):
     fmt = format(excp)
     if fmt not in Errors.errors:
         Errors.errors.append(fmt)
+
+
+"threads"
 
 
 class Thread(threading.Thread):
@@ -106,6 +108,9 @@ def named(obj):
     if '__name__' in dir(obj):
         return f'{obj.__class__.__name__}.{obj.__name__}'
     return None
+
+
+"reactor"
 
 
 class Reactor:
@@ -275,12 +280,12 @@ def wrap(func):
         later(ex)
 
 
+"interface"
+
+
 def __dir__():
     return (
-        'NAME',
-        'STARTTIME',
         'Client',
-        'Config',
         'Event',
         'Reactor',
         'Errors',

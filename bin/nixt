@@ -24,7 +24,6 @@ class CLI(Client):
 
     "CLI"
 
-
     def raw(self, txt):
         "print text."
         print(txt)

@@ -1,12 +1,11 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 "list of commands"
 
 
-from ..main   import Commands
-from ..object import keys
+from nixt.main   import Commands
+from nixt.object import keys
 
 
 def register():

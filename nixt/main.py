@@ -5,7 +5,6 @@
 "command"
 
 
-import os
 import time
 import _thread
 
@@ -14,8 +13,22 @@ from .object  import Obj, parse
 from .runtime import later, launch
 
 
+"defines"
+
+
 NAME = __file__.rsplit("/", maxsplit=2)[-2]
 STARTTIME = time.time()
+
+
+"config"
+
+
+class Config(Obj):
+
+    "Config"
+
+
+"commands"
 
 
 class Commands:
@@ -28,11 +41,6 @@ class Commands:
     def add(func):
         "add command."
         Commands.cmds[func.__name__] = func
-
-
-class Config(Obj):
-
-    "Config"
 
 
 def command(bot, evt):
@@ -48,6 +56,9 @@ def command(bot, evt):
         except Exception as ex:
             later(ex)
     evt.ready()
+
+
+"utilities"
 
 
 def forever():
@@ -106,6 +117,9 @@ def wrap(func):
         pass
     except Exception as ex:
         later(ex)
+
+
+"interface"
 
 
 def __dir__():

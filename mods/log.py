@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R,W0105
+# pylint: disable=R
 
 
 "log text"

@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 """| **Information and Evidence Unit**
@@ -76,7 +75,7 @@ p.s.
 """
 
 
-from ..main import Commands
+from nixt.main import Commands
 
 
 def register():

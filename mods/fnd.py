@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.[B
-# pylint: disable=W0105,W0622
+# pylint: disable=W0622
 
 
 "find"
@@ -8,9 +8,9 @@
 import time
 
 
-from ..main    import Commands
-from ..object  import format
-from ..persist import find, fntime, laps, long, skel, types
+from nixt.main    import Commands
+from nixt.object  import format
+from nixt.persist import find, fntime, laps, long, skel, types
 
 
 def register():

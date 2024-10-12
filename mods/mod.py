@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 "show available modules."
@@ -8,7 +7,7 @@
 import os
 
 
-from ..main import Commands
+from nixt.main import Commands
 
 
 def register():

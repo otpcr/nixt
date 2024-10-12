@@ -1,12 +1,11 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 "show errors"
 
 
-from ..main    import Commands
-from ..runtime import Errors
+from nixt.main    import Commands
+from nixt.runtime import Errors
 
 
 def register():

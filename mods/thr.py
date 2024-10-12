@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 "running threads."
@@ -9,10 +8,9 @@ import threading
 import time
 
 
-from nixt.main import Commands
+from nixt.main    import STARTTIME, Commands
 from nixt.object  import Object, update
 from nixt.persist import laps
-from nixt.runtime import STARTTIME
 
 
 def register():

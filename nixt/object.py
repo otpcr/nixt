@@ -37,6 +37,9 @@ class Obj(Object):
         return self.__dict__.get(key, "")
 
 
+"methods"
+
+
 def construct(obj, *args, **kwargs):
     "construct an object from provided arguments."
     if args:
@@ -79,6 +82,9 @@ def values(obj):
     return obj.__dict__.values()
 
 
+"decorder"
+
+
 class ObjectDecoder(json.JSONDecoder):
 
     "ObjectDecoder"
@@ -117,6 +123,9 @@ def loads(string, *args, **kw):
     kw["cls"] = ObjectDecoder
     kw["object_hook"] = hook
     return json.loads(string, *args, **kw)
+
+
+"encoder"
 
 
 class ObjectEncoder(json.JSONEncoder):
@@ -165,7 +174,7 @@ def dumps(*args, **kw):
     return json.dumps(*args, **kw)
 
 
-"methods"
+"utilities"
 
 
 def edit(obj, setter, skip=False):
@@ -304,6 +313,9 @@ def search(obj, selector, matching=None):
             res = False
             break
     return res
+
+
+"interface"
 
 
 def __dir__():

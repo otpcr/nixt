@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 "uptime"
@@ -8,9 +7,8 @@
 import time
 
 
-from nixt.main import Commands
+from nixt.main    import STARTTIME, Commands
 from nixt.persist import laps
-from nixt.runtime import STARTTIME
 
 
 def register():
