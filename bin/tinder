@@ -79,7 +79,6 @@ class CLI(Client):
     def raw(self, txt):
         "check verboise."
         if "v" in cfg.opts:
-            print(txt)
             sys.stdout.flush()
 
 
