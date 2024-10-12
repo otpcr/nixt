@@ -79,7 +79,7 @@ class CLI(Client):
     def raw(self, txt):
         "check verboise."
         if "v" in cfg.opts:
-            sys.stdout.flush()
+            print(txt)
 
 
 def banner():
@@ -137,7 +137,6 @@ def main():
     Workdir.wdr = ".test"
     parse(cfg, " ".join(sys.argv[1:]))
     scan(MODS, face)
-    print(Commands.cmds)
     nrcommands = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()
