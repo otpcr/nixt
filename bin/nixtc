@@ -22,7 +22,9 @@ from nixt.object  import parse
 from nixt.runtime import Client, Errors, Event, later
 
 
-Cfg = Config()
+Cfg         = Config()
+Cfg.name    = Client.__module__.split(".", maxsplit=2)[-2]
+Workdir.wdr = os.path.expanduser(f"~/.{Cfg.name}")
 
 
 class Console(Client):

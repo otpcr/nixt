@@ -17,8 +17,12 @@ from nixt.persist import pidfile, pidname
 from nixt.runtime import Errors
 
 
+NAME        = Client.__module__.split(".", maxsplit=2)[-2]
+Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
+
+
 def errors():
-    "print errors."
+    "print errors"
     for err in Errors.errors:
         for line in err:
             print(line)

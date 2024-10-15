@@ -61,8 +61,7 @@ class Workdir:
     "Workdir"
 
     fqns = []
-    name = Obj.__module__.split(".", maxsplit=2)[-2]
-    wdr = os.path.expanduser(f"~/.{name}")
+    wdr = ''
 
 
 "paths"
@@ -81,6 +80,7 @@ def long(name):
 
 def modname():
     "return pidfile path."
+    
     return p(Workdir.wdr, "mods")
 
 
