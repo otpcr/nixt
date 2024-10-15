@@ -20,7 +20,6 @@ from nixt.persist import Workdir
 from nixt.runtime import Client, Errors, Event, later
 
 
-
 NAME = Errors.__module__.split(".", maxsplit=2)[-2]
 Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
 
