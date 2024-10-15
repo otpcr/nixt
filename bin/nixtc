@@ -19,6 +19,7 @@ sys.path.insert(0, os.getcwd())
 from nixt.main    import NAME, Config, command, forever, scan, init
 from nixt.modules import face
 from nixt.object  import parse
+from nixt.persist import Workdir
 from nixt.runtime import Client, Errors, Event, later
 
 
