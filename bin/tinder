@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C0413,W0105,W0212,W0718
+# pylint: disable=C,W0105,W0212,W0718
 
 
 "tinder"
@@ -17,14 +17,15 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.main    import NAME, STARTTIME, Commands, Config, command, scan
+from nixt.main    import Commands, Config, command, scan
 from nixt.modules import face
 from nixt.object  import Object, parse
 from nixt.persist import Workdir, laps, skel
 from nixt.runtime import Client, Errors, Event, later, launch
 
 
-cfg = Config()
+cfg      = Config()
+cfg.name = Client.__module__.split(".", maxsplit=2)[-2]
 
 
 if os.path.exists("mods"):
@@ -64,45 +65,37 @@ param.ver = [""]
 
 class CLI(Client):
 
-    "command line interface."
-
     def __init__(self):
         Client.__init__(self)
         self.register("event", command)
 
     def callback(self, evt):
-        "wait for result"
         Client.callback(self, evt)
         if "w" in cfg.opts:
             evt.wait()
 
     def raw(self, txt):
-        "check verboise."
         if "v" in cfg.opts:
             print(txt)
 
 
 def banner():
-    "show banner."
     tme = time.ctime(time.time()).replace("  ", " ")
-    print(f"{NAME.upper()} since {tme}")
+    print(f"{cfg.name.upper()} since {tme}")
 
 
 def consume(evts):
-    "wait for all events to finish."
     for evt in evts:
         evt.wait()
 
 
 def errors():
-    "print errors."
     for erring in Errors.errors:
         for line in erring:
             print(line)
 
 
 def payload(clt):
-    "do payload."
     nmr = 0
     for cmdd in sorted(Commands.cmds):
         for ex in getattr(param, cmdd, [""]):
@@ -115,7 +108,6 @@ def payload(clt):
 
 
 def wrap(function):
-    "reset console."
     old3 = None
     try:
         old3 = termios.tcgetattr(sys.stdin.fileno())
@@ -133,7 +125,6 @@ def wrap(function):
 
 
 def main():
-    "main"
     Workdir.wdr = ".test"
     parse(cfg, " ".join(sys.argv[1:]))
     scan(MODS, face)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C0413,W0105,W0611
+# pylint: disable=C,W0611
 
 
 "cli"
@@ -8,9 +8,6 @@
 
 import os
 import sys
-
-
-sys.path.insert(0, os.getcwd())
 
 
 from nixt.main    import NAME, Config, command, scan
@@ -22,27 +19,24 @@ from nixt.runtime import Client, Errors, Event
 
 cfg         = Config()
 cfg.name    = Client.__module__.split(".", maxsplit=2)[-2]
+
+
 Workdir.wdr = os.path.expanduser(f"~/.{cfg.name}")
 
 
 class CLI(Client):
 
-    "CLI"
-
     def raw(self, txt):
-        "print text."
         print(txt)
 
 
 def errors():
-    "print errors."
     for error in Errors.errors:
         for line in error:
             print(line)
 
 
 def main():
-    "main"
     parse(cfg, " ".join(sys.argv[1:]))
     scan(face)
     cli = CLI()

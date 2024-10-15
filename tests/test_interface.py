@@ -72,10 +72,7 @@ METHODS = [
 
 class TestInterface(unittest.TestCase):
 
-    "TestInterface"
-
     def test_package(self):
-        "test methods interface."
         okd = True
         for mod in PACKAGE:
             mod1 = getattr(nixt, mod, None)
@@ -85,7 +82,6 @@ class TestInterface(unittest.TestCase):
         self.assertTrue(okd)
 
     def test_objects(self):
-        "test methods interface."
         okd = True
         obj = Object()
         dirr = dir(obj)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C0413,W0105,W0212
+# pylint: disable=C,W0212
 
 
 "service"
@@ -17,26 +17,23 @@ from nixt.persist import pidfile, pidname
 from nixt.runtime import Errors
 
 
-NAME        = Client.__module__.split(".", maxsplit=2)[-2]
+NAME        = Errors.__module__.split(".", maxsplit=2)[-2]
 Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
 
 
 def errors():
-    "print errors"
     for err in Errors.errors:
         for line in err:
             print(line)
 
 
 def privileges(username):
-    "privileges."
     pwnam2 = pwd.getpwnam(username)
     os.setgid(pwnam2.pw_gid)
     os.setuid(pwnam2.pw_uid)
 
 
 def main():
-    "main"
     privileges(getpass.getuser())
     pidfile(pidname())
     scan(FACE)

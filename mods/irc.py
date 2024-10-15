@@ -16,13 +16,14 @@ import time
 import _thread
 
 
-from nixt.main    import NAME, Commands, command
+from nixt.main    import Commands, command
 from nixt.object  import Object, Obj, edit, fmt, keys
 from nixt.persist import Cache, ident, last, sync
 from nixt.runtime import Event, Reactor, later, launch
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]
+NAME = Reactor.__module__.split(".", maxsplit=2)[-2]
 
 
 output = None

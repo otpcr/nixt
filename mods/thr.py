@@ -9,13 +9,15 @@ import threading
 import time
 
 
-from nixt.main    import STARTTIME, Commands
+from nixt.main    import Commands
 from nixt.object  import Object, update
 from nixt.persist import laps
 
 
+STARTTIME = time.time()
+
+
 def thr(event):
-    "list threads."
     result = []
     for thread in sorted(threading.enumerate(), key=lambda x: x.name):
         if str(thread).startswith('<_'):
@@ -41,9 +43,5 @@ def thr(event):
         event.reply('no threads')
 
 
-"register"
-
-
 def register():
-    "register commands."
     Commands.add(thr)

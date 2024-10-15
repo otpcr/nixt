@@ -22,30 +22,22 @@ lock      = _thread.allocate_lock()
 p         = os.path.join
 
 
-"cache"
-
-
 class Cache:
-
-    "Cache"
 
     objs = {}
 
     @staticmethod
     def add(path, obj):
-        "add object."
         with cachelock:
             Cache.objs[path] = obj
 
     @staticmethod
     def get(path):
-        "return object by matching path."
         with cachelock:
             return Cache.objs.get(path)
 
     @staticmethod
     def typed(match):
-        "return objects with match in path."
         with cachelock:
             for key in Cache.objs:
                 if match not in key:
@@ -53,22 +45,13 @@ class Cache:
                 yield Cache.objs.get(key)
 
 
-"workdir"
-
-
 class Workdir:
-
-    "Workdir"
 
     fqns = []
     wdr = ''
 
 
-"paths"
-
-
 def long(name):
-    "match from single name to long name."
     split = name.split(".")[-1].lower()
     res = name
     for names in types():
@@ -79,18 +62,14 @@ def long(name):
 
 
 def modname():
-    "return pidfile path."
-    
     return p(Workdir.wdr, "mods")
 
 
 def pidname():
-    "return pidfile path."
     return p(Workdir.wdr, f"{Workdir.name}.pid")
 
 
 def store(pth=""):
-    "return objects directory."
     stor = p(Workdir.wdr, "store", "")
     if not os.path.exists(stor):
         skel()
@@ -98,7 +77,6 @@ def store(pth=""):
 
 
 def whitelist(clz):
-    "whitelist classes."
     Workdir.fqns.append(fqn(clz))
 
 

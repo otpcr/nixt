@@ -12,10 +12,7 @@ from nixt.object import Object
 
 class TestComposite(unittest.TestCase):
 
-    "TestComposite"
-
     def testcomposite(self):
-        "test composition."
         obj = Object()
         obj.obj = Object()
         obj.obj.abc = "test"

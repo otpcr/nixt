@@ -40,6 +40,8 @@ N I X T
     client/server connection, deferred exception handling to not crash
     on an error, etc.
 
+    You need to set PYTHONPATH if you run this locally.
+
 
 **INSTALL**
 

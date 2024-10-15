@@ -2,12 +2,10 @@
 # pylint: disable=C,R,W1503
 
 
-
 "no tests"
 
 
 import unittest
-
 
 
 class TestNone(unittest.TestCase):

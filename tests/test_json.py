@@ -16,10 +16,7 @@ VALIDPYTHON = '{"test": "bla"}'
 
 class TestDecoder(unittest.TestCase):
 
-    "TestDecoder"
-
     def test_loads(self):
-        "test loading."
         obj = Object()
         obj.test = "bla"
         oobj = loads(dumps(obj))
@@ -27,9 +24,6 @@ class TestDecoder(unittest.TestCase):
 
 
 class TestEncoder(unittest.TestCase):
-
-
-    "TestEncoder"
 
     def test_dumps(self):
         "test dumping."

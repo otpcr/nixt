@@ -13,35 +13,21 @@ from .object  import Obj, parse
 from .runtime import later, launch
 
 
-"defines"
-
-
 class Config(Obj):
 
-    "Config"
-
-
-NAME = __file__.rsplit("/", maxsplit=2)[-2]
-STARTTIME = time.time()
-
-
-"commands"
+    pass
 
 
 class Commands:
-
-    "Commands"
 
     cmds = {}
 
     @staticmethod
     def add(func):
-        "add command."
         Commands.cmds[func.__name__] = func
 
 
 def command(bot, evt):
-    "check for and run a command."
     parse(evt, evt.txt)
     if "ident" in dir(bot):
         evt.orig = bot.ident
@@ -55,11 +41,7 @@ def command(bot, evt):
     evt.ready()
 
 
-"utilities"
-
-
 def forever():
-    "it doesn't stop, until ctrl-c"
     while True:
         try:
             time.sleep(1.0)
@@ -68,7 +50,6 @@ def forever():
 
 
 def init(*pkgs):
-    "run the init function in modules."
     mods = []
     for pkg in pkgs:
         for modname in dir(pkg):
@@ -83,7 +64,6 @@ def init(*pkgs):
 
 
 def scan(*pkgs, mods=None):
-    "run the init function in modules."
     wanted = spl(mods or "")
     for pkg in pkgs:
         for mod in dir(pkg):
@@ -98,7 +78,6 @@ def scan(*pkgs, mods=None):
 
 
 def spl(txt):
-    "split comma separated string into a list."
     try:
         result = txt.split(',')
     except (TypeError, ValueError):
@@ -107,16 +86,12 @@ def spl(txt):
 
 
 def wrap(func):
-    "reset console."
     try:
         func()
     except (KeyboardInterrupt, EOFError):
         pass
     except Exception as ex:
         later(ex)
-
-
-"interface"
 
 
 def __dir__():
