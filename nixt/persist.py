@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.  pylint:
-# pylint: disable=R0903,W0105,W0719
+# pylint: disable=C,R,W0105,W0719
 
 
 "persist to disk"
@@ -65,8 +65,8 @@ def modname():
     return p(Workdir.wdr, "mods")
 
 
-def pidname():
-    return p(Workdir.wdr, f"{Workdir.name}.pid")
+def pidname(name):
+    return p(Workdir.wdr, f"{name}.pid")
 
 
 def store(pth=""):

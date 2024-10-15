@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
+# pylint: disable=C
 
 
 "show available modules."
@@ -12,7 +12,6 @@ from nixt.main import Commands
 
 
 def mod(event):
-    "show available modules."
     path = os.path.dirname(__file__)
     mods = []
     for mdd in os.listdir(path):
@@ -26,9 +25,5 @@ def mod(event):
     event.reply(",".join(sorted(mods)))
 
 
-"register"
-
-
 def register():
-    "register commands."
     Commands.add(mod)

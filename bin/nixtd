@@ -57,7 +57,7 @@ def privileges(username):
 def main():
     daemon()
     privileges(getpass.getuser())
-    pidfile(pidname())
+    pidfile(pidname(NAME))
     scan(face)
     init(face)
     forever()

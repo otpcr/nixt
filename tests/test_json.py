@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=C
 
 
 "json"
@@ -26,7 +27,6 @@ class TestDecoder(unittest.TestCase):
 class TestEncoder(unittest.TestCase):
 
     def test_dumps(self):
-        "test dumping."
         obj = Object()
         obj.test = "bla"
         self.assertEqual(dumps(obj), VALIDPYTHON)

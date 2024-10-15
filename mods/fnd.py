@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.[B
-# pylint: disable=W0105,W0622
+# pylint: disable=C,W0622
 
 
 "find"
@@ -14,7 +14,6 @@ from nixt.persist import find, fntime, laps, long, skel, types
 
 
 def fnd(event):
-    "locate objects."
     skel()
     if not event.rest:
         res = sorted([x.split('.')[-1].lower() for x in types()])
@@ -31,9 +30,5 @@ def fnd(event):
         event.reply("no result")
 
 
-"register"
-
-
 def register():
-    "register commands."
     Commands.add(fnd)

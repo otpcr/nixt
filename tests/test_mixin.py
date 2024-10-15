@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R0903
+# pylint: disable=C,R
 
 
 "mixin"

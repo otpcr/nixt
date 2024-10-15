@@ -20,9 +20,12 @@ from nixt.persist import Workdir
 from nixt.runtime import Client, Errors, Event, later
 
 
-Cfg         = Config()
-Cfg.name    = Errors.__module__.split(".", maxsplit=2)[-2]
-Workdir.wdr = os.path.expanduser(f"~/.{Cfg.name}")
+
+NAME = Errors.__module__.split(".", maxsplit=2)[-2]
+Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
+
+
+Cfg = Config()
 
 
 class Console(Client):

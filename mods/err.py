@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
+# pylint: disable=C
 
 
 "show errors"
@@ -10,7 +10,6 @@ from nixt.runtime import Errors
 
 
 def err(event):
-    "show errors."
     nmr = 0
     for exc in Errors.errors:
         for line in exc:
@@ -22,9 +21,5 @@ def err(event):
     event.reply(f"found {nmr} errors.")
 
 
-"register"
-
-
 def register():
-    "register commands."
     Commands.add(err)

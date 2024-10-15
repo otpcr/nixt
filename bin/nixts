@@ -13,7 +13,7 @@ import pwd
 
 from nixt.main    import forever, init, scan, wrap
 from nixt.modules import face as FACE
-from nixt.persist import pidfile, pidname
+from nixt.persist import Workdir, pidfile, pidname
 from nixt.runtime import Errors
 
 
@@ -35,7 +35,7 @@ def privileges(username):
 
 def main():
     privileges(getpass.getuser())
-    pidfile(pidname())
+    pidfile(pidname(NAME))
     scan(FACE)
     init(FACE)
     forever()

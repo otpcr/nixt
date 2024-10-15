@@ -10,18 +10,18 @@ import os
 import sys
 
 
-from nixt.main    import NAME, Config, command, scan
+from nixt.main    import Config, command, scan
 from nixt.modules import face
 from nixt.object  import parse
 from nixt.persist import Workdir, modname
 from nixt.runtime import Client, Errors, Event
 
 
-cfg         = Config()
-cfg.name    = Client.__module__.split(".", maxsplit=2)[-2]
+NAME = Client.__module__.split(".", maxsplit=2)[-2]
+Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
 
 
-Workdir.wdr = os.path.expanduser(f"~/.{cfg.name}")
+cfg = Config()
 
 
 class CLI(Client):

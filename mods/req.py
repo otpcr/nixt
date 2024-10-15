@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
+# pylint: disable=C
 
 
 """| **Information and Evidence Unit**
@@ -80,13 +80,8 @@ from nixt.main import Commands
 
 
 def req(event):
-    "reconsider"
     event.reply(__doc__)
 
 
-"register"
-
-
 def register():
-    "register commands."
     Commands.add(req)
