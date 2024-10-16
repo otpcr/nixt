@@ -2,7 +2,7 @@
 # pylint: disable=C,R,W0105,W0718
 
 
-"main program helpers"
+"main helpers"
 
 
 import time
@@ -10,7 +10,20 @@ import _thread
 
 
 from .object  import Obj, parse
-from .runtime import later, launch
+from .runtime import Reactor, later, launch
+
+
+class Client(Reactor):
+
+    def display(self, evt):
+        for txt in evt.result:
+            self.say(evt.channel, txt)
+
+    def say(self, _channel, txt):
+        self.raw(txt)
+
+    def raw(self, txt):
+        raise NotImplementedError
 
 
 class Config(Obj):

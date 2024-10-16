@@ -8,26 +8,65 @@
 
 import os
 import sys
+import threading
 
 
 from nixt.main    import Config, command, scan
 from nixt.modules import face
 from nixt.object  import parse
 from nixt.persist import Workdir, modname
-from nixt.runtime import Client, Errors, Event
+from nixt.runtime import Errors, Event, Reactor
 
 
-NAME = Client.__module__.split(".", maxsplit=2)[-2]
+NAME = Reactor.__module__.split(".", maxsplit=2)[-2]
 Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
 
 
 cfg = Config()
 
 
-class CLI(Client):
+
+class CLI(Reactor):
+
+    def display(self, evt):
+        for txt in evt.result:
+            self.say(evt.channel, txt)
+
+    def say(self, _channel, txt):
+        self.raw(txt)
 
     def raw(self, txt):
         print(txt)
+
+
+class Event:
+
+    def __init__(self):
+        self._ready  = threading.Event()
+        self._thr    = None
+        self.channel = ""
+        self.orig    = ""
+        self.result  = []
+        self.txt     = ""
+        self.type    = "event"
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    def ready(self):
+        self._ready.set()
+
+    def reply(self, txt):
+        self.result.append(txt)
+
+    def wait(self):
+        self._ready.wait()
+        if self._thr:
+            self._thr.join()
+
 
 
 def errors():

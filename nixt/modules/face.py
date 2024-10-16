@@ -4,3 +4,6 @@
 
 
 "interface"
+
+
+from . import cmd

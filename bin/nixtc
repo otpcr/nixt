@@ -10,6 +10,7 @@ import os
 import readline
 import sys
 import termios
+import threading
 import time
 
 
@@ -17,7 +18,7 @@ from nixt.main    import Config, command, forever, scan, init
 from nixt.modules import face
 from nixt.object  import parse
 from nixt.persist import Workdir
-from nixt.runtime import Client, Errors, Event, later
+from nixt.runtime import Errors, Reactor, later
 
 
 NAME = Errors.__module__.split(".", maxsplit=2)[-2]
@@ -27,26 +28,56 @@ Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
 Cfg = Config()
 
 
-class Console(Client):
+class Console(Reactor):
 
     def __init__(self):
-        Client.__init__(self)
+        Reactor.__init__(self)
         self.register("event", command)
 
     def callback(self, evt):
-        "wait for result."
-        Client.callback(self, evt)
+        Reactor.callback(self, evt)
         evt.wait()
 
+    def display(self, evt):
+        for txt in evt.result:
+            self.raw(txt)
+
     def poll(self):
-        "poll console and create event."
         evt = Event()
         evt.txt = input("> ")
         return evt
 
     def raw(self, txt):
-        "print text."
         print(txt)
+
+
+class Event:
+
+    def __init__(self):
+        self._ready  = threading.Event()
+        self._thr    = None
+        self.channel = ""
+        self.orig    = ""
+        self.result  = []
+        self.txt     = ""
+        self.type    = "event"
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    def ready(self):
+        self._ready.set()
+
+    def reply(self, txt):
+        self.result.append(txt)
+
+    def wait(self):
+        self._ready.wait()
+        if self._thr:
+            self._thr.join()
 
 
 def banner():

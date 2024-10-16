@@ -2,7 +2,7 @@
 # pylint: disable=C,R,W0105,W0212,W0718
 
 
-"runtime"
+"errors,reactor,threads,timers"
 
 
 import queue
@@ -16,6 +16,21 @@ import _thread
 class Errors:
 
     errors = []
+
+
+def fmat(exc):
+    return traceback.format_exception(
+                               type(exc),
+                               exc,
+                               exc.__traceback__
+                              )
+
+
+def later(exc):
+    excp = exc.with_traceback(exc.__traceback__)
+    fmt = fmat(excp)
+    if fmt not in Errors.errors:
+        Errors.errors.append(fmt)
 
 
 class Thread(threading.Thread):
@@ -54,6 +69,13 @@ class Thread(threading.Thread):
             later(ex)
 
 
+def launch(func, name, *args, **kwargs):
+    thread = Thread(func, name, *args, **kwargs)
+    thread.start()
+    return thread
+
+
+
 class Reactor:
 
     def __init__(self):
@@ -90,17 +112,13 @@ class Reactor:
         self.stopped.set()
 
 
-class Client(Reactor):
+class Commands:
 
-    def display(self, evt):
-        for txt in evt.result:
-            self.say(evt.channel, txt)
+    cmds = {}
 
-    def say(self, _channel, txt):
-        self.raw(txt)
-
-    def raw(self, txt):
-        raise NotImplementedError
+    @staticmethod
+    def add(func):
+        Commands.cmds[func.__name__] = func
 
 
 class Timer:
@@ -170,37 +188,12 @@ class Event:
             self._thr.join()
 
 
-"utilities"
-
-
-def fmat(exc):
-    return traceback.format_exception(
-                               type(exc),
-                               exc,
-                               exc.__traceback__
-                              )
-
-
-def later(exc):
-    excp = exc.with_traceback(exc.__traceback__)
-    fmt = fmat(excp)
-    if fmt not in Errors.errors:
-        Errors.errors.append(fmt)
-
-
-def launch(func, name, *args, **kwargs):
-    thread = Thread(func, name, *args, **kwargs)
-    thread.start()
-    return thread
-
-
 "interface"
 
 
 def __dir__():
     return (
         'Client',
-        'Event',
         'Reactor',
         'Errors',
         'Repeater',
