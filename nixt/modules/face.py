@@ -4,6 +4,3 @@
 
 
 "interface"
-
-
-from . import cmd, log

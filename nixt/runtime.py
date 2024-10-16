@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C,R,W0212,W0718
+# pylint: disable=C,R,W0105,W0212,W0718
 
 
 "runtime"
@@ -16,21 +16,6 @@ import _thread
 class Errors:
 
     errors = []
-
-
-def fmat(exc):
-    return traceback.format_exception(
-                               type(exc),
-                               exc,
-                               exc.__traceback__
-                              )
-
-
-def later(exc):
-    excp = exc.with_traceback(exc.__traceback__)
-    fmt = fmat(excp)
-    if fmt not in Errors.errors:
-        Errors.errors.append(fmt)
 
 
 class Thread(threading.Thread):
@@ -69,30 +54,6 @@ class Thread(threading.Thread):
             later(ex)
 
 
-def launch(func, *args, **kwargs):
-    name = kwargs.get("name", named(func))
-    thread = Thread(func, name, *args, **kwargs)
-    thread.start()
-    return thread
-
-
-def named(obj):
-    if isinstance(obj, types.ModuleType):
-        return obj.__name__
-    typ = type(obj)
-    if '__builtins__' in dir(typ):
-        return obj.__name__
-    if '__self__' in dir(obj):
-        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj) and '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj):
-        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
-    if '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    return None
-
-
 class Reactor:
 
     def __init__(self):
@@ -103,7 +64,7 @@ class Reactor:
     def callback(self, evt):
         func = self.cbs.get(evt.type, None)
         if func:
-            evt._thr = launch(func, self, evt)
+            evt._thr = launch(func, "callback", self, evt)
 
     def loop(self):
         while not self.stopped.is_set():
@@ -123,7 +84,7 @@ class Reactor:
         self.cbs[typ] = cbs
 
     def start(self):
-        launch(self.loop)
+        launch(self.loop, "loop")
 
     def stop(self):
         self.stopped.set()
@@ -140,6 +101,44 @@ class Client(Reactor):
 
     def raw(self, txt):
         raise NotImplementedError
+
+
+class Timer:
+
+    def __init__(self, sleep, func, *args, thrname=None, **kwargs):
+        self.args  = args
+        self.func  = func
+        self.kwargs = kwargs
+        self.sleep = sleep
+        self.name  = thrname or kwargs.get("name", named(func))
+        self.state = {}
+        self.timer = None
+
+    def run(self):
+        self.state["latest"] = time.time()
+        launch(self.func, "timer", *self.args)
+
+    def start(self):
+        timer = threading.Timer(self.sleep, self.run)
+        timer.name   = self.name
+        timer.sleep  = self.sleep
+        timer.state  = self.state
+        timer.func   = self.func
+        timer.state["starttime"] = time.time()
+        timer.state["latest"]    = time.time()
+        timer.start()
+        self.timer   = timer
+
+    def stop(self):
+        if self.timer:
+            self.timer.cancel()
+
+
+class Repeater(Timer):
+
+    def run(self):
+        launch(self.start, "repeater")
+        super().run()
 
 
 class Event:
@@ -171,59 +170,31 @@ class Event:
             self._thr.join()
 
 
-class Timer:
-
-    def __init__(self, sleep, func, *args, thrname=None, **kwargs):
-        self.args  = args
-        self.func  = func
-        self.kwargs = kwargs
-        self.sleep = sleep
-        self.name  = thrname or kwargs.get("name", named(func))
-        self.state = {}
-        self.timer = None
-
-    def run(self):
-        self.state["latest"] = time.time()
-        launch(self.func, *self.args)
-
-    def start(self):
-        timer = threading.Timer(self.sleep, self.run)
-        timer.name   = self.name
-        timer.sleep  = self.sleep
-        timer.state  = self.state
-        timer.func   = self.func
-        timer.state["starttime"] = time.time()
-        timer.state["latest"]    = time.time()
-        timer.start()
-        self.timer   = timer
-
-    def stop(self):
-        if self.timer:
-            self.timer.cancel()
+"utilities"
 
 
-class Repeater(Timer):
-
-    def run(self):
-        launch(self.start)
-        super().run()
-
-
-def forever():
-    while True:
-        try:
-            time.sleep(1.0)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
+def fmat(exc):
+    return traceback.format_exception(
+                               type(exc),
+                               exc,
+                               exc.__traceback__
+                              )
 
 
-def wrap(func):
-    try:
-        func()
-    except (KeyboardInterrupt, EOFError):
-        pass
-    except Exception as ex:
-        later(ex)
+def later(exc):
+    excp = exc.with_traceback(exc.__traceback__)
+    fmt = fmat(excp)
+    if fmt not in Errors.errors:
+        Errors.errors.append(fmt)
+
+
+def launch(func, name, *args, **kwargs):
+    thread = Thread(func, name, *args, **kwargs)
+    thread.start()
+    return thread
+
+
+"interface"
 
 
 def __dir__():
@@ -239,7 +210,5 @@ def __dir__():
         'format',
         'later',
         'launch',
-        'init',
-        'named',
-        'wrap'
+        'named'
     )

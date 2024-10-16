@@ -123,7 +123,7 @@ class Fetcher(Object):
     def run(self, silent=False):
         thrs = []
         for _fn, feed in find('rss'):
-            thrs.append(launch(self.fetch, feed, silent, name=f"{feed.rss}"))
+            thrs.append(launch(self.fetch, "fetch", feed, silent))
         return thrs
 
     def start(self, repeat=True):

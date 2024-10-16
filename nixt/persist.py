@@ -258,6 +258,9 @@ def write(obj, pth):
             dump(obj, ofile, indent=4)
 
 
+"interface"
+
+
 def __dir__():
     return (
         'Workdir',

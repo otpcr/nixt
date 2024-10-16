@@ -140,7 +140,7 @@ def main():
     nrs = cfg.index or 1
     thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, clt))
+        thrs.append(launch(payload, "payload", clt))
     for thr in thrs:
         thr.join()
     consume(events)

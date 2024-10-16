@@ -58,7 +58,7 @@ def init(*pkgs):
             modi = getattr(pkg, modname)
             if "init" not in dir(modi):
                 continue
-            thr = launch(modi.init)
+            thr = launch(modi.init, "init")
             mods.append((modi, thr))
     return mods
 
