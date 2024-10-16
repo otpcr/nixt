@@ -12,7 +12,7 @@ version = "91"
 authors = [
     {name = "Bart Thate", email = "record11719@gmail.com" },
 ]
-description = "You have been nixt."
+description = "You have been Nixt."
 readme = "README.rst"
 license = { text="Public Domain"}
 classifiers=[
