@@ -19,10 +19,9 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from nixt.main    import Commands, spl
 from nixt.object  import Object, Obj, fmt, update
 from nixt.persist import Cache, find, fntime, laps, last, sync
-from nixt.runtime import Repeater, launch
+from nixt.runtime import Commands, Repeater, launch
 
 
 DEBUG = False

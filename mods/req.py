@@ -76,7 +76,7 @@ p.s.
 """
 
 
-from nixt.main import Commands
+from nixt.runtime import Commands
 
 
 def req(event):

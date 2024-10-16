@@ -8,9 +8,9 @@
 import time
 
 
-from nixt.main    import Commands
 from nixt.object  import fmt
 from nixt.persist import find, fntime, laps, long, skel, types
+from nixt.runtime import Commands
 
 
 def fnd(event):

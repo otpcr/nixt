@@ -8,9 +8,9 @@
 import time
 
 
-from nixt.main    import Commands
 from nixt.object  import Object
 from nixt.persist import find, laps, sync, fntime
+from nixt.runtime import Commands
 
 
 class Log(Object):

@@ -5,8 +5,7 @@
 "show errors"
 
 
-from nixt.main    import Commands
-from nixt.runtime import Errors
+from nixt.runtime import Commands, Errors
 
 
 def err(event):

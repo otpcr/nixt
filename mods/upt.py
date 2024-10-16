@@ -8,8 +8,8 @@
 import time
 
 
-from nixt.main    import Commands
 from nixt.persist import laps
+from nixt.runtime import Commands
 
 
 STARTTIME = time.time()

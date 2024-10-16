@@ -12,10 +12,9 @@ import uuid
 import _thread
 
 
-from nixt.main    import Commands, spl
 from nixt.object  import Obj, update
 from nixt.persist import find, sync
-
+from nixt.runtime import Commands
 
 from .rss import Rss
 
@@ -102,6 +101,14 @@ def attrs(obj, txt):
 
 def shortid():
     return str(uuid.uuid4())[:8]
+
+
+def spl(txt):
+    try:
+        result = txt.split(',')
+    except (TypeError, ValueError):
+        result = txt
+    return [x for x in result if x]
 
 
 def striphtml(text):

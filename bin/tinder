@@ -17,15 +17,14 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.main    import Commands, Config, command, scan
 from nixt.modules import face
-from nixt.object  import Object, parse
+from nixt.object  import Object, Obj, parse
 from nixt.persist import Workdir, laps, skel
-from nixt.runtime import Client, Errors, Event, later, launch
+from nixt.runtime import Commands, Errors, Event, Reactor, later, launch
 
 
-cfg      = Config()
-cfg.name = Client.__module__.split(".", maxsplit=2)[-2]
+cfg      = Obj()
+cfg.name = Reactor.__module__.split(".", maxsplit=2)[-2]
 
 
 if os.path.exists("mods"):
@@ -63,25 +62,46 @@ param.tdo = ["mekker", ""]
 param.ver = [""]
 
 
-class CLI(Client):
+class CLI(Reactor):
 
     def __init__(self):
-        Client.__init__(self)
+        Reactor.__init__(self)
         self.register("event", command)
 
     def callback(self, evt):
-        Client.callback(self, evt)
+        Reactor.callback(self, evt)
         if "w" in cfg.opts:
             evt.wait()
+
+    def display(self, evt):
+        for txt in evt.result:
+            self.say(evt.channel, txt)
 
     def raw(self, txt):
         if "v" in cfg.opts:
             print(txt)
 
+    def say(self, _channel, txt):
+        self.raw(txt)
+
 
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{cfg.name.upper()} since {tme}")
+
+
+def command(bot, evt):
+    parse(evt, evt.txt)
+    if "ident" in dir(bot):
+        evt.orig = bot.ident
+    func = Commands.cmds.get(evt.cmd, None)
+    if func:
+        try:
+            func(evt)
+            bot.display(evt)
+        except Exception as ex:
+            later(ex)
+    evt.ready()
 
 
 def consume(evts):
@@ -95,6 +115,8 @@ def errors():
             print(line)
 
 
+
+
 def payload(clt):
     nmr = 0
     for cmdd in sorted(Commands.cmds):
@@ -105,6 +127,17 @@ def payload(clt):
             events.append(evt)
             nmr += 1
     return nmr
+
+
+def scan(*pkgs):
+    for pkg in pkgs:
+        for mod in dir(pkg):
+            if mod.startswith("__"):
+                continue
+            modi = getattr(pkg, mod)
+            if "register" not in dir(modi):
+                continue
+            modi.register()
 
 
 def wrap(function):

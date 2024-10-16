@@ -8,7 +8,7 @@
 import os
 
 
-from nixt.main import Commands
+from nixt.runtime import Commands
 
 
 def mod(event):

@@ -8,7 +8,7 @@
 import getpass
 
 
-from nixt.main import Commands
+from nixt.runtime import Commands
 
 
 NAME = Commands.__module__.split(".", maxsplit=2)[-2]
