@@ -6,4 +6,4 @@
 "interface"
 
 
-from . import cmd
+from . import cmd, err, irc, rss

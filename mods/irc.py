@@ -526,6 +526,20 @@ class IRC(Reactor, Output):
         self.events.ready.wait()
 
 
+def command(bot, evt):
+    parse(evt, evt.txt)
+    if "ident" in dir(bot):
+        evt.orig = bot.ident
+    func = Commands.cmds.get(evt.cmd, None)
+    if func:
+        try:
+            func(evt)
+            bot.display(evt)
+        except Exception as ex:
+            later(ex)
+    evt.ready()
+
+
 def cb_auth(bot, evt):
     "auth callback."
     bot.docommand(f'AUTHENTICATE {bot.cfg.password}')

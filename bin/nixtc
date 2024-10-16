@@ -12,20 +12,20 @@ import sys
 import termios
 import threading
 import time
+import _thread
 
 
-from nixt.main    import Config, command, forever, scan, init
 from nixt.modules import face
-from nixt.object  import parse
+from nixt.object  import Obj, parse
 from nixt.persist import Workdir
-from nixt.runtime import Errors, Reactor, later
+from nixt.runtime import Commands, Errors, Reactor, later
 
 
 NAME = Errors.__module__.split(".", maxsplit=2)[-2]
 Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
 
 
-Cfg = Config()
+Cfg = Obj()
 
 
 class Console(Reactor):
@@ -89,6 +89,55 @@ def errors():
     for error in Errors.errors:
         for line in error:
             print(line)
+
+
+def command(bot, evt):
+    parse(evt, evt.txt)
+    if "ident" in dir(bot):
+        evt.orig = bot.ident
+    func = Commands.cmds.get(evt.cmd, None)
+    if func:
+        try:
+            func(evt)
+            bot.display(evt)
+        except Exception as ex:
+            later(ex)
+    evt.ready()
+
+
+def forever():
+    while True:
+        try:
+            time.sleep(1.0)
+        except (KeyboardInterrupt, EOFError):
+            _thread.interrupt_main()
+
+
+def init(*pkgs):
+    mods = []
+    for pkg in pkgs:
+        for modname in dir(pkg):
+            if modname.startswith("__"):
+                continue
+            modi = getattr(pkg, modname)
+            if "init" not in dir(modi):
+                continue
+            thr = launch(modi.init, "init")
+            mods.append((modi, thr))
+    return mods
+
+
+def scan(*pkgs):
+    for pkg in pkgs:
+        for mod in dir(pkg):
+            if mod.startswith("__"):
+                continue
+            modi = getattr(pkg, mod)
+            if "register" not in dir(modi):
+                continue
+            modi.register()
+
+
 
 
 def wrap(func):

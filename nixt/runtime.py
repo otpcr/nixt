@@ -128,7 +128,7 @@ class Timer:
         self.func  = func
         self.kwargs = kwargs
         self.sleep = sleep
-        self.name  = thrname or kwargs.get("name", named(func))
+        self.name  = thrname or kwargs.get("name", "timer")
         self.state = {}
         self.timer = None
 
@@ -202,6 +202,5 @@ def __dir__():
         'forever',
         'format',
         'later',
-        'launch',
-        'named'
+        'launch'
     )

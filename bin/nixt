@@ -11,18 +11,17 @@ import sys
 import threading
 
 
-from nixt.main    import Config, command, scan
 from nixt.modules import face
-from nixt.object  import parse
+from nixt.object  import Obj, parse
 from nixt.persist import Workdir, modname
-from nixt.runtime import Errors, Event, Reactor
+from nixt.runtime import Commands, Errors, Event, Reactor
 
 
 NAME = Reactor.__module__.split(".", maxsplit=2)[-2]
 Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
 
 
-cfg = Config()
+cfg = Obj()
 
 
 
@@ -68,11 +67,44 @@ class Event:
             self._thr.join()
 
 
+def command(bot, evt):
+    parse(evt, evt.txt)
+    if "ident" in dir(bot):
+        evt.orig = bot.ident
+    func = Commands.cmds.get(evt.cmd, None)
+    if func:
+        try:
+            func(evt)
+            bot.display(evt)
+        except Exception as ex:
+            later(ex)
+    evt.ready()
+
 
 def errors():
     for error in Errors.errors:
         for line in error:
             print(line)
+
+
+def forever():
+    while True:
+        try:
+            time.sleep(1.0)
+        except (KeyboardInterrupt, EOFError):
+            _thread.interrupt_main()
+
+
+def scan(*pkgs):
+    for pkg in pkgs:
+        for mod in dir(pkg):
+            if mod.startswith("__"):
+                continue
+            modi = getattr(pkg, mod)
+            if "register" not in dir(modi):
+                continue
+            modi.register()
+
 
 
 def main():

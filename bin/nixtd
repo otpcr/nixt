@@ -10,12 +10,12 @@ import getpass
 import os
 import pwd
 import sys
+import time
 
 
-from nixt.main    import forever, init, scan, wrap
 from nixt.modules import face
 from nixt.persist import Workdir, pidfile, pidname
-from nixt.runtime import Errors
+from nixt.runtime import Errors, later, launch
 
 
 NAME        = Errors.__module__.split(".", maxsplit=2)[-2]
@@ -48,14 +48,57 @@ def errors():
             print(line)
 
 
+def forever():
+    while True:
+        try:
+            time.sleep(1.0)
+        except (KeyboardInterrupt, EOFError):
+            _thread.interrupt_main()
+
+
+def init(*pkgs):
+    mods = []
+    for pkg in pkgs:
+        for modname in dir(pkg):
+            if modname.startswith("__"):
+                continue
+            modi = getattr(pkg, modname)
+            if "init" not in dir(modi):
+                continue
+            thr = launch(modi.init, "init")
+            mods.append((modi, thr))
+    return mods
+
+
+def scan(*pkgs):
+    for pkg in pkgs:
+        for mod in dir(pkg):
+            if mod.startswith("__"):
+                continue
+            modi = getattr(pkg, mod)
+            if "register" not in dir(modi):
+                continue
+            modi.register()
+
+
 def privileges(username):
     pwnam = pwd.getpwnam(username)
     os.setgid(pwnam.pw_gid)
     os.setuid(pwnam.pw_uid)
 
 
+def wrap(func):
+    "reset console."
+    try:
+        func()
+    except (KeyboardInterrupt, EOFError):
+        pass
+    except Exception as ex:
+        later(ex)
+
+
 def main():
-    daemon()
+    daemon(True)
     privileges(getpass.getuser())
     pidfile(pidname(NAME))
     scan(face)
