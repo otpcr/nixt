@@ -14,12 +14,9 @@ import time
 import _thread
 
 
+from nixt.main    import NAME
 from nixt.persist import Workdir, modname, pidfile, pidname
 from nixt.runtime import Errors, forever, later, launch, scan, wrap
-
-
-NAME        = Errors.__module__.split(".", maxsplit=2)[-2]
-Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
 
 
 if os.path.exists("mods"):

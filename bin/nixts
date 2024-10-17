@@ -14,12 +14,9 @@ import time
 import _thread
 
 
+from nixt.main    import NAME
 from nixt.persist import Workdir, modname, pidfile, pidname
 from nixt.runtime import Errors, forever, scan, wrap
-
-
-NAME        = Workdir.__module__.split(".", maxsplit=2)[-2]
-Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
 
 
 if os.path.exists("mods"):
@@ -29,6 +26,7 @@ else:
 
 
 modpth = modname()
+
 
 if os.path.exists(modpth):
     pth = os.path.dirname(modpth)
@@ -45,8 +43,7 @@ def errors():
 
 
 def privileges():
-    username = getpass.getuser()
-    pwnam2 = pwd.getpwnam(username)
+    pwnam2 = pwd.getpwnam(getpass.getuser())
     os.setgid(pwnam2.pw_gid)
     os.setuid(pwnam2.pw_uid)
 

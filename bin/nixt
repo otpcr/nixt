@@ -13,14 +13,10 @@ import time
 import _thread
 
 
-from nixt.main    import Commands, Command, scanner
+from nixt.main    import NAME, Client, Command, command, scanner
 from nixt.object  import Config, parse
 from nixt.persist import Workdir, modname
 from nixt.runtime import Errors, Reactor, later
-
-
-NAME = Reactor.__module__.split(".", maxsplit=2)[-2]
-Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
 
 
 cfg = Config()
@@ -42,31 +38,10 @@ else:
     MODULES = None
 
 
-class CLI(Reactor):
-
-    def display(self, evt):
-        for txt in evt.result:
-            self.say(evt.channel, txt)
-
-    def say(self, _channel, txt):
-        self.raw(txt)
+class CLI(Client):
 
     def raw(self, txt):
         print(txt)
-
-
-def command(bot, evt):
-    parse(evt, evt.txt)
-    if "ident" in dir(bot):
-        evt.orig = bot.ident
-    func = Commands.cmds.get(evt.cmd, None)
-    if func:
-        try:
-            func(evt)
-            bot.display(evt)
-        except Exception as ex:
-            later(ex)
-    evt.ready()
 
 
 def errors():

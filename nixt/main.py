@@ -14,7 +14,7 @@ import _thread
 
 from .object  import parse
 from .persist import Workdir
-from .runtime import Reactor
+from .runtime import Reactor, launch
 
 
 NAME = Reactor.__module__.split(".", maxsplit=2)[-2]

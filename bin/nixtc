@@ -16,12 +16,12 @@ import _thread
 
 
 from nixt.main    import NAME, Client, Commands, Command, forever, scanner
-from nixt.object  import Obj, parse
+from nixt.object  import Config, Obj, parse
 from nixt.persist import Workdir, modname
 from nixt.runtime import Errors, Reactor, later, launch
 
 
-Cfg = Obj()
+Cfg = Config()
 
 
 if os.path.exists("mods"):
@@ -47,9 +47,9 @@ class Console(Client):
         evt.wait()
 
     def poll(self):
-        evtt = Command()
-        evtt.txt = input("> ")
-        return evtt
+        evt = Command()
+        evt.txt = input("> ")
+        return evt
 
     def raw(self, txt):
         print(txt)
