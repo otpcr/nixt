@@ -18,13 +18,13 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.object  import Object, Obj, parse
+from nixt.main    import NAME, Commands, scanner
+from nixt.object  import Config, Object, Obj, parse
 from nixt.persist import Workdir, laps, skel
-from nixt.runtime import Commands, Errors, Reactor, later, launch
+from nixt.runtime import Errors, Reactor, later, launch
 
 
-cfg      = Obj()
-cfg.name = Reactor.__module__.split(".", maxsplit=2)[-2]
+cfg = Config()
 
 
 if os.path.exists("mods"):
@@ -113,7 +113,7 @@ class Eventt:
 
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
-    print(f"{cfg.name.upper()} since {tme}")
+    print(f"{NAME.upper()} since {tme}")
 
 
 def command(bot, evt):
@@ -153,17 +153,6 @@ def payload(clt):
     return nmr
 
 
-def scan(*pkgs):
-    for pkg in pkgs:
-        for mod in dir(pkg):
-            if mod.startswith("__"):
-                continue
-            modii = getattr(pkg, mod)
-            if "register" not in dir(modii):
-                continue
-            modii.register()
-
-
 def wrap(function):
     old3 = None
     try:
@@ -184,7 +173,7 @@ def wrap(function):
 def main():
     Workdir.wdr = ".test"
     parse(cfg, " ".join(sys.argv[1:]))
-    scan(MODS)
+    scanner(MODS)
     nrcommands = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()
