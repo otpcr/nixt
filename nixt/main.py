@@ -14,7 +14,7 @@ import _thread
 
 from .object  import parse
 from .persist import Workdir
-from .runtime import Reactor, launch
+from .runtime import Reactor, later, launch
 
 
 NAME = Reactor.__module__.split(".", maxsplit=2)[-2]
@@ -62,8 +62,8 @@ class Client(Reactor):
         for txt in evt.result:
             self.raw(txt)
 
-    def raw(self, txt2):
-        print(txt2)
+    def raw(self, txt):
+        raise NotImplementedError
 
 
 class Command:
@@ -108,7 +108,7 @@ def modloop(*pkgs):
             yield getattr(pkg, modname)
             
 
-def scanner(*pkgs, register=True, init=False):
+def scanner(*pkgs, init=False):
     result = []
     for mod in modloop(*pkgs):
         Commands.scan(mod)

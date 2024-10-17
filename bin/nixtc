@@ -10,15 +10,13 @@ import os
 import readline
 import sys
 import termios
-import threading
 import time
-import _thread
 
 
-from nixt.main    import NAME, Client, Commands, Command, forever, scanner
-from nixt.object  import Config, Obj, parse
-from nixt.persist import Workdir, modname
-from nixt.runtime import Errors, Reactor, later, launch
+from nixt.main    import NAME, Client, Command, forever, scanner
+from nixt.object  import Config, parse
+from nixt.persist import modname
+from nixt.runtime import Errors, later
 
 
 Cfg = Config()

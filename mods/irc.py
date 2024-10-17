@@ -16,13 +16,13 @@ import time
 import _thread
 
 
-from nixt.object  import Object, Obj, edit, fmt, keys, parse
+from nixt.main    import NAME, command
+from nixt.object  import Object, Obj, edit, fmt, keys
 from nixt.persist import Cache, ident, last, sync
 from nixt.runtime import Reactor, later, launch
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]
-NAME = Reactor.__module__.split(".", maxsplit=2)[-2]
 
 
 output = None
@@ -515,20 +515,6 @@ class IRC(Reactor, Output):
 
     def wait(self):
         self.events.ready.wait()
-
-
-def command(bot, evt):
-    parse(evt, evt.txt)
-    if "ident" in dir(bot):
-        evt.orig = bot.ident
-    func = Commands.cmds.get(evt.cmd, None)
-    if func:
-        try:
-            func(evt)
-            bot.display(evt)
-        except Exception as ex:
-            later(ex)
-    evt.ready()
 
 
 def cb_auth(bot, evt):

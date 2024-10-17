@@ -10,19 +10,17 @@ import getpass
 import os
 import pwd
 import sys
-import time
-import _thread
 
 
 from nixt.main    import NAME
-from nixt.persist import Workdir, modname, pidfile, pidname
-from nixt.runtime import Errors, forever, later, launch, scan, wrap
+from nixt.persist import modname, pidfile, pidname
+from nixt.runtime import Errors, forever, scan, wrap
 
 
 if os.path.exists("mods"):
-    import mods.face as MODS
+    import mods.face as MODZ
 else:
-    MODS = None
+    MODZ = None
 
 
 modpath = modname()
@@ -71,7 +69,7 @@ def main():
     daemon(True)
     privileges()
     pidfile(pidname(NAME))
-    scan(MODS, MODULES, init=True)
+    scan(MODZ, MODULES, init=True)
     forever()
 
 

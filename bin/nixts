@@ -10,12 +10,10 @@ import getpass
 import os
 import pwd
 import sys
-import time
-import _thread
 
 
 from nixt.main    import NAME
-from nixt.persist import Workdir, modname, pidfile, pidname
+from nixt.persist import modname, pidfile, pidname
 from nixt.runtime import Errors, forever, scan, wrap
 
 
