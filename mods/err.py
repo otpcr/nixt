@@ -5,7 +5,7 @@
 "show errors"
 
 
-from nixt.runtime import Commands, Errors
+from nixt.runtime import Errors
 
 
 def err(event):
@@ -18,7 +18,3 @@ def err(event):
         event.reply("no errors")
         return
     event.reply(f"found {nmr} errors.")
-
-
-def register():
-    Commands.add(err)

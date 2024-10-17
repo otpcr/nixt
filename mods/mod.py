@@ -8,9 +8,6 @@
 import os
 
 
-from nixt.runtime import Commands
-
-
 def mod(event):
     path = os.path.dirname(__file__)
     mods = []
@@ -23,7 +20,3 @@ def mod(event):
             continue
         mods.append(mdd[:-3])
     event.reply(",".join(sorted(mods)))
-
-
-def register():
-    Commands.add(mod)

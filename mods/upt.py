@@ -9,7 +9,6 @@ import time
 
 
 from nixt.persist import laps
-from nixt.runtime import Commands
 
 
 STARTTIME = time.time()
@@ -17,7 +16,3 @@ STARTTIME = time.time()
 
 def upt(event):
     event.reply(laps(time.time()-STARTTIME))
-
-
-def register():
-    Commands.add(upt)

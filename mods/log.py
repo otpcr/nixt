@@ -10,7 +10,6 @@ import time
 
 from nixt.object  import Object
 from nixt.persist import find, laps, sync, fntime
-from nixt.runtime import Commands
 
 
 class Log(Object):
@@ -34,7 +33,3 @@ def log(event):
     obj.txt = event.rest
     sync(obj)
     event.reply('ok')
-
-
-def register():
-    Commands.add(log)

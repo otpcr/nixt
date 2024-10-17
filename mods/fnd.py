@@ -10,7 +10,6 @@ import time
 
 from nixt.object  import fmt
 from nixt.persist import find, fntime, laps, long, skel, types
-from nixt.runtime import Commands
 
 
 def fnd(event):
@@ -28,7 +27,3 @@ def fnd(event):
         nmr += 1
     if not nmr:
         event.reply("no result")
-
-
-def register():
-    Commands.add(fnd)

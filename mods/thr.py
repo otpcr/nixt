@@ -11,7 +11,6 @@ import time
 
 from nixt.object  import Object, update
 from nixt.persist import laps
-from nixt.runtime import Commands
 
 
 STARTTIME = time.time()
@@ -41,7 +40,3 @@ def thr(event):
         event.reply(' '.join(res))
     else:
         event.reply('no threads')
-
-
-def register():
-    Commands.add(thr)

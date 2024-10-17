@@ -14,7 +14,7 @@ import _thread
 
 from nixt.object  import Obj, update
 from nixt.persist import find, sync
-from nixt.runtime import Commands
+
 
 from .rss import Rss
 
@@ -176,8 +176,3 @@ def imp(event):
         event.reply(f"skipped {nrskip} urls.")
     if nrs:
         event.reply(f"added {nrs} urls.")
-
-
-def register():
-    Commands.add(exp)
-    Commands.add(imp)

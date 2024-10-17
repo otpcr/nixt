@@ -15,14 +15,10 @@ import time
 import _thread
 
 
+from nixt.main    import NAME, Client, Commands, Command, forever, scanner
 from nixt.object  import Obj, parse
 from nixt.persist import Workdir, modname
-from nixt.runtime import Commands, Errors, Event, Reactor
-from nixt.runtime import forever, later, launch, scan
-
-
-NAME = Errors.__module__.split(".", maxsplit=2)[-2]
-Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
+from nixt.runtime import Errors, Reactor, later, launch
 
 
 Cfg = Obj()
@@ -44,27 +40,19 @@ else:
     MODZ = None
 
 
-class Console(Reactor):
-
-    def __init__(self):
-        Reactor.__init__(self)
-        self.register("event", command)
+class Console(Client):
 
     def callback(self, evt):
-        Reactor.callback(self, evt)
+        Client.callback(self, evt)
         evt.wait()
 
-    def display(self, evt):
-        for txt in evt.result:
-            self.raw(txt)
-
     def poll(self):
-        evtt = Event()
+        evtt = Command()
         evtt.txt = input("> ")
         return evtt
 
-    def raw(self, txt2):
-        print(txt2)
+    def raw(self, txt):
+        print(txt)
 
 
 def banner():
@@ -76,20 +64,6 @@ def errors():
     for error in Errors.errors:
         for line in error:
             print(line)
-
-
-def command(bot, evt):
-    parse(evt, evt.txt)
-    if "ident" in dir(bot):
-        evt.orig = bot.ident
-    funct = Commands.cmds.get(evt.cmd, None)
-    if funct:
-        try:
-            funct(evt)
-            bot.display(evt)
-        except Exception as ex:
-            later(ex)
-    evt.ready()
 
 
 def wrap(func):
@@ -114,7 +88,9 @@ def main():
     if "v" in Cfg.opts:
         readline.redisplay()
         banner()
-    for _mod, thr in scan(MODS, MODZ, init="i" in Cfg.opts):
+    for mod, thr in scanner(MODS, MODZ, init="i" in Cfg.opts):
+        if "v" in Cfg.opts and "output" in dir(mod):
+            mod.output = print
         if "w" in Cfg.opts and thr:
             thr.join()
     csl = Console()

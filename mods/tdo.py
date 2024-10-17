@@ -10,7 +10,6 @@ import time
 
 from nixt.object  import Object
 from nixt.persist import find, fntime, laps, sync
-from nixt.runtime import Commands
 
 
 class Todo(Object):
@@ -50,8 +49,3 @@ def tdo(event):
     obj.txt = event.rest
     sync(obj)
     event.reply('ok')
-
-
-def register():
-    Commands.add(dne)
-    Commands.add(tdo)

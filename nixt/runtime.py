@@ -12,26 +12,6 @@ import traceback
 import _thread
 
 
-class Errors:
-
-    errors = []
-
-
-def fmat(exc):
-    return traceback.format_exception(
-                               type(exc),
-                               exc,
-                               exc.__traceback__
-                              )
-
-
-def later(exc):
-    excp = exc.with_traceback(exc.__traceback__)
-    fmt = fmat(excp)
-    if fmt not in Errors.errors:
-        Errors.errors.append(fmt)
-
-
 class Thread(threading.Thread):
 
     def __init__(self, func, thrname, *args, daemon=True, **kwargs):
@@ -110,15 +90,6 @@ class Reactor:
         self.stopped.set()
 
 
-class Commands:
-
-    cmds = {}
-
-    @staticmethod
-    def add(func):
-        Commands.cmds[func.__name__] = func
-
-
 class Timer:
 
     def __init__(self, sleep, func, *args, thrname=None, **kwargs):
@@ -157,7 +128,39 @@ class Repeater(Timer):
         super().run()
 
 
-"utilities"
+"errors"
+
+
+class Errors:
+
+    errors = []
+
+
+def fmat(exc):
+    return traceback.format_exception(
+                               type(exc),
+                               exc,
+                               exc.__traceback__
+                              )
+
+
+def later(exc):
+    excp = exc.with_traceback(exc.__traceback__)
+    fmt = fmat(excp)
+    if fmt not in Errors.errors:
+        Errors.errors.append(fmt)
+
+
+"user"
+
+
+class Commands:
+
+    cmds = {}
+
+    @staticmethod
+    def add(func):
+        Commands.cmds[func.__name__] = func
 
 
 class Event:
@@ -184,6 +187,9 @@ class Event:
         self._ready.wait()
         if self._thr:
             self._thr.join()
+
+
+"utilities"
 
 
 def forever():
@@ -222,7 +228,6 @@ def wrap(func):
         pass
     except Exception as ex:
         later(ex)
-
 
 
 "interface"

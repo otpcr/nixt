@@ -51,6 +51,7 @@ packages = [
     'mods/irc.py',
     'mods/log.py',
     'mods/mod.py',
+    'mods/opm.py',
     'mods/req.py',
     'mods/rss.py',
     'mods/srv.py',

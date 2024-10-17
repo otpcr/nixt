@@ -5,13 +5,9 @@
 "list of commands"
 
 
-from nixt.object  import keys
-from nixt.runtime import Commands
+from nixt.object import keys
+from nixt.main   import Commands
 
 
 def cmd(event):
     event.reply(",".join(sorted(keys(Commands.cmds))))
-
-
-def register():
-    Commands.add(cmd)

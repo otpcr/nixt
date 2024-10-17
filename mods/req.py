@@ -76,12 +76,5 @@ p.s.
 """
 
 
-from nixt.runtime import Commands
-
-
 def req(event):
     event.reply(__doc__)
-
-
-def register():
-    Commands.add(req)

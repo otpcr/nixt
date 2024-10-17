@@ -8,10 +8,9 @@
 import getpass
 
 
-from nixt.runtime import Commands
+from nixt.main import NAME
 
 
-NAME = Commands.__module__.split(".", maxsplit=2)[-2]
 TXT = """[Unit]
 Description=%s
 After=network-online.target
@@ -29,7 +28,3 @@ WantedBy=multi-user.target"""
 def srv(event):
     name  = getpass.getuser()
     event.reply(TXT % (NAME.upper(), name, name, name, NAME))
-
-
-def register():
-    Commands.add(srv)

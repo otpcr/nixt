@@ -18,7 +18,7 @@ import _thread
 
 from nixt.object  import Object, Obj, edit, fmt, keys, parse
 from nixt.persist import Cache, ident, last, sync
-from nixt.runtime import Commands, Reactor, later, launch
+from nixt.runtime import Reactor, later, launch
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]
@@ -660,9 +660,3 @@ def pwd(event):
     base = base64.b64encode(enc)
     dcd = base.decode('ascii')
     event.reply(dcd)
-
-
-def register():
-    Commands.add(cfg)
-    Commands.add(mre)
-    Commands.add(pwd)

@@ -21,7 +21,7 @@ from urllib.parse import quote_plus, urlencode
 
 from nixt.object  import Object, Obj, fmt, update
 from nixt.persist import Cache, find, fntime, laps, last, sync
-from nixt.runtime import Commands, Repeater, launch
+from nixt.runtime import Repeater, launch
 
 
 DEBUG = False
@@ -352,12 +352,3 @@ def syn(event):
         thr.join()
         nrs += 1
     event.reply(f"{nrs} feeds synced")
-
-
-def register():
-    Commands.add(dpl)
-    Commands.add(nme)
-    Commands.add(rem)
-    Commands.add(res)
-    Commands.add(rss)
-    Commands.add(syn)

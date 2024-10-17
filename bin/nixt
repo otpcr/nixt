@@ -13,16 +13,17 @@ import time
 import _thread
 
 
-from nixt.object  import Obj, parse
+from nixt.main    import Commands, Command, scanner
+from nixt.object  import Config, parse
 from nixt.persist import Workdir, modname
-from nixt.runtime import Commands, Errors, Event, Reactor, later, scan
+from nixt.runtime import Errors, Reactor, later
 
 
 NAME = Reactor.__module__.split(".", maxsplit=2)[-2]
 Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
 
 
-cfg = Obj()
+cfg = Config()
 
 
 if os.path.exists("mods"):
@@ -76,9 +77,9 @@ def errors():
 
 def main():
     parse(cfg, " ".join(sys.argv[1:]))
-    scan(MODS, MODULES)
+    scanner(MODS, MODULES)
     cli = CLI()
-    evt = Event()
+    evt = Command()
     evt.txt = cfg.txt
     command(cli, evt)
     evt.wait()
