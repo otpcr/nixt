@@ -15,7 +15,7 @@ import _thread
 
 
 from nixt.persist import Workdir, modname, pidfile, pidname
-from nixt.runtime import Errors, later, launch
+from nixt.runtime import Errors, forever, scan, wrap
 
 
 NAME        = Workdir.__module__.split(".", maxsplit=2)[-2]
@@ -28,11 +28,11 @@ else:
     MODS = None
 
 
-modpth = os.path.dirname(modname())
-
+modpth = modname()
 
 if os.path.exists(modpth):
-    sys.path.insert(0, modpth)
+    pth = os.path.dirname(modpth)
+    sys.path.insert(0, pth)
     import mods.face as MODA
 else:
     MODA = None
@@ -44,59 +44,17 @@ def errors():
             print(line)
 
 
-def forever():
-    while True:
-        try:
-            time.sleep(1.1)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-
-
-def privileges(username):
+def privileges():
+    username = getpass.getuser()
     pwnam2 = pwd.getpwnam(username)
     os.setgid(pwnam2.pw_gid)
     os.setuid(pwnam2.pw_uid)
 
 
-def init(*pkgs):
-    mods = []
-    for pkga in pkgs:
-        for modnam in dir(pkga):
-            if modnam.startswith("__"):
-                continue
-            modui = getattr(pkga, modnam)
-            if "init" not in dir(modui):
-                continue
-            thr = launch(modui.init, "init")
-            mods.append((modui, thr))
-    return mods
-
-
-def scan(*pkgs):
-    for pkg in pkgs:
-        for moda in dir(pkg):
-            if moda.startswith("__"):
-                continue
-            modo = getattr(pkg, moda)
-            if "register" not in dir(modo):
-                continue
-            modo.register()
-
-
-def wrap(func):
-    try:
-        func()
-    except (KeyboardInterrupt, EOFError):
-        pass
-    except Exception as ex:
-        later(ex)
-
-
 def main():
-    privileges(getpass.getuser())
+    privileges()
     pidfile(pidname(NAME))
-    scan(MODS, MODA)
-    init(MODS, MODA)
+    scan(MODS, MODA, init=True)
     forever()
 
 

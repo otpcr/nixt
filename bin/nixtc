@@ -17,7 +17,8 @@ import _thread
 
 from nixt.object  import Obj, parse
 from nixt.persist import Workdir, modname
-from nixt.runtime import Commands, Errors, Reactor, later, launch
+from nixt.runtime import Commands, Errors, Event, Reactor
+from nixt.runtime import forever, later, launch, scan
 
 
 NAME = Errors.__module__.split(".", maxsplit=2)[-2]
@@ -47,7 +48,7 @@ class Console(Reactor):
 
     def __init__(self):
         Reactor.__init__(self)
-        self.register("command", command)
+        self.register("event", command)
 
     def callback(self, evt):
         Reactor.callback(self, evt)
@@ -64,33 +65,6 @@ class Console(Reactor):
 
     def raw(self, txt2):
         print(txt2)
-
-
-class Event:
-
-    def __init__(self):
-        self._ready  = threading.Event()
-        self._thr    = None
-        self.result  = []
-        self.txt     = ""
-        self.type    = "command"
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-    def __str__(self):
-        return str(self.__dict__)
-
-    def ready(self):
-        self._ready.set()
-
-    def reply(self, txt2):
-        self.result.append(txt2)
-
-    def wait(self):
-        self._ready.wait()
-        if self._thr:
-            self._thr.join()
 
 
 def banner():
@@ -118,39 +92,6 @@ def command(bot, evt):
     evt.ready()
 
 
-def forever():
-    while not False:
-        try:
-            time.sleep(1.0)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-
-
-def init(*pkgs):
-    mods = []
-    for pkg in pkgs:
-        for modb in dir(pkg):
-            if modb.startswith("__"):
-                continue
-            modi = getattr(pkg, modb)
-            if "init" not in dir(modi):
-                continue
-            thr = launch(modi.init, "init")
-            mods.append((modi, thr))
-    return mods
-
-
-def scan(*pkgs):
-    for pkg in pkgs:
-        for mod in dir(pkg):
-            if mod.startswith("__"):
-                continue
-            moda = getattr(pkg, mod)
-            if "register" not in dir(moda):
-                continue
-            moda.register()
-
-
 def wrap(func):
     old2 = None
     try:
@@ -170,14 +111,12 @@ def wrap(func):
 
 def main():
     parse(Cfg, " ".join(sys.argv[1:]))
-    scan(MODS, MODZ)
     if "v" in Cfg.opts:
         readline.redisplay()
         banner()
-    if "i" in Cfg.opts:
-        for _mod, thr in init(MODS, MODZ):
-            if "w" in Cfg.opts:
-                thr.join()
+    for _mod, thr in scan(MODS, MODZ, init="i" in Cfg.opts):
+        if "w" in Cfg.opts and thr:
+            thr.join()
     csl = Console()
     csl.start()
     forever()

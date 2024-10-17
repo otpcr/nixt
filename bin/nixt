@@ -15,7 +15,7 @@ import _thread
 
 from nixt.object  import Obj, parse
 from nixt.persist import Workdir, modname
-from nixt.runtime import Commands, Errors, Reactor, later
+from nixt.runtime import Commands, Errors, Event, Reactor, later, scan
 
 
 NAME = Reactor.__module__.split(".", maxsplit=2)[-2]
@@ -54,35 +54,6 @@ class CLI(Reactor):
         print(txt)
 
 
-class Event:
-
-    def __init__(self):
-        self._ready  = threading.Event()
-        self._thr    = None
-        self.channel = ""
-        self.orig    = ""
-        self.result  = []
-        self.txt     = ""
-        self.type    = "event"
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-    def __str__(self):
-        return str(self.__dict__)
-
-    def ready(self):
-        self._ready.set()
-
-    def reply(self, txt):
-        self.result.append(txt)
-
-    def wait(self):
-        self._ready.wait()
-        if self._thr:
-            self._thr.join()
-
-
 def command(bot, evt):
     parse(evt, evt.txt)
     if "ident" in dir(bot):
@@ -101,26 +72,6 @@ def errors():
     for error in Errors.errors:
         for line in error:
             print(line)
-
-
-def forever():
-    while True:
-        try:
-            time.sleep(1.0)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-
-
-def scan(*pkgs):
-    for pkg in pkgs:
-        for mod in dir(pkg):
-            if mod.startswith("__"):
-                continue
-            modi = getattr(pkg, mod)
-            if "register" not in dir(modi):
-                continue
-            modi.register()
-
 
 
 def main():

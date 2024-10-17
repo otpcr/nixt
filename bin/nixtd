@@ -15,7 +15,7 @@ import _thread
 
 
 from nixt.persist import Workdir, modname, pidfile, pidname
-from nixt.runtime import Errors, later, launch
+from nixt.runtime import Errors, forever, later, launch, scan, wrap
 
 
 NAME        = Errors.__module__.split(".", maxsplit=2)[-2]
@@ -28,11 +28,11 @@ else:
     MODS = None
 
 
-modpath = os.path.dirname(modname())
+modpath = modname()
 
 
 if os.path.exists(modpath):
-    sys.path.insert(0, modpath)
+    sys.path.insert(0, os.path.dirname(modpath))
     import mods.face as MODULES
 else:
     MODULES = None
@@ -64,60 +64,17 @@ def errors():
             print(line)
 
 
-def forever():
-    while True:
-        try:
-            time.sleep(1.2)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-
-
-def init(*pkgs):
-    mods = []
-    for pkgu in pkgs:
-        for modnn in dir(pkgu):
-            if modnn.startswith("__"):
-                continue
-            modie = getattr(pkgu, modnn)
-            if "init" not in dir(modie):
-                continue
-            thr = launch(modie.init, "init")
-            mods.append((modie, thr))
-    return mods
-
-
-def scan(*pkgs):
-    for pkg in pkgs:
-        for modn in dir(pkg):
-            if modn.startswith("__"):
-                continue
-            modu = getattr(pkg, modn)
-            if "register" not in dir(modu):
-                continue
-            modu.register()
-
-
-def privileges(username):
-    pwnam = pwd.getpwnam(username)
+def privileges():
+    pwnam = pwd.getpwnam(getpass.getuser())
     os.setgid(pwnam.pw_gid)
     os.setuid(pwnam.pw_uid)
 
 
-def wrap(func2):
-    try:
-        func2()
-    except (KeyboardInterrupt, EOFError):
-        pass
-    except Exception as ex:
-        later(ex)
-
-
 def main():
     daemon(True)
-    privileges(getpass.getuser())
+    privileges()
     pidfile(pidname(NAME))
-    scan(MODS, MODULES)
-    init(MODS, MODULES)
+    scan(MODS, MODULES, init=True)
     forever()
 
 
