@@ -18,7 +18,7 @@ import _thread
 
 from nixt.object  import Object, Obj, edit, fmt, keys, parse
 from nixt.persist import Cache, ident, last, sync
-from nixt.runtime import Commands, Event, Reactor, later, launch
+from nixt.runtime import Commands, Reactor, later, launch
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]
@@ -62,6 +62,34 @@ class Config(Obj):
         self.realname = self.realname or Config.realname
         self.server = self.server or Config.server
         self.username = self.username or Config.username
+
+
+class Event:
+
+    def __init__(self):
+        self._ready  = threading.Event()
+        self._thr    = None
+        self.orig    = ""
+        self.result  = []
+        self.type    = "event"
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    def ready(self):
+        self._ready.set()
+
+    def reply(self, txt):
+        self.result.append(txt)
+
+    def wait(self):
+        self._ready.wait()
+        if self._thr:
+            self._thr.join()
+
 
 
 class TextWrap(textwrap.TextWrapper):
@@ -533,7 +561,7 @@ def cb_h904(bot, evt):
 
 
 def cb_kill(bot, evt):
-    pawss
+    pass
 
 def cb_log(bot, evt):
     pass

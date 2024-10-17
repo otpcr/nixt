@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C,W0105,W0212,W0718
+# pylint: disable=C,W0105,W0201,W0212,W0718
 
 
 "tinder"
@@ -11,16 +11,16 @@ import shutil
 import sys
 import termios
 import time
+import threading
 import _thread
 
 
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.modules import face
 from nixt.object  import Object, Obj, parse
 from nixt.persist import Workdir, laps, skel
-from nixt.runtime import Commands, Errors, Event, Reactor, later, launch
+from nixt.runtime import Commands, Errors, Reactor, later, launch
 
 
 cfg      = Obj()
@@ -85,6 +85,32 @@ class CLI(Reactor):
         self.raw(txt)
 
 
+class Eventt:
+
+    def __init__(self):
+        self._ready  = threading.Event()
+        self._thr    = None
+        self.result  = []
+        self.type    = "event"
+
+    def __getattr__(self, keyy):
+        return self.__dict__.get(keyy, "")
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    def reply(self, txt):
+        self.result.append(txt)
+
+    def ready(self):
+        self._ready.set()
+
+    def wait(self):
+        self._ready.wait()
+        if self._thr:
+            self._thr.join()
+
+
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{cfg.name.upper()} since {tme}")
@@ -94,10 +120,10 @@ def command(bot, evt):
     parse(evt, evt.txt)
     if "ident" in dir(bot):
         evt.orig = bot.ident
-    func = Commands.cmds.get(evt.cmd, None)
-    if func:
+    funco = Commands.cmds.get(evt.cmd, None)
+    if funco:
         try:
-            func(evt)
+            funco(evt)
             bot.display(evt)
         except Exception as ex:
             later(ex)
@@ -115,13 +141,11 @@ def errors():
             print(line)
 
 
-
-
 def payload(clt):
     nmr = 0
     for cmdd in sorted(Commands.cmds):
         for ex in getattr(param, cmdd, [""]):
-            evt = Event()
+            evt = Eventt()
             evt.txt = cmdd + " " + ex
             clt.put(evt)
             events.append(evt)
@@ -134,10 +158,10 @@ def scan(*pkgs):
         for mod in dir(pkg):
             if mod.startswith("__"):
                 continue
-            modi = getattr(pkg, mod)
-            if "register" not in dir(modi):
+            modii = getattr(pkg, mod)
+            if "register" not in dir(modii):
                 continue
-            modi.register()
+            modii.register()
 
 
 def wrap(function):
@@ -160,7 +184,7 @@ def wrap(function):
 def main():
     Workdir.wdr = ".test"
     parse(cfg, " ".join(sys.argv[1:]))
-    scan(MODS, face)
+    scan(MODS)
     nrcommands = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()

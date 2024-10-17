@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C,W0212
+# pylint: disable=C,W0212,W0718
 
 
 "service"
@@ -9,29 +9,45 @@
 import getpass
 import os
 import pwd
+import sys
 import time
 import _thread
 
 
-from nixt.modules import face as FACE
-from nixt.persist import Workdir, pidfile, pidname
+from nixt.persist import Workdir, modname, pidfile, pidname
 from nixt.runtime import Errors, later, launch
 
 
-NAME        = Errors.__module__.split(".", maxsplit=2)[-2]
+NAME        = Workdir.__module__.split(".", maxsplit=2)[-2]
 Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
 
 
+if os.path.exists("mods"):
+    import mods.face as MODS
+else:
+    MODS = None
+
+
+modpth = os.path.dirname(modname())
+
+
+if os.path.exists(modpth):
+    sys.path.insert(0, modpth)
+    import mods.face as MODA
+else:
+    MODA = None
+
+
 def errors():
-    for err in Errors.errors:
-        for line in err:
+    for errr in Errors.errors:
+        for line in errr:
             print(line)
 
 
 def forever():
     while True:
         try:
-            time.sleep(1.0)
+            time.sleep(1.1)
         except (KeyboardInterrupt, EOFError):
             _thread.interrupt_main()
 
@@ -44,27 +60,27 @@ def privileges(username):
 
 def init(*pkgs):
     mods = []
-    for pkg in pkgs:
-        for modname in dir(pkg):
-            if modname.startswith("__"):
+    for pkga in pkgs:
+        for modnam in dir(pkga):
+            if modnam.startswith("__"):
                 continue
-            modi = getattr(pkg, modname)
-            if "init" not in dir(modi):
+            modui = getattr(pkga, modnam)
+            if "init" not in dir(modui):
                 continue
-            thr = launch(modi.init, "init")
-            mods.append((modi, thr))
+            thr = launch(modui.init, "init")
+            mods.append((modui, thr))
     return mods
 
 
 def scan(*pkgs):
     for pkg in pkgs:
-        for mod in dir(pkg):
-            if mod.startswith("__"):
+        for moda in dir(pkg):
+            if moda.startswith("__"):
                 continue
-            modi = getattr(pkg, mod)
-            if "register" not in dir(modi):
+            modo = getattr(pkg, moda)
+            if "register" not in dir(modo):
                 continue
-            modi.register()
+            modo.register()
 
 
 def wrap(func):
@@ -79,8 +95,8 @@ def wrap(func):
 def main():
     privileges(getpass.getuser())
     pidfile(pidname(NAME))
-    scan(FACE)
-    init(FACE)
+    scan(MODS, MODA)
+    init(MODS, MODA)
     forever()
 
 

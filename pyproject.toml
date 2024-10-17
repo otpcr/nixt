@@ -39,7 +39,6 @@ script-files = [
 ]
 packages = [
     'nixt',
-    'nixt.modules'
 ]
 
 

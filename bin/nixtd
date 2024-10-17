@@ -11,15 +11,31 @@ import os
 import pwd
 import sys
 import time
+import _thread
 
 
-from nixt.modules import face
-from nixt.persist import Workdir, pidfile, pidname
+from nixt.persist import Workdir, modname, pidfile, pidname
 from nixt.runtime import Errors, later, launch
 
 
 NAME        = Errors.__module__.split(".", maxsplit=2)[-2]
 Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
+
+
+if os.path.exists("mods"):
+    import mods.face as MODS
+else:
+    MODS = None
+
+
+modpath = os.path.dirname(modname())
+
+
+if os.path.exists(modpath):
+    sys.path.insert(0, modpath)
+    import mods.face as MODULES
+else:
+    MODULES = None
 
 
 def daemon(verbose=False):
@@ -43,42 +59,42 @@ def daemon(verbose=False):
 
 
 def errors():
-    for error in Errors.errors:
-        for line in error:
+    for err in Errors.errors:
+        for line in err:
             print(line)
 
 
 def forever():
     while True:
         try:
-            time.sleep(1.0)
+            time.sleep(1.2)
         except (KeyboardInterrupt, EOFError):
             _thread.interrupt_main()
 
 
 def init(*pkgs):
     mods = []
-    for pkg in pkgs:
-        for modname in dir(pkg):
-            if modname.startswith("__"):
+    for pkgu in pkgs:
+        for modnn in dir(pkgu):
+            if modnn.startswith("__"):
                 continue
-            modi = getattr(pkg, modname)
-            if "init" not in dir(modi):
+            modie = getattr(pkgu, modnn)
+            if "init" not in dir(modie):
                 continue
-            thr = launch(modi.init, "init")
-            mods.append((modi, thr))
+            thr = launch(modie.init, "init")
+            mods.append((modie, thr))
     return mods
 
 
 def scan(*pkgs):
     for pkg in pkgs:
-        for mod in dir(pkg):
-            if mod.startswith("__"):
+        for modn in dir(pkg):
+            if modn.startswith("__"):
                 continue
-            modi = getattr(pkg, mod)
-            if "register" not in dir(modi):
+            modu = getattr(pkg, modn)
+            if "register" not in dir(modu):
                 continue
-            modi.register()
+            modu.register()
 
 
 def privileges(username):
@@ -87,10 +103,9 @@ def privileges(username):
     os.setuid(pwnam.pw_uid)
 
 
-def wrap(func):
-    "reset console."
+def wrap(func2):
     try:
-        func()
+        func2()
     except (KeyboardInterrupt, EOFError):
         pass
     except Exception as ex:
@@ -101,8 +116,8 @@ def main():
     daemon(True)
     privileges(getpass.getuser())
     pidfile(pidname(NAME))
-    scan(face)
-    init(face)
+    scan(MODS, MODULES)
+    init(MODS, MODULES)
     forever()
 
 

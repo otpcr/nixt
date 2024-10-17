@@ -241,6 +241,14 @@ def shortid():
     return str(uuid.uuid4())[:8]
 
 
+def spl(txt):
+    try:
+        result = txt.split(',')
+    except (TypeError, ValueError):
+        result = txt
+    return [x for x in result if x]
+
+
 def striphtml(text):
     clean = re.compile('<.*?>')
     return re.sub(clean, '', text)

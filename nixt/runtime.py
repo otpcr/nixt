@@ -9,7 +9,6 @@ import queue
 import threading
 import time
 import traceback
-import types
 import _thread
 
 
@@ -157,35 +156,6 @@ class Repeater(Timer):
     def run(self):
         launch(self.start, "repeater")
         super().run()
-
-
-class Event:
-
-    def __init__(self):
-        self._ready  = threading.Event()
-        self._thr    = None
-        self.channel = ""
-        self.orig    = ""
-        self.result  = []
-        self.txt     = ""
-        self.type    = "event"
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-    def __str__(self):
-        return str(self.__dict__)
-
-    def ready(self):
-        self._ready.set()
-
-    def reply(self, txt):
-        self.result.append(txt)
-
-    def wait(self):
-        self._ready.wait()
-        if self._thr:
-            self._thr.join()
 
 
 "interface"

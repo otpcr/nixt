@@ -15,10 +15,9 @@ import time
 import _thread
 
 
-from nixt.modules import face
 from nixt.object  import Obj, parse
-from nixt.persist import Workdir
-from nixt.runtime import Commands, Errors, Reactor, later
+from nixt.persist import Workdir, modname
+from nixt.runtime import Commands, Errors, Reactor, later, launch
 
 
 NAME = Errors.__module__.split(".", maxsplit=2)[-2]
@@ -28,11 +27,27 @@ Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
 Cfg = Obj()
 
 
+if os.path.exists("mods"):
+    import mods.face as MODS
+else:
+    MODS = None
+
+
+modpathz = modname()
+
+
+if os.path.exists(modpathz):
+    sys.path.insert(0, modpathz)
+    import mods.face as MODZ
+else:
+    MODZ = None
+
+
 class Console(Reactor):
 
     def __init__(self):
         Reactor.__init__(self)
-        self.register("event", command)
+        self.register("command", command)
 
     def callback(self, evt):
         Reactor.callback(self, evt)
@@ -43,12 +58,12 @@ class Console(Reactor):
             self.raw(txt)
 
     def poll(self):
-        evt = Event()
-        evt.txt = input("> ")
-        return evt
+        evtt = Event()
+        evtt.txt = input("> ")
+        return evtt
 
-    def raw(self, txt):
-        print(txt)
+    def raw(self, txt2):
+        print(txt2)
 
 
 class Event:
@@ -56,11 +71,9 @@ class Event:
     def __init__(self):
         self._ready  = threading.Event()
         self._thr    = None
-        self.channel = ""
-        self.orig    = ""
         self.result  = []
         self.txt     = ""
-        self.type    = "event"
+        self.type    = "command"
 
     def __getattr__(self, key):
         return self.__dict__.get(key, "")
@@ -71,8 +84,8 @@ class Event:
     def ready(self):
         self._ready.set()
 
-    def reply(self, txt):
-        self.result.append(txt)
+    def reply(self, txt2):
+        self.result.append(txt2)
 
     def wait(self):
         self._ready.wait()
@@ -82,7 +95,7 @@ class Event:
 
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
-    print(f"{Cfg.name.upper()} since {tme}")
+    print(f"{NAME.upper()} since {tme}")
 
 
 def errors():
@@ -95,10 +108,10 @@ def command(bot, evt):
     parse(evt, evt.txt)
     if "ident" in dir(bot):
         evt.orig = bot.ident
-    func = Commands.cmds.get(evt.cmd, None)
-    if func:
+    funct = Commands.cmds.get(evt.cmd, None)
+    if funct:
         try:
-            func(evt)
+            funct(evt)
             bot.display(evt)
         except Exception as ex:
             later(ex)
@@ -106,7 +119,7 @@ def command(bot, evt):
 
 
 def forever():
-    while True:
+    while not False:
         try:
             time.sleep(1.0)
         except (KeyboardInterrupt, EOFError):
@@ -116,10 +129,10 @@ def forever():
 def init(*pkgs):
     mods = []
     for pkg in pkgs:
-        for modname in dir(pkg):
-            if modname.startswith("__"):
+        for modb in dir(pkg):
+            if modb.startswith("__"):
                 continue
-            modi = getattr(pkg, modname)
+            modi = getattr(pkg, modb)
             if "init" not in dir(modi):
                 continue
             thr = launch(modi.init, "init")
@@ -132,12 +145,10 @@ def scan(*pkgs):
         for mod in dir(pkg):
             if mod.startswith("__"):
                 continue
-            modi = getattr(pkg, mod)
-            if "register" not in dir(modi):
+            moda = getattr(pkg, mod)
+            if "register" not in dir(moda):
                 continue
-            modi.register()
-
-
+            moda.register()
 
 
 def wrap(func):
@@ -159,12 +170,12 @@ def wrap(func):
 
 def main():
     parse(Cfg, " ".join(sys.argv[1:]))
-    scan(face)
+    scan(MODS, MODZ)
     if "v" in Cfg.opts:
         readline.redisplay()
         banner()
     if "i" in Cfg.opts:
-        for _mod, thr in init(face):
+        for _mod, thr in init(MODS, MODZ):
             if "w" in Cfg.opts:
                 thr.join()
     csl = Console()
