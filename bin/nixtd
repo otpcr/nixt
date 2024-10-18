@@ -12,9 +12,9 @@ import pwd
 import sys
 
 
-from nixt.main    import NAME
+from nixt.main    import NAME, forever, scanner, wrap
 from nixt.persist import modname, pidfile, pidname
-from nixt.runtime import Errors, forever, scan, wrap
+from nixt.runtime import Errors
 
 
 if os.path.exists("mods"):
@@ -69,7 +69,7 @@ def main():
     daemon(True)
     privileges()
     pidfile(pidname(NAME))
-    scan(MODZ, MODULES, init=True)
+    scanner(MODZ, MODULES, init=True)
     forever()
 
 

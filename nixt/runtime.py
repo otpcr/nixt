@@ -12,6 +12,62 @@ import traceback
 import _thread
 
 
+class Errors:
+
+    errors = []
+
+
+def fmat(exc):
+    return traceback.format_exception(
+                               type(exc),
+                               exc,
+                               exc.__traceback__
+                              )
+
+
+def later(exc):
+    excp = exc.with_traceback(exc.__traceback__)
+    fmt = fmat(excp)
+    if fmt not in Errors.errors:
+        Errors.errors.append(fmt)
+
+
+class Reactor:
+
+    def __init__(self):
+        self.cbs      = {}
+        self.queue    = queue.Queue()
+        self.stopped  = threading.Event()
+
+    def callback(self, evt):
+        func = self.cbs.get(evt.type, None)
+        if func:
+            evt._thr = launch(func, "callback", self, evt)
+
+    def loop(self):
+        while not self.stopped.is_set():
+            try:
+                evt = self.poll()
+                self.callback(evt)
+            except (KeyboardInterrupt, EOFError):
+                _thread.interrupt_main()
+
+    def poll(self):
+        return self.queue.get()
+
+    def put(self, evt):
+        self.queue.put_nowait(evt)
+
+    def register(self, typ, cbs):
+        self.cbs[typ] = cbs
+
+    def start(self):
+        launch(self.loop, "loop")
+
+    def stop(self):
+        self.stopped.set()
+
+
 class Thread(threading.Thread):
 
     def __init__(self, func, thrname, *args, daemon=True, **kwargs):
@@ -54,42 +110,6 @@ def launch(func, name, *args, **kwargs):
     return thread
 
 
-class Reactor:
-
-    def __init__(self):
-        self.cbs      = {}
-        self.queue    = queue.Queue()
-        self.stopped  = threading.Event()
-
-    def callback(self, evt):
-        func = self.cbs.get(evt.type, None)
-        if func:
-            evt._thr = launch(func, "callback", self, evt)
-
-    def loop(self):
-        while not self.stopped.is_set():
-            try:
-                evt = self.poll()
-                self.callback(evt)
-            except (KeyboardInterrupt, EOFError):
-                _thread.interrupt_main()
-
-    def poll(self):
-        return self.queue.get()
-
-    def put(self, evt):
-        self.queue.put_nowait(evt)
-
-    def register(self, typ, cbs):
-        self.cbs[typ] = cbs
-
-    def start(self):
-        launch(self.loop, "loop")
-
-    def stop(self):
-        self.stopped.set()
-
-
 class Timer:
 
     def __init__(self, sleep, func, *args, thrname=None, **kwargs):
@@ -128,111 +148,6 @@ class Repeater(Timer):
         super().run()
 
 
-"errors"
-
-
-class Errors:
-
-    errors = []
-
-
-def fmat(exc):
-    return traceback.format_exception(
-                               type(exc),
-                               exc,
-                               exc.__traceback__
-                              )
-
-
-def later(exc):
-    excp = exc.with_traceback(exc.__traceback__)
-    fmt = fmat(excp)
-    if fmt not in Errors.errors:
-        Errors.errors.append(fmt)
-
-
-"user"
-
-
-class Commands:
-
-    cmds = {}
-
-    @staticmethod
-    def add(func):
-        Commands.cmds[func.__name__] = func
-
-
-class Event:
-
-    def __init__(self):
-        self._ready  = threading.Event()
-        self._thr    = None
-        self.result  = []
-        self.type    = "event"
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-    def __str__(self):
-        return str(self.__dict__)
-
-    def ready(self):
-        self._ready.set()
-
-    def reply(self, txt):
-        self.result.append(txt)
-
-    def wait(self):
-        self._ready.wait()
-        if self._thr:
-            self._thr.join()
-
-
-"utilities"
-
-
-def forever():
-    while True:
-        try:
-            time.sleep(1.0)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-
-
-def modloop(*pkgs):
-    for pkg in pkgs:
-        for modname in dir(pkg):
-            if modname.startswith("__"):
-                continue
-            yield getattr(pkg, modname)
-            
-
-def scan(*pkgs, register=True, init=False):
-    result = []
-    for mod in modloop(*pkgs):
-        if register and "register" in dir(mod):
-            mod.register()
-        if init and "init" in dir(mod):
-            thr = launch(mod.init, "init")
-        else:
-            thr = None
-        result.append((mod, thr))
-    return result
-            
-
-def wrap(func):
-    try:
-        func()
-    except (KeyboardInterrupt, EOFError):
-        pass
-    except Exception as ex:
-        later(ex)
-
-
-"interface"
-
-
 def __dir__():
     return (
         'Client',
@@ -242,10 +157,6 @@ def __dir__():
         'Repeater',
         'Thread',
         'Timer',
-        'forever',
-        'format',
         'later',
-        'launch',
-        'scan',
-        'wrap'
+        'launch'
     )
