@@ -8,7 +8,7 @@
 import getpass
 
 
-from nixt.main import NAME
+from mods.main import NAME
 
 
 TXT = """[Unit]

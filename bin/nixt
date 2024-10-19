@@ -13,11 +13,20 @@ import time
 import _thread
 
 
-from nixt.main    import NAME, Client, Command, command, scanner
-from nixt.object  import Config, parse
-from nixt.persist import Workdir, modname
-from nixt.runtime import Errors, Reactor, later
+sys.path.insert(0, os.getcwd())
 
+
+from nixt.object  import Object, parse
+from nixt.persist import Workdir, modname
+
+
+from mods.main    import NAME, Client, Command, command, scanner
+from mods.runtime import Errors, Reactor, later
+
+
+class Config(Object):
+
+    pass
 
 cfg = Config()
 

@@ -13,6 +13,9 @@ class Object:
     def __contains__(self, key):
         return key in dir(self)
 
+    def __getstate__(self):
+        pass
+
     def __iter__(self):
         return iter(self.__dict__)
 
@@ -22,16 +25,6 @@ class Object:
     def __str__(self):
         return str(self.__dict__)
 
-
-class Obj(Object):
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-
-class Config(Obj):
-
-    pass
 
 def construct(obj, *args, **kwargs):
     if args:
@@ -209,19 +202,34 @@ def match(obj, txt):
             yield key
 
 
+def named(obj):
+    typ = type(obj)
+    if '__builtins__' in dir(typ):
+        return obj.__name__
+    if '__self__' in dir(obj):
+        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj) and '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj):
+        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
+    if '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    return None
+
+
 def parse(obj, txt=None):
     if txt is None:
         txt = ""
     args = []
     obj.args    = []
     obj.cmd     = ""
-    obj.gets    = Obj()
+    obj.gets    = Object()
     obj.hasmods = False
     obj.index   = None
     obj.mod     = ""
     obj.opts    = ""
     obj.result  = []
-    obj.sets    = Obj()
+    obj.sets    = Object()
     obj.txt     = txt or ""
     obj.otxt    = obj.txt
     _nr = -1
@@ -288,19 +296,14 @@ def search(obj, selector, matching=None):
 
 def __dir__():
     return (
-        'Config',
         'Object',
-        'Obj',
         'construct',
         'edit',
         'fmt',
         'fqn',
-        'dumps',
         'keys',
-        'loads',
         'items',
         'match',
-        'parse',
         'search',
         'update',
         'values'

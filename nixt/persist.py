@@ -13,7 +13,10 @@ import time
 import _thread
 
 
-from .object import Obj, dump, load, search, update
+from .object import Object, dump, load, search, update
+
+
+NAME = Object.__module__.split(".", maxsplit=2)[-2]
 
 
 cachelock = _thread.allocate_lock()
@@ -96,7 +99,7 @@ def find(mtc, selector=None, index=None, deleted=False, matching=False):
         if obj:
             yield (fnm, obj)
             continue
-        obj = Obj()
+        obj = Object()
         fetch(obj, fnm)
         Cache.add(fnm, obj)
         if not deleted and '__deleted__' in obj and obj.__deleted__:
@@ -267,13 +270,7 @@ def __dir__():
         'find',
         'fetch',
         'last',
-        'laps',
-        'modname',
-        'pidfile',
-        'pidname',
         'read',
-        'skel',
         'sync',
-        'types',
         'write'
     )

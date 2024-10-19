@@ -16,16 +16,17 @@ import time
 import _thread
 
 
-from nixt.main    import NAME, command
-from nixt.object  import Object, Obj, edit, fmt, keys
+from nixt.object  import Object, edit, fmt, keys
 from nixt.persist import Cache, ident, last, sync
-from nixt.runtime import Reactor, later, launch
+
+
+from .main    import NAME, command
+from .runtime import Reactor, later, launch
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]
 
 
-output = None
 saylock = _thread.allocate_lock()
 
 
@@ -33,17 +34,16 @@ def init():
     irc = IRC()
     irc.start()
     irc.events.ready.wait()
-    debug(f'{fmt(Config, skip="edited,password")}')
     return irc
 
 
-class Config(Obj):
+class Config(Object):
 
     channel = f'#{NAME}'
     commands = True
     control = '!'
-    edited = time.time()
     nick = NAME
+    password = ""
     port = 6667
     realname = NAME
     sasl = False
@@ -54,14 +54,15 @@ class Config(Obj):
     users = False
 
     def __init__(self):
-        Obj.__init__(self)
-        self.channel = self.channel or Config.channel
-        self.commands = self.commands or Config.commands
-        self.nick = self.nick or Config.nick
-        self.port = self.port or Config.port
-        self.realname = self.realname or Config.realname
-        self.server = self.server or Config.server
-        self.username = self.username or Config.username
+        Object.__init__(self)
+        self.channel = Config.channel
+        self.commands = Config.commands
+        self.nick = Config.nick
+        self.password = Config.password
+        self.port = Config.port
+        self.realname = Config.realname
+        self.server = Config.server
+        self.username = Config.username
 
 
 class Event:
@@ -177,20 +178,21 @@ class IRC(Reactor, Output):
         self.buffer = []
         self.cfg = Config()
         self.channels = []
-        self.events = Obj()
+        self.events = Object()
         self.events.authed = threading.Event()
         self.events.connected = threading.Event()
         self.events.joined = threading.Event()
         self.events.ready = threading.Event()
         self.idents = []
         self.sock = None
-        self.state = Obj()
+        self.state = Object()
         self.state.dostop = False
         self.state.error = ""
         self.state.keeprunning = False
         self.state.lastline = ""
         self.state.nrconnect = 0
         self.state.nrsend = 0
+        self.state.stopkeep = False
         self.zelf = ''
         self.register('903', cb_h903)
         self.register('904', cb_h903)
@@ -213,7 +215,6 @@ class IRC(Reactor, Output):
         self.state.nrconnect += 1
         self.events.connected.clear()
         if self.cfg.password:
-            debug("using SASL")
             self.cfg.sasl = True
             self.cfg.port = "6697"
             ctx = ssl.SSLContext(ssl.PROTOCOL_TLS)
@@ -283,8 +284,6 @@ class IRC(Reactor, Output):
                     ConnectionResetError
                    ) as ex:
                 self.state.error = str(ex)
-                debug(str(ex))
-            debug(f"sleeping {self.cfg.sleep} seconds")
             time.sleep(self.cfg.sleep)
         self.logon(server, nck)
 
@@ -336,7 +335,6 @@ class IRC(Reactor, Output):
             self.state.pongcheck = True
             self.docommand('PING', self.cfg.server)
             if self.state.pongcheck:
-                debug("failed pongcheck, restarting")
                 self.state.pongcheck = False
                 self.state.keeprunning = False
                 self.events.connected.clear()
@@ -354,7 +352,6 @@ class IRC(Reactor, Output):
         rawstr = str(txt)
         rawstr = rawstr.replace('\u0001', '')
         rawstr = rawstr.replace('\001', '')
-        debug(txt)
         obj = Event()
         obj.args = []
         obj.rawstr = rawstr
@@ -429,7 +426,6 @@ class IRC(Reactor, Output):
                    ) as ex:
                 later(ex)
                 self.stop()
-                debug("handler stopped")
                 evt = self.event(str(ex))
                 return evt
         try:
@@ -440,7 +436,6 @@ class IRC(Reactor, Output):
 
     def raw(self, txt):
         txt = txt.rstrip()
-        debug(txt)
         txt = txt[:500]
         txt += '\r\n'
         txt = bytes(txt, 'utf-8')
@@ -461,7 +456,6 @@ class IRC(Reactor, Output):
         self.state.nrsend += 1
 
     def reconnect(self):
-        debug(f"reconnecting to {self.cfg.server}")
         try:
             self.disconnect()
         except (ssl.SSLError, OSError):
@@ -533,7 +527,6 @@ def cb_error(bot, evt):
         bot.state.nrerror = 0
     bot.state.nrerror += 1
     bot.state.error = evt.txt
-    debug(evt.txt)
 
 
 def cb_h903(bot, evt):
@@ -583,17 +576,8 @@ def cb_privmsg(bot, evt):
 
 
 def cb_quit(bot, evt):
-    debug(f"quit from {bot.cfg.server}")
     if evt.orig and evt.orig in bot.zelf:
         bot.stop()
-
-
-def debug(txt):
-    for ign in IGNORE:
-        if ign in txt:
-            return
-    if output:
-        output(txt)
 
 
 "commands"

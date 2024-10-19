@@ -13,10 +13,20 @@ import termios
 import time
 
 
-from nixt.main    import NAME, Client, Command, forever, scanner
-from nixt.object  import Config, parse
+sys.path.insert(0, os.getcwd())
+
+
+from nixt.object  import Object, parse
 from nixt.persist import modname
-from nixt.runtime import Errors, later
+
+
+from mods.main    import NAME, Client, Command, forever, scanner
+from mods.runtime import Errors, later
+
+
+class Config(Object):
+
+    pass
 
 
 Cfg = Config()

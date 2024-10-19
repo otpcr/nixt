@@ -12,7 +12,7 @@ import uuid
 import _thread
 
 
-from nixt.object  import Obj, update
+from nixt.object  import Object, update
 from nixt.persist import find, sync
 
 
@@ -81,7 +81,7 @@ class OPMLParser:
         for attrz in OPMLParser.getattrs(txt, toke):
             if not attrz:
                 continue
-            obj = Obj()
+            obj = Object()
             for itm in spl(itemz):
                 if itm == "link":
                     itm = "href"
@@ -130,9 +130,9 @@ def exp(event):
     nrs = 0
     for _fn, ooo in find("rss"):
         nrs += 1
-        obj = Obj()
+        obj = Object()
         update(obj, ooo)
-        name = obj.name or f"url{nrs}"
+        name = f"url{nrs}"
         txt = f'<outline name="{name}" display_list="{obj.display_list}" xmlUrl="{obj.rss}"/>'
         event.reply(" "*12 + txt)
     event.reply(" "*8 + "</outline>")

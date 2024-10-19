@@ -18,11 +18,17 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.main    import NAME, Commands, scanner
-from nixt.object  import Config, Object, parse
+from nixt.object  import Object, parse
 from nixt.persist import Workdir, laps, skel
-from nixt.runtime import Errors, Reactor, later, launch
 
+
+from mods.main    import NAME, Commands, scanner
+from mods.runtime import Errors, Reactor, later, launch
+
+
+class Config(Object):
+
+    pass
 
 cfg = Config()
 

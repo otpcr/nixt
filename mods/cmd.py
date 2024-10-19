@@ -6,7 +6,9 @@
 
 
 from nixt.object import keys
-from nixt.main   import Commands
+
+
+from .main   import Commands
 
 
 def cmd(event):
