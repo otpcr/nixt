@@ -16,20 +16,14 @@ import time
 sys.path.insert(0, os.getcwd())
 
 
+from nixt.main    import NAME, Client, Config, Event, forever, scanner
 from nixt.object  import Object, parse
 from nixt.persist import modname
-
-
-from mods.main    import NAME, Client, Command, forever, scanner
-from mods.runtime import Errors, later
-
-
-class Config(Object):
-
-    pass
+from nixt.runtime import Errors, later
 
 
 Cfg = Config()
+Cfg.opts = Object()
 
 
 if os.path.exists("mods"):
@@ -55,7 +49,7 @@ class Console(Client):
         evt.wait()
 
     def poll(self):
-        evt = Command()
+        evt = Event()
         evt.txt = input("> ")
         return evt
 

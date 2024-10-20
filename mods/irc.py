@@ -16,12 +16,10 @@ import time
 import _thread
 
 
+from nixt.main    import NAME, command
 from nixt.object  import Object, edit, fmt, keys
 from nixt.persist import Cache, ident, last, sync
-
-
-from .main    import NAME, command
-from .runtime import Reactor, later, launch
+from nixt.runtime import Reactor, later, launch
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]

@@ -21,9 +21,7 @@ from urllib.parse import quote_plus, urlencode
 
 from nixt.object  import Object, fmt, update
 from nixt.persist import Cache, find, fntime, laps, last, sync
-
-
-from .runtime import Repeater, launch
+from nixt.runtime import Repeater, launch
 
 
 DEBUG = False
@@ -40,7 +38,9 @@ def init():
 
 class Feed(Object):
 
-    pass
+    def __init__(self):
+        Object.__init__(self)
+        self.link = ""
 
 
 class Rss(Object):

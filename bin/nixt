@@ -16,19 +16,14 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
+from nixt.main    import NAME, Client, Config, Event, command, scanner
 from nixt.object  import Object, parse
 from nixt.persist import Workdir, modname
+from nixt.runtime import Errors, Reactor, later
 
-
-from mods.main    import NAME, Client, Command, command, scanner
-from mods.runtime import Errors, Reactor, later
-
-
-class Config(Object):
-
-    pass
 
 cfg = Config()
+cfg.txt = ""
 
 
 if os.path.exists("mods"):
@@ -63,8 +58,9 @@ def main():
     parse(cfg, " ".join(sys.argv[1:]))
     scanner(MODS, MODULES)
     cli = CLI()
-    evt = Command()
+    evt = Event()
     evt.txt = cfg.txt
+    evt.type = "command"
     command(cli, evt)
     evt.wait()
 

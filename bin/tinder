@@ -11,26 +11,21 @@ import shutil
 import sys
 import termios
 import time
-import threading
 import _thread
 
 
 sys.path.insert(0, os.getcwd())
 
 
+from nixt.main    import NAME, Config, Commands, Event, command, scanner
 from nixt.object  import Object, parse
 from nixt.persist import Workdir, laps, skel
+from nixt.runtime import Errors, Reactor, later, launch
 
-
-from mods.main    import NAME, Commands, scanner
-from mods.runtime import Errors, Reactor, later, launch
-
-
-class Config(Object):
-
-    pass
 
 cfg = Config()
+cfg.index = 0
+cfg.opts = Object()
 
 
 if os.path.exists("mods"):
@@ -91,49 +86,9 @@ class CLI(Reactor):
         self.raw(txt)
 
 
-class Eventt:
-
-    def __init__(self):
-        self._ready  = threading.Event()
-        self._thr    = None
-        self.result  = []
-        self.type    = "event"
-
-    def __getattr__(self, keyy):
-        return self.__dict__.get(keyy, "")
-
-    def __str__(self):
-        return str(self.__dict__)
-
-    def reply(self, txt):
-        self.result.append(txt)
-
-    def ready(self):
-        self._ready.set()
-
-    def wait(self):
-        self._ready.wait()
-        if self._thr:
-            self._thr.join()
-
-
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{NAME.upper()} since {tme}")
-
-
-def command(bot, evt):
-    parse(evt, evt.txt)
-    if "ident" in dir(bot):
-        evt.orig = bot.ident
-    funco = Commands.cmds.get(evt.cmd, None)
-    if funco:
-        try:
-            funco(evt)
-            bot.display(evt)
-        except Exception as ex:
-            later(ex)
-    evt.ready()
 
 
 def consume(evts):
@@ -151,7 +106,7 @@ def payload(clt):
     nmr = 0
     for cmdd in sorted(Commands.cmds):
         for ex in getattr(param, cmdd, [""]):
-            evt = Eventt()
+            evt = Event()
             evt.txt = cmdd + " " + ex
             clt.put(evt)
             events.append(evt)
