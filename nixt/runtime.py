@@ -32,8 +32,6 @@ def later(exc):
         Errors.errors.append(fmt)
 
 
-
-
 class Thread(threading.Thread):
 
     def __init__(self, func, thrname, *args, daemon=True, **kwargs):
