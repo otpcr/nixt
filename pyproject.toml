@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nixt"
-version = "93"
+version = "100"
 authors = [
     {name = "Bart Thate", email = "record11719@gmail.com" },
 ]
@@ -23,6 +23,12 @@ classifiers=[
     'Topic :: Utilities'
 ]
 
+[project.scripts]
+"nixt"  = "nixt.cli:wrapped"
+"nixtc" = "nixt.console:wrapped"
+"nixtd" = "nixt.daemon:main"
+"nixts" = "nixt.service:wrapped"
+
 
 [project.urls]
 "home" = "https://pypi.org/project/nixt"
@@ -31,14 +37,9 @@ classifiers=[
 
 
 [tool.setuptools]
-script-files = [
-    'bin/nixt',
-    'bin/nixtc',
-    'bin/nixtd',
-    'bin/nixts'
-]
 packages = [
     'nixt',
+    'nixt.modules'
 ]
 
 
