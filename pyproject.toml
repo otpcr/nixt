@@ -1,10 +1,8 @@
 # This file is placed in the Public Domain.
 
-
 [build-system]
 requires = ["setuptools>=43.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
-
 
 [project]
 name = "nixt"
@@ -23,25 +21,16 @@ classifiers=[
     'Topic :: Utilities'
 ]
 
-[project.scripts]
-"nixt"  = "nixt.cli:wrapped"
-"nixtc" = "nixt.console:wrapped"
-"nixtd" = "nixt.daemon:main"
-"nixts" = "nixt.service:wrapped"
-
-
 [project.urls]
 "home" = "https://pypi.org/project/nixt"
 "bugs" = "https://github.com/otpcr/nixt/issues"
 "source" = "https://github.com/otpcr/nixt"
-
 
 [tool.setuptools]
 packages = [
     'nixt',
     'nixt.modules'
 ]
-
 
 [tool.setuptools.data-files]
 "share/nixt/mods/" = [
