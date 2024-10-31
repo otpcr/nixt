@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C,R,W0105,W0719,E1101
+# pylint: disable=C,R,W0105,W0719,E1101,E0402
 
 
 "persist to disk"
