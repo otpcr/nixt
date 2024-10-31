@@ -21,15 +21,6 @@ from nixt.object import *
 
 
 PACKAGE = [
-    '__builtins__',
-    '__cached__',
-    '__doc__',
-    '__file__',
-    '__loader__',
-    '__name__',
-    '__package__',
-    '__path__',
-    '__spec__',
     'object',
     'persist',
     'runtime'
@@ -78,6 +69,7 @@ class TestInterface(unittest.TestCase):
             mod1 = getattr(nixt, mod, None)
             if not mod1:
                 okd = False
+                print(mod)
                 break
         self.assertTrue(okd)
 
@@ -85,9 +77,11 @@ class TestInterface(unittest.TestCase):
         okd = True
         obj = Object()
         dirr = dir(obj)
+        print(dirr)
         for meth in METHODS:
             if meth not in dirr:
                 okd = False
+                print(f"{meth} not found")
         self.assertTrue(okd)
 
 
