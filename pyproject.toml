@@ -42,8 +42,11 @@ packages = [
 [tool.setuptools.data-files]
 "share/otpcr/examples" = [
     'examples/face.py',
+    'examples/fnd.py',
     'examples/irc.py',
+    'examples/log.py',
     'examples/opm.py',
     'examples/rss.py',
+    'examples/tdo.py',
     'examples/udp.py'
 ]

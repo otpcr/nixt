@@ -8,9 +8,9 @@
 import time
 
 
-from ..command import laps
-from ..object  import Object
-from ..persist import find, fntime, ident, write
+from nixt.command import laps
+from nixt.object  import Object
+from nixt.persist import find, fntime, ident, write
 
 
 class Log(Object):
