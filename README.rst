@@ -4,70 +4,71 @@ N I X T
 
 NAME
 
-|    ``nixt`` - NIXT
+
+``nixt`` - NIXT
 
 
 SYNOPSIS
 
 
-|    ``nixtctl <cmd> [key=val] [key==val]``
+``nixtctl <cmd> [key=val] [key==val]``
 
 
 DESCRIPTION
 
 
-|    NIXT has all the python3 code to program a unix cli program, such as
-|    disk perisistence for configuration files, event handler to
-|    handle the client/server connection, code to introspect modules
-|    for commands, deferred exception handling to not crash on an
-|    error, a parser to parse commandline options and values, etc.
-|
-|    NIXT uses object programming (OP) that allows for easy json save//load
-|    to/from disk of objects. It provides an "clean namespace" Object class
-|    that only has dunder methods, so the namespace is not cluttered with
-|    method names. This makes storing and reading to/from json possible.
-|
-|    NIXT is Public Domain.
+NIXT has all the python3 code to program a unix cli program, such as
+disk perisistence for configuration files, event handler to
+handle the client/server connection, code to introspect modules
+for commands, deferred exception handling to not crash on an
+error, a parser to parse commandline options and values, etc.
+
+NIXT uses object programming (OP) that allows for easy json save//load
+to/from disk of objects. It provides an "clean namespace" Object class
+that only has dunder methods, so the namespace is not cluttered with
+method names. This makes storing and reading to/from json possible.
+
+NIXT is Public Domain.
 
 
 INSTALL
 
-|    $ ``pipx install nixt``
-|    $ ``pipx ensurepath``
-|
-|    <new terminal>
-|
-|    $ ``nixtctl srv > nixt.service``
-|    $ ``sudo mv *.service /etc/systemd/system/``
-|    $ ``sudo systemctl enable nixt --now``
-|
-|    joins #nixt on localhost
+
+$ ``pipx install nixt``
+$ ``pipx ensurepath``
+
+<new terminal>
+
+$ ``nixtctl srv > nixt.service``
+$ ``sudo mv *.service /etc/systemd/system/``
+$ ``sudo systemctl enable nixt --now``
+
+joins #nixt on localhost
 
 
 USAGE
 
-::
 
-    without any argument the bot does nothing::
+without any argument the bot does nothing::
 
-    $ nixtctl
-    $
+$ ``nixtctl``
+$
 
-    see list of commands
+see list of commands
 
-    $ nixtctl cmd
-    cfg,cmd,dne,dpl,err,exp,fnd,imp,log,mod,mre,nme,pwd
-    rem,res,rss,srv,syn,tdo,thr,upt
+$ ``nixtctl cmd``
+cfg,cmd,dne,dpl,err,exp,fnd,imp,log,mod,mre,nme,pwd
+rem,res,rss,srv,syn,tdo,thr,upt
 
-    start daemon
+start daemon
 
-    $ nixtd
-    $
+$ ``nixtd``
+$
 
-    start service
+start service
 
-    $ nixts
-    <runs until ctrl-c>
+$ ``nixts``
+<runs until ctrl-c>
 
 
 CONFIGURATION
