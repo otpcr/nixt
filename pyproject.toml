@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nixt"
-version = "130"
+version = "131"
 authors = [
     {name = "Bart Thate", email = "bthate@dds.nl" },
 ]
@@ -40,7 +40,7 @@ packages = [
 
 
 [tool.setuptools.data-files]
-"share/otpcr/mods" = [
+"share/otpcr/examples" = [
     'examples/face.py',
     'examples/irc.py',
     'examples/opm.py',

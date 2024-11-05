@@ -2,14 +2,116 @@ N I X T
 =======
 
 
-**NAME**
+NAME
 
 ::
 
-   nixt - NIXT
+    nixt - NIXT
 
 
-**SYNOPSIS**
+SYNOPSIS
+
+::
+
+    nixtctl <cmd> [key=val] [key==val]
+
+
+DESCRIPTION
+
+::
+
+    NIXT has all the python3 code to program a unix cli program, such as
+    disk perisistence for configuration files, event handler to
+    handle the client/server connection, code to introspect modules
+    for commands, deferred exception handling to not crash on an
+    error, a parser to parse commandline options and values, etc.
+
+    NIXT uses object programming (OP) that allows for easy json save//load
+    to/from disk of objects. It provides an "clean namespace" Object class
+    that only has dunder methods, so the namespace is not cluttered with
+    method names. This makes storing and reading to/from json possible.
+
+    NIXT is Public Domain.
+
+
+INSTALL
+
+::
+
+    $ pipx install nixt
+    $ pipx ensurepath
+
+    <new terminal>
+
+    $ nixtctl srv > nixt.service
+    # mv *.service /etc/systemd/system/
+    # systemctl enable nixt --now
+
+    joins #nixt on localhost
+
+
+USAGE
+
+::
+
+    without any argument the bot does nothing::
+
+    $ nixtctl
+    $
+
+    see list of commands
+
+    $ nixtctl cmd
+    cfg,cmd,dne,dpl,err,exp,fnd,imp,log,mod,mre,nme,pwd
+    rem,res,rss,srv,syn,tdo,thr,upt
+
+    start daemon
+
+    $ nixtd
+    $
+
+    start service
+
+    $ nixts
+    <runs until ctrl-c>
+
+
+CONFIGURATION
+
+::
+
+    irc
+
+    $ nixtctl cfg server=<server>
+    $ nixtctl cfg channel=<channel>
+    $ nixtctl cfg nick=<nick>
+
+    sasl
+
+    $ nixtctl pwd <nsvnick> <nspass>
+    $ nixtctl cfg password=<frompwd>
+
+    rss
+
+    $ nixtctl rss <url>
+    $ nixtctl dpl <url> <item1,item2>
+    $ nixtctl rem <url>
+    $ nixtctl nme <url> <name>
+
+
+COMMANDS
+
+::
+
+    cmd - commands
+    err - show errors
+    log - log text
+    mod - modules
+    thr - show running threads
+    upt - show uptime
+
+
+**CODE**
 
 ::
 
@@ -20,52 +122,26 @@ N I X T
     {'a': 'b'}
 
 
-**DESCRIPTION**
+FILES
 
 ::
 
-    NIXT contains all the python3 code to program objects in a functional
-    way. It provides a base Object class that has only dunder methods, all
-    methods are factored out into functions with the objects as the first
-    argument. It is called Object Programming (OP), OOP without the
-    oriented.
-
-    NIXT allows for easy json save//load to/from disk of objects. It
-    provides an "clean namespace" Object class that only has dunder
-    methods, so the namespace is not cluttered with method names. This
-    makes storing and reading to/from json possible.
-
-    NIXT has all you need to program a unix cli program, such as disk
-    perisistence for configuration files, event handler to handle the
-    client/server connection, deferred exception handling to not crash
-    on an error, etc.
-
-    You need to set PYTHONPATH if you run this locally.
+    ~/.nixt
+    ~/.local/bin/nixt
+    ~/.local/bin/nixtctl
+    ~/.local/bin/nixtd
+    ~/.local/bin/nixts
+    ~/.local/pipx/venvs/nixt/*
 
 
-**INSTALL**
-
+AUTHOR
 
 ::
 
-    $ pip install nixt
+    Bart Thate <bthate@dds.nl>
 
 
-**SOURCE**
-
-::
-
-    source is at https://github.com/otpcr/nixt
-
-
-**AUTHOR**
-
-::
-
-    Bart Thate <record11719@gmail.com>
-
-
-**COPYRIGHT**
+COPYRIGHT
 
 ::
 
