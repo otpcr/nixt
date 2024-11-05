@@ -4,21 +4,17 @@ N I X T
 
 NAME
 
-::
-
-    nixt - NIXT
+    ``nixt`` - NIXT
 
 
 SYNOPSIS
 
-::
 
-    nixtctl <cmd> [key=val] [key==val]
+    ``nixtctl <cmd> [key=val] [key==val]``
 
 
 DESCRIPTION
 
-::
 
     NIXT has all the python3 code to program a unix cli program, such as
     disk perisistence for configuration files, event handler to
@@ -36,16 +32,14 @@ DESCRIPTION
 
 INSTALL
 
-::
-
-    $ pipx install nixt
-    $ pipx ensurepath
+    $ ``pipx install nixt``
+    $ ``pipx ensurepath``
 
     <new terminal>
 
-    $ nixtctl srv > nixt.service
-    # mv *.service /etc/systemd/system/
-    # systemctl enable nixt --now
+    $ ``nixtctl srv > nixt.service``
+    $ ``sudo mv *.service /etc/systemd/system/``
+    $ ``sudo systemctl enable nixt --now``
 
     joins #nixt on localhost
 
