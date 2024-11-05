@@ -120,6 +120,7 @@ def main():
     parse(cfg, " ".join(sys.argv[1:]))
     if "m" in cfg.opts and os.path.exists("examples"):
         import examples.face as MODS
+        MODS.rss.DEBUG = True
     else:
         MODS = None
     scanner(face, MODS)
