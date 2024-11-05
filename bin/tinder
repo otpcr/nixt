@@ -7,6 +7,7 @@
 
 
 import os
+import platform
 import shutil
 import sys
 import termios
@@ -17,22 +18,15 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.main    import NAME, Config, Commands, Event, command, scanner
-from nixt.object  import Object, parse
-from nixt.persist import Workdir, laps, skel
-from nixt.runtime import Errors, Reactor, later, launch
+from nixt.command import NAME, Config, Commands, command, laps, parse, scanner
+from nixt.modules import face
+from nixt.object  import Object
+from nixt.persist import Workdir, skel
+from nixt.runtime import Client, Errors, Event, later, launch
 
 
 cfg = Config()
 cfg.index = 0
-cfg.opts = Object()
-
-
-if os.path.exists("mods"):
-    import mods.face as MODS
-    MODS.rss.DEBUG = True
-else:
-    MODS = None
 
 
 LAP = 1
@@ -63,27 +57,15 @@ param.tdo = ["mekker", ""]
 param.ver = [""]
 
 
-class CLI(Reactor):
+class CLI(Client):
 
     def __init__(self):
-        Reactor.__init__(self)
-        self.register("event", command)
-
-    def callback(self, evt):
-        Reactor.callback(self, evt)
-        if "w" in cfg.opts:
-            evt.wait()
-
-    def display(self, evt):
-        for txt in evt.result:
-            self.say(evt.channel, txt)
+        Client.__init__(self)
+        self.register("command", command)
 
     def raw(self, txt):
         if "v" in cfg.opts:
             print(txt)
-
-    def say(self, _channel, txt):
-        self.raw(txt)
 
 
 def banner():
@@ -103,15 +85,17 @@ def errors():
 
 
 def payload(clt):
-    nmr = 0
-    for cmdd in sorted(Commands.cmds):
-        for ex in getattr(param, cmdd, [""]):
-            evt = Event()
-            evt.txt = cmdd + " " + ex
-            clt.put(evt)
-            events.append(evt)
-            nmr += 1
-    return nmr
+    with paylock:
+        nmr = 0
+        for cmdd in sorted(Commands.cmds):
+            for ex in getattr(param, cmdd, [""]):
+                evt = Event()
+                evt.txt = cmdd + " " + ex
+                evt.type = "command"
+                clt.put(evt)
+                events.append(evt)
+                nmr += 1
+        return nmr
 
 
 def wrap(function):
@@ -134,7 +118,7 @@ def wrap(function):
 def main():
     Workdir.wdr = ".test"
     parse(cfg, " ".join(sys.argv[1:]))
-    scanner(MODS)
+    scanner(face)
     nrcommands = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()
@@ -147,10 +131,11 @@ def main():
     nrs = cfg.index or 1
     thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, "payload", clt))
+        thrs.append(launch(payload, clt))
+    consume(events)
     for thr in thrs:
         thr.join()
-    consume(events)
+    #clt.wait()
     if "v" in cfg.opts:
         endtime = time.time()
         lap = laps(endtime-STARTTIME)
@@ -159,8 +144,9 @@ def main():
         print(f"{lap} {nrs} {nrcommands} {percall}")
         if not Errors.errors:
             print("no errors")
-
+        print(platform.python_version())
 
 if __name__ == "__main__":
     wrap(main)
     errors()
+    sys.exit(0)
