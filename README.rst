@@ -42,33 +42,36 @@ method names. This makes storing and reading to/from json possible.
 | $ ``nixtctl srv > nixt.service``
 | $ ``sudo mv *.service /etc/systemd/system/``
 | $ ``sudo systemctl enable nixt --now``
-
-joins #nixt on localhost
-
+|
+| joins #nixt on localhost
+|
 
 **USAGE**
 
 
-without any argument the bot does nothing::
+without any argument the bot does nothing
 
 | $ ``nixtctl``
 | $
+|
 
 see list of commands
 
 | $ ``nixtctl cmd``
 | cmd,err,mod,thr,upt
+|
 
 start daemon
 
 | $ ``nixtd``
 | $
+|
 
 start service
 
 | $ ``nixts``
 | <runs until ctrl-c>
-
+|
 
 **CONFIGURATION**
 
@@ -78,11 +81,13 @@ irc
 | $ ``nixtctl cfg server=<server>``
 | $ ``nixtctl cfg channel=<channel>``
 | $ ``nixtctl cfg nick=<nick>``
+|
 
 sasl
 
 | $ ``nixtctl pwd <nsvnick> <nspass>``
 | $ ``nixtctl cfg password=<frompwd>``
+|
 
 rss
 
@@ -90,7 +95,7 @@ rss
 | $ ``nixtctl dpl <url> <item1,item2>``
 | $ ``nixtctl rem <url>``
 | $ ``nixtctl nme <url> <name>``
-
+|
 
 **COMMANDS**
 
@@ -100,7 +105,7 @@ rss
 | ``mod`` - modules
 | ``thr`` - show running threads
 | ``upt`` - show uptime
-
+|
 
 **CODE**
 
@@ -121,12 +126,12 @@ rss
 | ``~/.local/bin/nixtd``
 | ``~/.local/bin/nixts``
 | ``~/.local/pipx/venvs/nixt/*``
-
+|
 
 **AUTHOR**
 
 
-Bart Thate <bthate@dds.nl>
+Bart Thate <``bthate@dds.nl``>
 
 
 **COPYRIGHT**
