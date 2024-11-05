@@ -2,19 +2,19 @@ N I X T
 =======
 
 
-NAME
+**NAME**
 
 
 ``nixt`` - NIXT
 
 
-SYNOPSIS
+**SYNOPSIS**
 
 
 ``nixtctl <cmd> [key=val] [key==val]``
 
 
-DESCRIPTION
+**DESCRIPTION**
 
 
 NIXT has all the python3 code to program a unix cli program, such as
@@ -31,7 +31,7 @@ method names. This makes storing and reading to/from json possible.
 NIXT is Public Domain.
 
 
-INSTALL
+**INSTALL**
 
 
 $ ``pipx install nixt``
@@ -46,7 +46,7 @@ $ ``sudo systemctl enable nixt --now``
 joins #nixt on localhost
 
 
-USAGE
+**USAGE**
 
 
 without any argument the bot does nothing::
@@ -71,39 +71,37 @@ $ ``nixts``
 <runs until ctrl-c>
 
 
-CONFIGURATION
-
-::
-
-    irc
-
-    $ nixtctl cfg server=<server>
-    $ nixtctl cfg channel=<channel>
-    $ nixtctl cfg nick=<nick>
-
-    sasl
-
-    $ nixtctl pwd <nsvnick> <nspass>
-    $ nixtctl cfg password=<frompwd>
-
-    rss
-
-    $ nixtctl rss <url>
-    $ nixtctl dpl <url> <item1,item2>
-    $ nixtctl rem <url>
-    $ nixtctl nme <url> <name>
+**CONFIGURATION**
 
 
-COMMANDS
+irc
 
-::
+$ ``nixtctl cfg server=<server>``
+$ ``nixtctl cfg channel=<channel>``
+$ ``nixtctl cfg nick=<nick>``
 
-    cmd - commands
-    err - show errors
-    log - log text
-    mod - modules
-    thr - show running threads
-    upt - show uptime
+sasl
+
+$ ``nixtctl pwd <nsvnick> <nspass>``
+$ ``nixtctl cfg password=<frompwd>``
+
+rss
+
+$ ``nixtctl rss <url>``
+$ ``nixtctl dpl <url> <item1,item2>``
+$ ``nixtctl rem <url>``
+$ ``nixtctl nme <url> <name>``
+
+
+**COMMANDS**
+
+
+``cmd`` - commands
+``err`` - show errors
+``log`` - log text
+``mod`` - modules
+``thr`` - show running threads
+``upt`` - show uptime
 
 
 **CODE**
@@ -117,27 +115,23 @@ COMMANDS
     {'a': 'b'}
 
 
-FILES
+**FILES**
 
-::
-
-    ~/.nixt
-    ~/.local/bin/nixt
-    ~/.local/bin/nixtctl
-    ~/.local/bin/nixtd
-    ~/.local/bin/nixts
-    ~/.local/pipx/venvs/nixt/*
+``~/.nixt``
+``~/.local/bin/nixt``
+``~/.local/bin/nixtctl``
+``~/.local/bin/nixtd``
+``~/.local/bin/nixts``
+``~/.local/pipx/venvs/nixt/*``
 
 
-AUTHOR
-
-::
-
-    Bart Thate <bthate@dds.nl>
+**AUTHOR**
 
 
-COPYRIGHT
+Bart Thate <bthate@dds.nl>
 
-::
 
-    NIXT is Public Domain.
+**COPYRIGHT**
+
+
+``NIXT`` is Public Domain.
