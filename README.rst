@@ -34,14 +34,14 @@ method names. This makes storing and reading to/from json possible.
 **INSTALL**
 
 
-| $ ``pipx install nixt``
-| $ ``pipx ensurepath``
+| ``$ pipx install nixt``
+| ``$ pipx ensurepath``
 |
 | <new terminal>
 | 
-| $ ``nixtctl srv > nixt.service``
-| $ ``sudo mv *.service /etc/systemd/system/``
-| $ ``sudo systemctl enable nixt --now``
+| ``$ nixtctl srv > nixt.service``
+| ``$ sudo mv *.service /etc/systemd/system/``
+| ``$ sudo systemctl enable nixt --now``
 |
 | joins #nixt on localhost
 |
@@ -51,51 +51,28 @@ method names. This makes storing and reading to/from json possible.
 
 without any argument the bot does nothing
 
-| $ ``nixtctl``
-| $
+| ``$ nixtctl``
+| ``$``
 |
 
 see list of commands
 
-| $ ``nixtctl cmd``
+| ``$ nixtctl cmd``
 | cmd,err,mod,thr,upt
 |
 
 start daemon
 
-| $ ``nixtd``
-| $
+| ``$ nixtd``
+| ``$``
 |
 
 start service
 
-| $ ``nixts``
+| ``$ nixts``
 | <runs until ctrl-c>
 |
 
-**CONFIGURATION**
-
-
-irc
-
-| $ ``nixtctl cfg server=<server>``
-| $ ``nixtctl cfg channel=<channel>``
-| $ ``nixtctl cfg nick=<nick>``
-|
-
-sasl
-
-| $ ``nixtctl pwd <nsvnick> <nspass>``
-| $ ``nixtctl cfg password=<frompwd>``
-|
-
-rss
-
-| $ ``nixtctl rss <url>``
-| $ ``nixtctl dpl <url> <item1,item2>``
-| $ ``nixtctl rem <url>``
-| $ ``nixtctl nme <url> <name>``
-|
 
 **COMMANDS**
 
