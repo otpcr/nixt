@@ -36,15 +36,6 @@ method names. This makes storing and reading to/from json possible.
 
 | ``$ pipx install nixt``
 | ``$ pipx ensurepath``
-|
-| <new terminal>
-| 
-| ``$ nixtctl srv > nixt.service``
-| ``$ sudo mv *.service /etc/systemd/system/``
-| ``$ sudo systemctl enable nixt --now``
-|
-| joins #nixt on localhost
-|
 
 **USAGE**
 
@@ -94,6 +85,13 @@ start service
     >>> print(loads(dumps(o)))
     {'a': 'b'}
 
+
+**SYSTEMD**
+|
+| ``$ nixtctl srv > nixt.service``
+| ``$ sudo mv *.service /etc/systemd/system/``
+| ``$ sudo systemctl enable nixt --now``
+|
 
 **FILES**
 
