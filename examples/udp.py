@@ -12,7 +12,7 @@ import sys
 import threading
 import time
 
- 
+
 from nixt.object  import Object
 from nixt.persist import Cache
 from nixt.runtime import launch
@@ -47,10 +47,7 @@ class UDP(Object):
         if addr:
             Cfg.addr = addr
         for obj in Cache.typed("IRC"):
-            obj.announce(txt2)
-
-        for bot in broker.all():
-            bot.announce(txt.replace("\00", ""))
+            obj.announce(txt.replace("\00", ""))
 
     def loop(self):
         try:
