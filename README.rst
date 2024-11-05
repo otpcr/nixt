@@ -11,8 +11,10 @@ N I X T
 **SYNOPSIS**
 
 
-``nixtctl <cmd> [key=val] [key==val]``
-
+| ``nixtctl <cmd> [key=val] [key==val]``
+| ``nixtd``
+| ``nixts``
+|
 
 **DESCRIPTION**
 
