@@ -6,15 +6,14 @@
 "interface"
 
 
-from . import cmd, err, fnd, log, mod, thr, upt
+from . import cmd, err, mod, thr, upt
 
 
 def __dir__():
     return (
         'cmd',
         'err',
-        'fnd',
-        'log',
+        'mod',
         'thr',
         'upt'
     )
