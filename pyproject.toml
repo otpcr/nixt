@@ -41,9 +41,9 @@ packages = [
 
 [tool.setuptools.data-files]
 "share/otpcr/mods" = [
-    'mods/face.py',
-    'mods/irc.py',
-    'mods/opm.py',
-    'mods/rss.py',
-    'mods/udp.py'
+    'examples/face.py',
+    'examples/irc.py',
+    'examples/opm.py',
+    'examples/rss.py',
+    'examples/udp.py'
 ]

@@ -118,7 +118,11 @@ def wrap(function):
 def main():
     Workdir.wdr = ".test"
     parse(cfg, " ".join(sys.argv[1:]))
-    scanner(face)
+    if "m" in cfg.opts and os.path.exists("examples"):
+        import examples.face as MODS
+    else:
+        MODS = None
+    scanner(face, MODS)
     nrcommands = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()
