@@ -6,9 +6,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nixt"
-version = "120"
+version = "130"
 authors = [
-    {name = "Bart Thate", email = "record11719@gmail.com" },
+    {name = "Bart Thate", email = "bthate@dds.nl" },
 ]
 description = "NIXT"
 readme = "README.rst"
@@ -27,6 +27,23 @@ classifiers=[
 "source" = "https://github.com/otpcr/nixt"
 
 [tool.setuptools]
+script-files = [
+    'bin/nixt',
+    'bin/nixtctl',
+    'bin/nixtd',
+    'bin/nixts'
+]
 packages = [
     'nixt',
+    'nixt.modules',
+]
+
+
+[tool.setuptools.data-files]
+"share/otpcr/mods" = [
+    'mods/face.py',
+    'mods/irc.py',
+    'mods/opm.py',
+    'mods/rss.py',
+    'mods/udp.py'
 ]

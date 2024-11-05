@@ -7,6 +7,7 @@
 
 import inspect
 import os
+import sys
 import time
 import _thread
 
@@ -120,6 +121,10 @@ def modloop(*pkgs, disable=""):
             if modname.startswith("__"):
                 continue
             yield getattr(pkg, modname)
+
+
+def modpath():
+    return os.path.expanduser("~/.local/pipx/venvs/nixt/share/otpcr/")
 
 
 def parse(obj, txt=None):
