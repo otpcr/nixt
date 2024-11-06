@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C,R,W0718
+# pylint: disable=C,R,W0105,W0718
 
 
 "command"
@@ -7,6 +7,7 @@
 
 import inspect
 import os
+import threading
 import time
 import _thread
 
@@ -63,6 +64,36 @@ def command(bot, evt):
         except Exception as ex:
             later(ex)
     evt.ready()
+
+
+class Event:
+
+    def __init__(self):
+        self._ready = threading.Event()
+        self._thr   = None
+        self.result = []
+        self.type   = "event"
+        self.txt    = ""
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    def ready(self):
+        self._ready.set()
+
+    def reply(self, txt):
+        self.result.append(txt)
+
+    def wait(self):
+        self._ready.wait()
+        if self._thr:
+            self._thr.join()
+
+
+"utilities"
 
 
 def forever():
@@ -216,6 +247,9 @@ def wrap(func):
         pass
     except Exception as ex:
         later(ex)
+
+
+"interface"
 
 
 def __dir__():
