@@ -9,10 +9,10 @@ import datetime
 import time
 
 
-from nixt.command import laps
+from nixt.command import Event, laps
 from nixt.object  import Object, construct, keys
 from nixt.persist import Cache
-from nixt.runtime import Event, Repeater
+from nixt.runtime import Repeater
 
 
 DAY = 24*60*60
