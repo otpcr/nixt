@@ -8,9 +8,6 @@
 import json
 
 
-"classes"
-
-
 class Object:
 
     def __contains__(self, key):
@@ -27,20 +24,6 @@ class Object:
 
     def __str__(self):
         return str(self.__dict__)
-
-
-class Obj(Object):
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-
-class Config(Obj):
-
-    pass
-
-
-"methods"
 
 
 def construct(obj, *args, **kwargs):
@@ -150,9 +133,6 @@ def values(obj):
     return obj.__dict__.values()
 
 
-"decoder"
-
-
 class ObjectDecoder(json.JSONDecoder):
 
     def __init__(self, *args, **kwargs):
@@ -184,9 +164,6 @@ def loads(string, *args, **kw):
     kw["cls"] = ObjectDecoder
     kw["object_hook"] = hook
     return json.loads(string, *args, **kw)
-
-
-"encoder"
 
 
 class ObjectEncoder(json.JSONEncoder):
@@ -228,14 +205,9 @@ def dumps(*args, **kw):
     return json.dumps(*args, **kw)
 
 
-"interface"
-
-
 def __dir__():
     return (
-        'Config',
         'Object',
-        'Obj',
         'construct',
         'dumps',
         'edit',
