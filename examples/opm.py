@@ -16,7 +16,7 @@ from nixt.object  import Object, update
 from nixt.persist import find, ident, write
 
 
-from .rss import Rss
+from .rss import Rss # pylint: disable=E0402
 
 
 importlock = _thread.allocate_lock()
