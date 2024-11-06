@@ -12,6 +12,9 @@ import traceback
 import _thread
 
 
+"reactor"
+
+
 class Reactor:
 
     def __init__(self):
@@ -23,7 +26,7 @@ class Reactor:
         func = self.cbs.get(evt.type, None)
         if func:
             evt._thr = launch(func, self, evt)
-        else:
+        elif "ready" in dir(evt):
             evt.ready()
 
     def loop(self):
@@ -58,6 +61,36 @@ class Client(Reactor):
 
     def raw(self, txt):
         raise NotImplementedError
+
+
+class Event:
+
+    def __init__(self):
+        self._ready = threading.Event()
+        self._thr   = None
+        self.result = []
+        self.type   = "event"
+        self.txt    = ""
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    def ready(self):
+        self._ready.set()
+
+    def reply(self, txt):
+        self.result.append(txt)
+
+    def wait(self):
+        self._ready.wait()
+        if self._thr:
+            self._thr.join()
+
+
+"threads"
 
 
 class Thread(threading.Thread):
@@ -118,6 +151,9 @@ def name(obj):
     return None
 
 
+"errors"
+
+
 class Errors:
 
     errors = []
@@ -141,6 +177,9 @@ def later(exc):
     fmt = Errors.format(excp)
     if fmt not in Errors.errors:
         Errors.errors.append(fmt)
+
+
+"timers"
 
 
 class Timer:
@@ -181,10 +220,14 @@ class Repeater(Timer):
         super().run()
 
 
+"interface"
+
+
 def __dir__():
     return (
         'Client',
         'Errors',
+        'Event',
         'Reactor',
         'Repeater',
         'Thread',

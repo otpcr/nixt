@@ -26,6 +26,13 @@ class Object:
         return str(self.__dict__)
 
 
+class Obj(Object):
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
+
+
+
 def construct(obj, *args, **kwargs):
     if args:
         val = args[0]
@@ -208,6 +215,7 @@ def dumps(*args, **kw):
 def __dir__():
     return (
         'Object',
+        'Obj',
         'construct',
         'dumps',
         'edit',

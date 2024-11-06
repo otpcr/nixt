@@ -12,27 +12,14 @@ import time
 import _thread
 
 
-from .object  import Object
+from .object  import Obj
 from .persist import Workdir
 from .runtime import later, launch
 
 
-NAME = __file__.rsplit(os.sep, maxsplit=2)[-2]
-STARTTIME = time.time()
-
-
+NAME        = __file__.rsplit(os.sep, maxsplit=2)[-2]
+STARTTIME   = time.time()
 Workdir.wdr = os.path.expanduser(f"~/.{NAME}")
-
-
-class Obj(Object):
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-
-class Config(Obj):
-
-    pass
 
 
 class Commands:
@@ -66,34 +53,9 @@ def command(bot, evt):
     evt.ready()
 
 
-class Event:
+class Config(Obj):
 
-    def __init__(self):
-        self._ready = threading.Event()
-        self._thr   = None
-        self.result = []
-        self.type   = "event"
-        self.txt    = ""
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-    def __str__(self):
-        return str(self.__dict__)
-
-    def ready(self):
-        self._ready.set()
-
-    def reply(self, txt):
-        self.result.append(txt)
-
-    def wait(self):
-        self._ready.wait()
-        if self._thr:
-            self._thr.join()
-
-
-"utilities"
+    pass
 
 
 def forever():
@@ -247,9 +209,6 @@ def wrap(func):
         pass
     except Exception as ex:
         later(ex)
-
-
-"interface"
 
 
 def __dir__():

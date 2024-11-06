@@ -9,10 +9,10 @@
 import sys
 
 
-from nixt.command import NAME, Commands, Config, Event
+from nixt.command import NAME, Commands, Config
 from nixt.command import command, parse, scanner, wrap
 from nixt.modules import face
-from nixt.runtime import Client, errors
+from nixt.runtime import Client, Event, errors
 
 
 cfg  = Config()
