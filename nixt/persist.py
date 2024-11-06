@@ -16,16 +16,10 @@ import _thread
 from .object import Object, dump, load, search, update
 
 
-"defines"
-
-
 cachelock = _thread.allocate_lock()
 disklock  = _thread.allocate_lock()
 lock      = _thread.allocate_lock()
 p         = os.path.join
-
-
-"workdir"
 
 
 class Workdir:
@@ -61,9 +55,6 @@ def store(pth=""):
 
 def whitelist(clz):
     Workdir.fqns.append(fqn(clz))
-
-
-"cache"
 
 
 class Cache:

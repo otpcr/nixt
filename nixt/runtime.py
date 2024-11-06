@@ -13,9 +13,6 @@ import traceback
 import _thread
 
 
-"errors"
-
-
 class Errors:
 
     errors = []
@@ -41,8 +38,6 @@ def later(exc):
     if fmt not in Errors.errors:
         Errors.errors.append(fmt)
 
-
-"threads"
 
 
 class Thread(threading.Thread):
@@ -103,9 +98,6 @@ def name(obj):
     return None
 
 
-"reactor"
-
-
 class Reactor:
 
     def __init__(self):
@@ -154,9 +146,6 @@ class Client(Reactor):
         raise NotImplementedError
 
 
-"event"
-
-
 class Event:
 
     def __init__(self):
@@ -182,9 +171,6 @@ class Event:
         self._ready.wait()
         if self._thr:
             self._thr.join()
-
-
-"timers"
 
 
 class Timer:
@@ -225,37 +211,6 @@ class Repeater(Timer):
         super().run()
 
 
-"utilitties"
-
-
-def forever():
-    while True:
-        try:
-            time.sleep(0.1)
-        except (KeyboardInterrupt, EOFError):
-            _thread.interrupt_main()
-
-
-def privileges():
-    import getpass
-    import pwd
-    pwnam2 = pwd.getpwnam(getpass.getuser())
-    os.setgid(pwnam2.pw_gid)
-    os.setuid(pwnam2.pw_uid)
-
-
-def wrap(func):
-    try:
-        func()
-    except (KeyboardInterrupt, EOFError):
-        pass
-    except Exception as ex:
-        later(ex)
-
-
-"interface"
-
-
 def __dir__():
     return (
         'Client',
@@ -266,10 +221,7 @@ def __dir__():
         'Thread',
         'Timer',
         'errors',
-        'forever',
         'later',
         'launch',
-        'name',
-        'privlleges',
-        'wrap'
+        'name'
     )
