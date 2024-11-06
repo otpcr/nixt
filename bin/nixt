@@ -16,8 +16,7 @@ import time
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.command import NAME, Config, command, forever, modpath, parse
-from nixt.command import scanner
+from nixt.command import NAME, Config, command, forever, parse, scanner
 from nixt.modules import face
 from nixt.runtime import Client, Event, errors, later
 

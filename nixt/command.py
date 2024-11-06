@@ -115,10 +115,6 @@ def modloop(*pkgs, disable=""):
             yield getattr(pkg, modname)
 
 
-def modpath():
-    return os.path.expanduser("~/.local/pipx/venvs/nixt/share/otpcr/")
-
-
 def parse(obj, txt=None):
     if txt is None:
         txt = ""
