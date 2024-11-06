@@ -5,7 +5,6 @@
 "errors,reactor,threads,timers"
 
 
-import os
 import queue
 import threading
 import time
