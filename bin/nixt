@@ -78,8 +78,13 @@ def main():
     parse(cfg, " ".join(sys.argv[1:]))
     if "v" in cfg.opts:
         banner()
+    if "m" in cfg.opts and os.path.exists("mods"):
+        import mods.face as MODS
+        MODS.rss.DEBUG = True
+    else:
+        MODS = None
     if "c" in cfg.opts:
-        for mod, thr in scanner(face, init="i" in cfg.opts, disable=cfg.sets.dis):
+        for mod, thr in scanner(face, MODS, init="i" in cfg.opts, disable=cfg.sets.dis):
             if "v" in cfg.opts and "output" in dir(mod):
                 mod.output = print
             if thr and "w" in cfg.opts:
@@ -88,7 +93,7 @@ def main():
         csl.start()
         forever()
     else:
-        scanner(face)
+        scanner(face, MODS)
         evt = Event()
         evt.txt = cfg.txt
         evt.type = "command"
