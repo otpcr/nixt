@@ -13,9 +13,9 @@ import threading
 import time
 
 
-from .object  import Object
-from .persist import Cache
-from .runtime import launch
+from ..object  import Object
+from ..persist import Cache
+from ..runtime import launch
 
 
 def init():

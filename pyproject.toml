@@ -32,10 +32,9 @@ classifiers=[
 
 [project.scripts]
 'nixt'  = 'nixt.control:wrapped'
-'nixtc' = "nixt.console:wrapped'
+'nixtc' = 'nixt.console:wrapped'
 'nixtd' = 'nixt.daemon:main'
 'nixts' = 'nixt.service:wrapped'
-
 
 
 [tool.setuptools]

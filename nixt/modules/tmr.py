@@ -9,9 +9,9 @@ import re
 import time as ttime
 
 
-from .object  import update
-from .persist import Cache, find, ident, laps, write
-from .runtime import Event, Timer, launch
+from ..object  import update
+from ..persist import Cache, find, ident, laps, write
+from ..runtime import Event, Timer, launch
 
 
 def init():

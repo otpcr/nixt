@@ -13,9 +13,9 @@ import time
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 
-from .object  import Object, Obj
-from .persist import Workdir, fns
-from .runtime import later, launch
+from ..object  import Object
+from ..persist import Config, Obj, fns
+from ..runtime import later, launch
 
 
 def init():
@@ -24,18 +24,8 @@ def init():
     return rest
 
 
-def html(txt):
-    return """<!doctype html>
-<html>
-   %s
-</html>
-""" % txt
-
-
-class Config(Obj):
-
-    hostname = "localhost"
-    port     = 10102
+Config.hostname = "localhost"
+Config.port     = 10102
 
 
 class REST(HTTPServer, Object):
@@ -96,7 +86,7 @@ class RESTHandler(BaseHTTPRequestHandler):
                 txt += f'<a href="http://{Config.hostname}:{Config.port}/{fnm}">{fnm}</a><br>\n'
             self.send(html(txt.strip()))
             return
-        fnm = Workdir.wdr + os.sep + "store" + os.sep + self.path
+        fnm = Config.wdr + os.sep + "store" + os.sep + self.path
         try:
             f = open(fnm, "r", encoding="utf-8")
             txt = f.read()
@@ -110,3 +100,12 @@ class RESTHandler(BaseHTTPRequestHandler):
 
     def log(self, code):
         pass
+
+
+def html(txt):
+    return """<!doctype html>
+<html>
+   %s
+</html>
+""" % txt
+
