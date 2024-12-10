@@ -1,6 +1,5 @@
-#!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C,W0212
+# pylint: disable=C0116,C0415,W0212,E0402
 
 
 "daemon"
@@ -10,12 +9,8 @@ import os
 import sys
 
 
-from nixt.command import NAME, forever, privileges, scanner, wrap
-from nixt.modules import face
-from nixt.persist import pidfile, pidname
-
-
-scan = scanner
+from .persist import Config, pidfile, pidname
+from .runtime import errors, forever, privileges, scan, wrap
 
 
 def daemon(verbose=False):
@@ -38,13 +33,20 @@ def daemon(verbose=False):
     os.nice(10)
 
 
+def wrapped():
+    wrap(main)
+    for line in errors():
+        print(line)
+
+
 def main():
-    daemon()
+    daemon(True)
     privileges()
-    pidfile(pidname(NAME))
+    pidfile(pidname(Config.name))
+    from .modules import face
     scan(face, init=True)
     forever()
 
 
 if __name__ == "__main__":
-    wrap(main)
+    wrapped()

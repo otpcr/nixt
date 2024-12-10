@@ -1,37 +1,25 @@
-#!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C
+# pylint: disable=C0115,C0116,C0415,R0903,R0912,R0915,W0105,W0718,E0402
 
 
-"console"
+"main"
 
 
 import sys
 
 
-from nixt.command import NAME, Commands, Config
-from nixt.command import command, parse, scanner, wrap
-from nixt.modules import face
-from nixt.runtime import Client, Event, errors
+from .persist import Config
+from .runtime import Client, Commands, Event
+from .runtime import command, errors, parse, scan, wrap
 
 
-cfg  = Config()
+Cfg = Config()
 
 
 class CLI(Client):
 
-    def __init__(self):
-        Client.__init__(self)
-        self.register("command", command)
-
     def raw(self, txt):
         print(txt)
-
-
-def srv(event):
-    import getpass
-    name  = getpass.getuser()
-    event.reply(TXT % (NAME.upper(), name, name, name, NAME))
 
 
 def wrapped():
@@ -39,13 +27,21 @@ def wrapped():
     for line in errors():
         print(line)
 
+
+def srv(event):
+    import getpass
+    name = getpass.getuser()
+    event.reply(TXT % (Cfg.name.upper(), name, name, name, Cfg.name))
+
+
 def main():
     Commands.add(srv)
-    parse(cfg, " ".join(sys.argv[1:]))
-    scanner(face)
+    parse(Cfg, " ".join(sys.argv[1:]))
+    from .modules import face
+    scan(face)
     evt = Event()
-    evt.txt = cfg.txt
     evt.type = "command"
+    evt.txt = Cfg.otxt
     csl = CLI()
     command(csl, evt)
     evt.wait()

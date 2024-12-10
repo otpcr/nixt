@@ -10,27 +10,7 @@ import json
 
 class Object:
 
-    def __contains__(self, key):
-        return key in dir(self)
-
-    def __getstate__(self):
-        pass
-
-    def __iter__(self):
-        return iter(self.__dict__)
-
-    def __len__(self):
-        return len(self.__dict__)
-
-    def __str__(self):
-        return str(self.__dict__)
-
-
-class Obj(Object):
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
+    pass
 
 
 def construct(obj, *args, **kwargs):
@@ -89,7 +69,6 @@ def format(obj, args=None, skip=None, plain=False):
         else:
             txt += f'{key}={value} '
     return txt.strip()
-
 
 
 def items(obj):
@@ -210,20 +189,3 @@ def dump(*args, **kw):
 def dumps(*args, **kw):
     kw["cls"] = ObjectEncoder
     return json.dumps(*args, **kw)
-
-
-def __dir__():
-    return (
-        'Object',
-        'Obj',
-        'construct',
-        'dumps',
-        'edit',
-        'keys',
-        'loads',
-        'items',
-        'match',
-        'search',
-        'update',
-        'values'
-    )
