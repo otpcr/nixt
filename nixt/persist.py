@@ -33,7 +33,7 @@ class Obj(Object):
 class Config(Obj):
 
     fqns = []
-    name = "obz"
+    name = "nixt"
     wdr  = os.path.expanduser("~/.{Config.name}")
 
 

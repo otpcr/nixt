@@ -1,12 +1,14 @@
 # This file is placed in the Public Domain.
 
+
 [build-system]
 requires = ["setuptools>=43.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
+
 [project]
 name = "nixt"
-version = "131"
+version = "140"
 authors = [
     {name = "Bart Thate", email = "bthate@dds.nl" },
 ]
@@ -21,32 +23,23 @@ classifiers=[
     'Topic :: Utilities'
 ]
 
+
 [project.urls]
 "home" = "https://pypi.org/project/nixt"
 "bugs" = "https://github.com/otpcr/nixt/issues"
 "source" = "https://github.com/otpcr/nixt"
 
+
+[project.scripts]
+'nixt'  = 'nixt.control:wrapped'
+'nixtc' = "nixt.console:wrapped'
+'nixtd' = 'nixt.daemon:main'
+'nixts' = 'nixt.service:wrapped'
+
+
+
 [tool.setuptools]
-script-files = [
-    'bin/nixt',
-    'bin/nixtctl',
-    'bin/nixtd',
-    'bin/nixts'
-]
 packages = [
     'nixt',
-    'nixt.modules',
-]
-
-
-[tool.setuptools.data-files]
-"share/otpcr/examples" = [
-    'examples/face.py',
-    'examples/fnd.py',
-    'examples/irc.py',
-    'examples/log.py',
-    'examples/opm.py',
-    'examples/rss.py',
-    'examples/tdo.py',
-    'examples/udp.py'
+    'nixt.modules'
 ]

@@ -65,6 +65,7 @@ def wrapped():
 
 
 def main():
+    import sys
     parse(cfg, " ".join(sys.argv[1:]))
     if "v" in cfg.opts:
         banner()
