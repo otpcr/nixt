@@ -116,10 +116,6 @@ def fqn(obj):
     return kin
 
 
-def ident(obj):
-    return p(fqn(obj), *str(datetime.datetime.now()).split())
-
-
 def items(obj):
     if isinstance(obj,type({})):
         return obj.items()
