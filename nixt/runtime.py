@@ -238,8 +238,8 @@ class Output:
         self.oqueue.put((None, None))
 
     def wait(self):
-        self.oqueue.join()
         self.dostop.wait()
+        self.oqueue.join()
 
 
 "reactor"
@@ -279,11 +279,11 @@ class Reactor:
             except (KeyboardInterrupt, EOFError):
                 if "ready" in dir(evt):
                     evt.ready()
-                _thread.interrupt_main()
+                break
+        _thread.interrupt_main()
                 
     def poll(self):
-        if not self.stopped.is_set():
-            return self.queue.get()
+        return self.queue.get()
 
     def put(self, evt):
         self.queue.put(evt)

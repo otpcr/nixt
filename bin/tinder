@@ -122,7 +122,7 @@ def main():
     parse(cfg, " ".join(sys.argv[1:]))
     face.rss.DEBUG = True
     scan(face)
-    nrcommands = len(Commands.cmds) or 1
+    NRCOMMAND = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()
         print("verbose is on")
@@ -132,27 +132,29 @@ def main():
     skel()
     clt = CLI()
     clt.start()
-    nrs = cfg.index or 1
+    NRS = cfg.index or 1
     thrs = []
-    for _nr in range(nrs):
+    for _nr in range(NRS):
         thrs.append(launch(payload, clt))
     for thr in thrs:
         thr.join()
     consume(events)
-    #clt.stop()
+    clt.stop()
     clt.wait()
-    endtime = time.time()
-    lap = laps(endtime-STARTTIME)
-    percall = (endtime-STARTTIME)/(nrs*nrcommands)
-    print(f"{lap} {nrs} {nrcommands} {percall}")
-    if not list(errors()):
-        print("no errors")
 
 
 if __name__ == "__main__":
     wrap(main)
+    endtime = time.time()
+    lap = laps(endtime-STARTTIME)
+    PERCALL = (endtime-STARTTIME)/(NRS*NRCOMMAND)
+    print(f"{lap} {NRS} {NRCOMMAND} {PERCALL}")
+    if not list(errors()):
+        print("no errors")
     for line in errors():
         print(line)
     if events:
         print(f"{len(events)} events remained")
+    else:
+        print("no events remaining")
     sys.stdout.flush()
