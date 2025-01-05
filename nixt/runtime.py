@@ -222,7 +222,7 @@ class Output:
         while not self.dostop.is_set():
             (channel, txt) = self.oqueue.get()
             if channel is None and txt is None:
-                self.oqueue.task_done()
+                #self.oqueue.task_done()
                 break
             self.dosay(channel, txt)
             self.oqueue.task_done()
@@ -234,12 +234,13 @@ class Output:
         launch(self.output)
 
     def stop(self):
+        self.oqueue.join()
         self.dostop.set()
         self.oqueue.put((None, None))
 
     def wait(self):
         self.dostop.wait()
-        self.oqueue.join()
+        print(self.oqueue.qsize())
 
 
 "reactor"
@@ -279,8 +280,7 @@ class Reactor:
             except (KeyboardInterrupt, EOFError):
                 if "ready" in dir(evt):
                     evt.ready()
-                break
-        _thread.interrupt_main()
+                _thread.interrupt_main()
                 
     def poll(self):
         return self.queue.get()
