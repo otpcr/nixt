@@ -81,8 +81,8 @@ def construct(obj, *args, **kwargs):
         except TypeError:
             try:
                 update(obj, val)
-            except ValueError:
-                update(obj, dict(val))
+            except TypeError:
+                update(obj, val)
     if kwargs:
         update(obj, kwargs)
 
@@ -133,10 +133,10 @@ def keys(obj):
 
 
 def update(obj, data):
-    if isinstance(data, type({})):
-        obj.__dict__.update(data)
-    else:
+    try:
         obj.__dict__.update(vars(data))
+    except TypeError:
+        obj.__dict__.update(data)
 
 
 def values(obj):
