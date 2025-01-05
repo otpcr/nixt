@@ -139,8 +139,8 @@ def main():
     for thr in thrs:
         thr.join()
     consume(events)
-    clt.stop()
-    #clt.wait()
+    #clt.stop()
+    clt.wait()
     endtime = time.time()
     lap = laps(endtime-STARTTIME)
     percall = (endtime-STARTTIME)/(nrs*nrcommands)

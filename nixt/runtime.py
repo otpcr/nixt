@@ -238,8 +238,8 @@ class Output:
         self.oqueue.put((None, None))
 
     def wait(self):
-        self.dostop.wait()
         self.oqueue.join()
+        self.dostop.wait()
 
 
 "reactor"
@@ -323,12 +323,12 @@ class Client(Output, Reactor):
         Reactor.start(self)
 
     def stop(self):
-        Reactor.stop(self)
         Output.stop(self)
+        Reactor.stop(self)
 
     def wait(self):
-        Reactor.wait(self)
         Output.wait(self)
+        Reactor.wait(self)
 
 
 "threads"
