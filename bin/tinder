@@ -118,6 +118,9 @@ def wrap(function):
 
 
 def main():
+    global nrs
+    global nrcommand
+    global percall
     Config.wdr = ".test"
     parse(cfg, " ".join(sys.argv[1:]))
     face.rss.DEBUG = True
