@@ -12,24 +12,27 @@ import unittest
 
 
 import nixt
-import nixt.object
-import nixt.persist
-import nixt.runtime
 
 
 from nixt.object import *
 
 
+import nixt.find
+import nixt.modules
+import nixt.object
+import nixt.runtime
+
+
 PACKAGE = [
+    'find',
+    'modules',
     'object',
-    'persist',
     'runtime'
 ]
 
 
 METHODS = [
     '__class__',
-    '__contains__',
     '__delattr__',
     '__dict__',
     '__dir__',
@@ -38,14 +41,11 @@ METHODS = [
     '__format__',
     '__ge__',
     '__getattribute__',
-    '__getstate__',
     '__gt__',
     '__hash__',
     '__init__',
     '__init_subclass__',
-    '__iter__',
     '__le__',
-    '__len__',
     '__lt__',
     '__module__',
     '__ne__',
@@ -55,7 +55,6 @@ METHODS = [
     '__repr__',
     '__setattr__',
     '__sizeof__',
-    '__str__',
     '__subclasshook__',
     '__weakref__'
 ]
