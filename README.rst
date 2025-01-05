@@ -5,117 +5,212 @@ N I X T
 **NAME**
 
 
-``nixt`` - NIXT
+``nixt`` - NIXT 
 
 
 **SYNOPSIS**
 
 
-| ``nixtctl <cmd> [key=val] [key==val]``
-| ``nixtd``
-| ``nixts``
+|
+| ``nixt <cmd> [key=val] [key==val]``
+| ``nixt -cviw
+| ``nixt -d`` 
+| ``nixt -s``
 |
 
 **DESCRIPTION**
 
 
-``NIXT`` has all the python3 code to program a unix cli program, such as
-disk perisistence for configuration files, event handler to
-handle the client/server connection, code to introspect modules
-for commands, deferred exception handling to not crash on an
-error, a parser to parse commandline options and values, etc.
+``nixt`` has all you need to program a unix cli program, such as disk
+perisistence for configuration files, event handler to handle the
+client/server connection, deferred exception handling to not crash
+on an error, etc.
 
-``NIXT`` uses object programming (OP) that allows for easy json save//load
-to/from disk of objects. It provides an "clean namespace" Object class
-that only has dunder methods, so the namespace is not cluttered with
-method names. This makes storing and reading to/from json possible.
+``nixt`` contains all the python3 code to program objects in a functional
+way. It provides a base Object class that has only dunder methods, all
+methods are factored out into functions with the objects as the first
+argument. It is called Object Programming (OP), OOP without the
+oriented.
 
-``NIXT`` is Public Domain.
+``nixt`` allows for easy json save//load to/from disk of objects. It
+provides an "clean namespace" Object class that only has dunder
+methods, so the namespace is not cluttered with method names. This
+makes storing and reading to/from json possible.
+
+``nixt`` is a demo bot, it can connect to IRC, fetch and display RSS
+feeds, take todo notes, keep a shopping list and log text. You can
+also copy/paste the service file and run it under systemd for 24/7
+presence in a IRC channel.
+
+``nixt`` is Public Domain.
 
 
 **INSTALL**
 
 
+installation is done with pipx
+
+|
 | ``$ pipx install nixt``
 | ``$ pipx ensurepath``
+|
+| <new terminal>
+|
+| ``$ nixt srv > nixt.service``
+| ``$ sudo mv nixt.service /etc/systemd/system/``
+| ``$ sudo systemctl enable nixt --now``
+|
+| joins ``#nixt`` on localhost
 |
 
 
 **USAGE**
 
 
-without any argument the bot does nothing
+use ``nixt`` to control the program, default it does nothing
 
-| ``$ nixtctl``
+|
+| ``$ nixt``
 | ``$``
 |
 
 see list of commands
 
-| ``$ nixtctl cmd``
-| cmd,err,mod,thr,upt
+|
+| ``$ nixt cmd``
+| ``cfg,cmd,dne,dpl,err,exp,imp,log,mod,mre,nme,``
+| ``pwd,rem,req,res,rss,srv,syn,tdo,thr,upt``
 |
 
 start daemon
 
-| ``$ nixtd``
+|
+| ``$ nixt -d``
 | ``$``
 |
 
 start service
 
-| ``$ nixts``
-| <runs until ctrl-c>
+|
+| ``$ nixt -s``
+| ``<runs until ctrl-c>``
 |
 
 
 **COMMANDS**
 
 
+here is a list of available commands
+
+|
+| ``cfg`` - irc configuration
 | ``cmd`` - commands
+| ``dpl`` - sets display items
 | ``err`` - show errors
-| ``mod`` - modules
+| ``exp`` - export opml (stdout)
+| ``imp`` - import opml
+| ``log`` - log text
+| ``mre`` - display cached output
+| ``pwd`` - sasl nickserv name/pass
+| ``rem`` - removes a rss feed
+| ``res`` - restore deleted feeds
+| ``req`` - reconsider
+| ``rss`` - add a feed
+| ``syn`` - sync rss feeds
+| ``tdo`` - add todo item
 | ``thr`` - show running threads
 | ``upt`` - show uptime
 |
 
-**CODE**
+**CONFIGURATION**
+
+
+irc
+
+|
+| ``$ nixt cfg server=<server>``
+| ``$ nixt cfg channel=<channel>``
+| ``$ nixt cfg nick=<nick>``
+|
+
+sasl
+
+|
+| ``$ nixt pwd <nsvnick> <nspass>``
+| ``$ nixt cfg password=<frompwd>``
+|
+
+rss
+
+|
+| ``$ nixt rss <url>``
+| ``$ nixt dpl <url> <item1,item2>``
+| ``$ nixt rem <url>``
+| ``$ nixt nme <url> <name>``
+|
+
+opml
+
+|
+| ``$ nixt exp``
+| ``$ nixt imp <filename>``
+|
+
+
+**PROGRAMMING**
+
+
+``nixt`` runs it's modules in the package, so you have to clone from git
+
+|
+| ``$ git clone ssh://git@github.com/otpcr/nixt``
+|
+
+edit a file in nixt/modules/<name>.py and add the following for ``hello world``
 
 ::
 
-    >>> from nixt.object import Object, dumps, loads
-    >>> o = Object()
-    >>> o.a = "b"
-    >>> print(loads(dumps(o)))
-    {'a': 'b'}
+    def hello(event):
+        event.reply("hello world !!")
 
 
-**SYSTEMD**
+save this and edit ``nixt/modules/face.py`` and import your filename in there.
+install that with ``pipx install . --force``, your program can execute the
+``hello`` command now.
 
 
-| ``$ nixtctl srv > nixt.service``
-| ``$ sudo mv *.service /etc/systemd/system/``
-| ``$ sudo systemctl enable nixt --now``
 |
+| ``$ nixt hello``
+| ``hello world !!``
+|
+
+commands run in their own thread, errors are deferred to not have loops
+blocking/breaking on exception and can contain your own written python3
+code, see the obz/modules directory for examples.
+
+
+**SOURCE**
+
+
+source is at `https://github.com/otpcr/nixt  <https://github.com/otpcr/nixt>`_
+
 
 **FILES**
 
-
+|
 | ``~/.nixt``
 | ``~/.local/bin/nixt``
-| ``~/.local/bin/nixtctl``
-| ``~/.local/bin/nixtd``
-| ``~/.local/bin/nixts``
 | ``~/.local/pipx/venvs/nixt/*``
 |
 
 **AUTHOR**
 
-
-Bart Thate <``bthate@dds.nl``>
-
+|
+| ``Bart Thate`` <``bthate@dds.nl``>
+|
 
 **COPYRIGHT**
 
-
-``NIXT`` is Public Domain.
+|
+| ``nixt`` is Public Domain.
+|
