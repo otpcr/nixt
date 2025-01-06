@@ -10,10 +10,10 @@ import uuid
 import _thread
 
 
+from ..command import spl
 from ..find    import find, write
 from ..object  import Object, update
 from  .rss     import Rss
-from ..runtime import spl
 
 
 importlock = _thread.allocate_lock()
