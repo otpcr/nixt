@@ -5,7 +5,9 @@
 "runtime"
 
 
+import datetime
 import inspect
+import os
 import queue
 import threading
 import time
@@ -17,6 +19,7 @@ import _thread
 cachelock   = _thread.allocate_lock()
 commandlock = _thread.allocate_lock()
 outputlock  = _thread.allocate_lock()
+p           = os.path.join
 
 
 "cache"
@@ -76,7 +79,7 @@ def command(bot, evt):
                 func(evt)
                 bot.display(evt)
             except Exception as ex:
-               later(ex)
+                later(ex)
         evt.ready()
 
 
@@ -132,15 +135,6 @@ class Default:
         return str(self.__dict__)
 
 
-"config"
-
-
-class Config(Default):
-
-    name = Default.__module__.split(".")[0].lower()
-    wdr = ""
-
-
 "errors"
 
 
@@ -176,6 +170,7 @@ def later(exc):
 class Event:
 
     def __init__(self):
+        self._id    = ident(self)
         self._ready = threading.Event()
         self._thr   = None
         self.result = []
@@ -198,6 +193,30 @@ class Event:
         self._ready.wait()
         if self._thr:
             self._thr.join()
+
+
+def fqn(obj):
+    kin = str(type(obj)).split()[-1][1:-2]
+    if kin == "type":
+        kin = f"{obj.__module__}.{obj.__name__}"
+    return kin
+
+
+def ident(obj):
+    return p(fqn(obj), *str(datetime.datetime.now()).split())
+
+
+def idtime(daystr):
+    daystr = daystr.replace('_', ':')
+    datestr = ' '.join(daystr.split(os.sep)[-2:])
+    if '.' in datestr:
+        datestr, rest = datestr.rsplit('.', 1)
+    else:
+        rest = ''
+    timed = time.mktime(time.strptime(datestr, '%Y-%m-%d %H:%M:%S'))
+    if rest:
+        timed += float('.' + rest)
+    return timed
 
 
 "output"
@@ -226,7 +245,6 @@ class Output:
         while not self.dostop.is_set():
             (channel, txt) = self.oqueue.get()
             if channel is None and txt is None:
-                #self.oqueue.task_done()
                 break
             self.dosay(channel, txt)
             self.oqueue.task_done()
@@ -276,7 +294,6 @@ class Reactor:
                     break
                 if not self.stopped.is_set():
                     self.callback(evt)
-                self.queue.task_done()
             except (KeyboardInterrupt, EOFError):
                 if "ready" in dir(evt):
                     evt.ready()
@@ -298,7 +315,6 @@ class Reactor:
         launch(self.loop)
 
     def stop(self):
-        self.queue.join()
         self.stopped.set()
         self.queue.put(None)
 
@@ -493,6 +509,10 @@ def parse(obj, txt=None):
     return obj
 
 
+
+
+
+
 "interface"
 
 
@@ -501,7 +521,6 @@ def __dir__():
         'Cache',
         'Client',
         'Commands',
-        'Config',
         'Default',
         'Errors',
         'Event',

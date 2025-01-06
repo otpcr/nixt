@@ -16,8 +16,8 @@ import _thread
 p = os.path.join
 
 
-from .object  import Object, dumps, fqn, items, keys, loads, update
-from .runtime import Cache
+from .object  import Object, dumps, items, keys, loads, update
+from .runtime import Cache, fqn
 
 
 lock     = _thread.allocate_lock()

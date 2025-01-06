@@ -17,10 +17,10 @@ import _thread
 
 
 from ..find    import format, ident, last, write
+from ..find    import Config as Main
 from ..object  import Object, edit, keys
 from ..runtime import Cache, Commands, Event, Reactor
 from ..runtime import command, later, launch, spl
-from ..runtime import Config as Main
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]
