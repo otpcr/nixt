@@ -56,3 +56,9 @@ class Output:
 
     def wait(self):
         self.dostop.wait()
+
+
+def __dir__():
+    return (
+        'Output',
+    )

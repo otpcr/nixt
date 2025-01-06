@@ -32,3 +32,11 @@ def later(exc):
     fmt = Error.format(excp)
     if fmt not in Error.errors:
         Error.errors.append(fmt)
+
+
+def __dir__():
+    return (
+        'Error',
+        'errors',
+        'later'
+    )

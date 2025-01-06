@@ -1,5 +1,6 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C
+# pylint: disable=C,E0402
+
 
 "event"
 
@@ -8,6 +9,9 @@ import datetime
 import os
 import threading
 import time
+
+
+from .object import fqn
 
 
 p = os.path.join
@@ -41,13 +45,6 @@ class Event:
             self._thr.join()
 
 
-def fqn(obj):
-    kin = str(type(obj)).split()[-1][1:-2]
-    if kin == "type":
-        kin = f"{obj.__module__}.{obj.__name__}"
-    return kin
-
-
 def ident(obj):
     return p(fqn(obj), *str(datetime.datetime.now()).split())
 
@@ -63,3 +60,12 @@ def idtime(daystr):
     if rest:
         timed += float('.' + rest)
     return timed
+
+
+def __dir__():
+    return (
+        'Event',
+        'fqn',
+        'ident',
+        'idtime'
+    )

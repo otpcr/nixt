@@ -21,3 +21,10 @@ class Default:
 
     def __str__(self):
         return str(self.__dict__)
+
+
+
+def __dir__():
+    return (
+        'Default',
+    )

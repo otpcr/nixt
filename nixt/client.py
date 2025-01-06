@@ -17,3 +17,9 @@ class Client(Reactor):
 
     def raw(self, txt):
         raise NotImplementedError("raw")
+
+
+def __dir__():
+    return (
+        'Client',
+    )

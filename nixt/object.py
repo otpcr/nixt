@@ -5,7 +5,11 @@
 "a clean namespace"
 
 
+import datetime
 import json
+
+
+SEP = "/"
 
 
 class Object:
@@ -116,6 +120,10 @@ def fqn(obj):
     return kin
 
 
+def ident(obj):
+    return SEP.join(fqn(obj), *str(datetime.datetime.now()).split())
+
+
 def items(obj):
     if isinstance(obj,type({})):
         return obj.items()
@@ -146,6 +154,7 @@ def __dir__():
         'edit',
         'fqn',
         'keys',
+        'ident',
         'items',
         'values',
         'update'

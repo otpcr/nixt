@@ -32,3 +32,9 @@ class Cache:
                 if matcher not in key:
                     continue
                 yield Cache.objs.get(key)
+
+
+def __dir__():
+    return (
+        'Cache',
+    )

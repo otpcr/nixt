@@ -48,3 +48,10 @@ class Repeater(Timer):
     def run(self):
         launch(self.start)
         super().run()
+
+
+def __dir__():
+    return (
+        'Repeater',
+        'Timer'
+    )

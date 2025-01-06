@@ -256,3 +256,16 @@ def write(obj, pth=None):
         with open(pth, 'w', encoding='utf-8') as ofile:
             ofile.write(txt)
         return pth
+
+
+def __dir__():
+    return (
+        'Config',
+        'find',
+        'format',
+        'laps',
+        'last',
+        'read',
+        'write'
+    )
+    

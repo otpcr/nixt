@@ -75,3 +75,9 @@ class Reactor:
 
     def wait(self):
         self.stopped.wait()
+
+
+def __dir__():
+    return (
+        'Reactor',
+    )
