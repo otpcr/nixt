@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C,R0903,W0105,W0201,W0212,W0613, W0718,E0401
+# pylint: disable=C,R0903,W0105,W0201,W0212,W0603,W0613,W0718,E0401
 
 
 "tinder"
@@ -65,7 +65,6 @@ param.ver = [""]
 
 class CLI(Client):
 
-
     def raw(self, txt):
         if "v" in cfg.opts:
             print(txt)
@@ -120,7 +119,6 @@ def wrap(function):
 def main():
     global nrs
     global nrcommand
-    global percall
     Config.wdr = ".test"
     parse(cfg, " ".join(sys.argv[1:]))
     face.rss.DEBUG = True
@@ -151,13 +149,12 @@ if __name__ == "__main__":
     endtime = time.time()
     lap = laps(endtime-starttime)
     percall = (endtime-starttime)/(nrs*nrcommand)
-    print(f"{lap} {nrs} {nrcommand} {percall}")
-    if not list(errors()):
-        print("no errors")
     for line in errors():
         print(line)
-    if events:
-        print(f"{len(events)} events remained")
-    else:
-        print("no events remaining")
+    if "v" in cfg.opts:
+        if not list(errors()):
+            print("no errors")
+        if events:
+            print(f"{len(events)} events")
+        print(f"{lap} {nrs} {nrcommand} {percall}")
     sys.stdout.flush()
