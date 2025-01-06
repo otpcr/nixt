@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nixt"
-version = "140"
+version = "141"
 authors = [
     {name = "Bart Thate", email = "bthate@dds.nl" },
 ]
@@ -30,14 +30,10 @@ classifiers=[
 "source" = "https://github.com/otpcr/nixt"
 
 
-[project.scripts]
-'nixt'  = 'nixt.control:wrapped'
-'nixtc' = 'nixt.console:wrapped'
-'nixtd' = 'nixt.daemon:main'
-'nixts' = 'nixt.service:wrapped'
-
-
 [tool.setuptools]
+script-files = [
+    'bin/nixt'
+]
 packages = [
     'nixt',
     'nixt.modules'
