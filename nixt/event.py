@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-
+# pylint: disable=C
 
 "event"
 
@@ -7,6 +7,7 @@
 import datetime
 import os
 import threading
+import time
 
 
 p = os.path.join
@@ -62,4 +63,3 @@ def idtime(daystr):
     if rest:
         timed += float('.' + rest)
     return timed
-

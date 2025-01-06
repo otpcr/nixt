@@ -1,7 +1,15 @@
 # This file is placed in the Public Domain.
+# pylint: disable=C,E0402
 
 
 "timer"
+
+
+import threading
+import time
+
+
+from .thread import launch, name
 
 
 class Timer:
@@ -40,4 +48,3 @@ class Repeater(Timer):
     def run(self):
         launch(self.start)
         super().run()
-

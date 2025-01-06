@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=C,R0903,E0402
 
 
 "client"
@@ -16,4 +17,3 @@ class Client(Reactor):
 
     def raw(self, txt):
         raise NotImplementedError("raw")
-

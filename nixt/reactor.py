@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=C,W0212,W0718,E0402
 
 
 "reactor"
@@ -9,6 +10,7 @@ import threading
 import _thread
 
 
+from .error  import later
 from .thread import launch
 
 

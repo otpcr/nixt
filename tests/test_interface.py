@@ -17,17 +17,37 @@ import nixt
 from nixt.object import *
 
 
+import nixt.cache
+import nixt.client
+import nixt.command
+import nixt.default
+import nixt.error
+import nixt.event
 import nixt.find
 import nixt.modules
 import nixt.object
-import nixt.runtime
+import nixt.output
+import nixt.parse
+import nixt.reactor
+import nixt.thread
+import nixt.timer
 
 
 PACKAGE = [
+    'cache',
+    'client',
+    'command',
+    'default',
+    'error',
+    'event',
     'find',
     'modules',
     'object',
-    'runtime'
+    'output',
+    'parse',
+    'reactor',
+    'thread',
+    'timer'
 ]
 
 

@@ -16,10 +16,13 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
+from nixt.client  import Client
+from nixt.command import Command, command, scan
+from nixt.error   import errors, later
+from nixt.event   import Event
 from nixt.find    import Config
 from nixt.modules import face
-from nixt.runtime import Client, Commands, Event
-from nixt.runtime import command, errors, later, parse, scan
+from nixt.parse   import parse
 
 
 Config.name = Config.__module__.split(".", maxsplit=2)[-2]
@@ -92,7 +95,7 @@ def console():
 
 
 def control():
-    Commands.add(srv)
+    Command.add(srv)
     parse(cfg, " ".join(sys.argv[1:]))
     if not cfg.otxt:
         return
@@ -103,8 +106,6 @@ def control():
     csl = CLI()
     command(csl, evt)
     evt.wait()
-    for txt in evt.result:
-        print(txt)
 
 
 def daemon(verbose=False):

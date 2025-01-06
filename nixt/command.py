@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=C,W0718,E0402
 
 
 "commands"
@@ -9,8 +10,9 @@ import types
 import _thread
 
 
-from .error import later
-from .parse import parse
+from .error  import later
+from .parse  import parse
+from .thread import launch
 
 
 commandlock = _thread.allocate_lock()

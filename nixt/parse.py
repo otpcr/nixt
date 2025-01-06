@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=C,R0912,R0915,E0402
 
 
 "parse"

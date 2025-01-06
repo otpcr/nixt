@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=C,W0718,E0402
 
 
 "thread"
@@ -7,6 +8,10 @@
 import queue
 import threading
 import time
+import _thread
+
+
+from .error import later
 
 
 class Thread(threading.Thread):

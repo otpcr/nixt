@@ -1,7 +1,19 @@
 # This file is placed in the Public Domain.
+# pylint: disable=C,W0613,E0402
 
 
 "output"
+
+
+import queue
+import threading
+import _thread
+
+
+from .thread import launch
+
+
+outputlock = _thread.allocate_lock()
 
 
 class Output:

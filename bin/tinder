@@ -17,11 +17,15 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
+from nixt.client  import Client
+from nixt.command import Command, scan
+from nixt.error   import errors, later
+from nixt.event   import Event, idtime
 from nixt.find    import Config, laps, skel
 from nixt.modules import face
 from nixt.object  import Object
-from nixt.runtime import Client, Commands, Event
-from nixt.runtime import errors, idtime, later, launch, parse, scan
+from nixt.parse   import parse
+from nixt.thread  import launch
 
 
 Config.name = "tinder"
@@ -90,7 +94,7 @@ def consume(evts):
 def payload(clt):
     nmr = 0
     with paylock:
-        for cmdd in sorted(Commands.cmds):
+        for cmdd in sorted(Command.cmds):
             for ex in getattr(param, cmdd, [""]):
                 evt = Event()
                 evt.txt = cmdd + " " + ex
@@ -125,7 +129,7 @@ def main():
     parse(cfg, " ".join(sys.argv[1:]))
     face.rss.DEBUG = True
     scan(face)
-    nrcommand = len(Commands.cmds) or 1
+    nrcommand = len(Command.cmds) or 1
     if "v" in cfg.opts:
         banner()
         print("verbose is on")

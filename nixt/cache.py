@@ -1,7 +1,14 @@
 # This file is placed in the Public Domain.
+# pylint: disable=C
 
 
 "cache"
+
+
+import _thread
+
+
+cachelock = _thread.allocate_lock()
 
 
 class Cache:
@@ -25,4 +32,3 @@ class Cache:
                 if matcher not in key:
                     continue
                 yield Cache.objs.get(key)
-

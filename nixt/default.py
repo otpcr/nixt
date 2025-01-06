@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=C
 
 
 "default"
@@ -20,4 +21,3 @@ class Default:
 
     def __str__(self):
         return str(self.__dict__)
-
