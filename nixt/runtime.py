@@ -14,7 +14,9 @@ import types
 import _thread
 
 
-cachelock = _thread.allocate_lock()
+cachelock   = _thread.allocate_lock()
+commandlock = _thread.allocate_lock()
+outputlock  = _thread.allocate_lock()
 
 
 "cache"
@@ -64,17 +66,18 @@ class Commands:
 
 
 def command(bot, evt):
-    parse(evt, evt.txt)
-    if "ident" in dir(bot):
-        evt.orig = bot.ident
-    func = Commands.cmds.get(evt.cmd, None)
-    if func:
-        try:
-            func(evt)
-            bot.display(evt)
-        except Exception as ex:
-            later(ex)
-    evt.ready()
+    with commandlock:
+        parse(evt, evt.txt)
+        if "ident" in dir(bot):
+            evt.orig = bot.ident
+        func = Commands.cmds.get(evt.cmd, None)
+        if func:
+            try:
+                func(evt)
+                bot.display(evt)
+            except Exception as ex:
+               later(ex)
+        evt.ready()
 
 
 def modloop(*pkgs, disable=""):
@@ -209,8 +212,9 @@ class Output:
         self.dostop = threading.Event()
 
     def display(self, evt):
-        for txt in evt.result:
-            self.oput(evt.channel, txt)
+        with outputlock:
+            for txt in evt.result:
+                self.oput(evt.channel, txt)
 
     def dosay(self, channel, txt):
         self.raw(txt)
@@ -272,6 +276,7 @@ class Reactor:
                     break
                 if not self.stopped.is_set():
                     self.callback(evt)
+                self.queue.task_done()
             except (KeyboardInterrupt, EOFError):
                 if "ready" in dir(evt):
                     evt.ready()
@@ -293,6 +298,7 @@ class Reactor:
         launch(self.loop)
 
     def stop(self):
+        self.queue.join()
         self.stopped.set()
         self.queue.put(None)
 
@@ -322,8 +328,8 @@ class Client(Output, Reactor):
         Reactor.stop(self)
 
     def wait(self):
-        Output.wait(self)
         Reactor.wait(self)
+        Output.wait(self)
 
 
 "threads"

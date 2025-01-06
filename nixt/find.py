@@ -52,6 +52,7 @@ def cdir(pth):
 def fns(clz):
     dname = ''
     pth = store(clz)
+    res = []
     with lock:
         for rootdir, dirs, _files in os.walk(pth, topdown=False):
             if dirs:
@@ -59,13 +60,15 @@ def fns(clz):
                     if dname.count('-') == 2:
                         ddd = p(rootdir, dname)
                         for fll in os.listdir(ddd):
-                            yield p(ddd, fll)
+                            res.append(p(ddd, fll))
+    return sorted(res)
 
 
 def find(clz, selector=None, index=None, deleted=False, matching=False):
     skel()
     nrs = -1
     pth = long(clz)
+    res = []
     with findlock:
         for fnm in sorted(fns(pth), key=fntime):
             obj = Cache.get(fnm)
@@ -82,7 +85,8 @@ def find(clz, selector=None, index=None, deleted=False, matching=False):
             if index is not None and nrs != int(index):
                 continue
             Cache.add(fnm, obj)
-            yield (fnm, obj)
+            res.append((fnm, obj))
+    return sorted(res)
 
 
 def fntime(daystr):
