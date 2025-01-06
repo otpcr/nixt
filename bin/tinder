@@ -21,7 +21,7 @@ from nixt.find    import Config, laps, skel
 from nixt.modules import face
 from nixt.object  import Object
 from nixt.runtime import Client, Commands, Event
-from nixt.runtime import errors, later, launch, parse, scan
+from nixt.runtime import errors, idtime, later, launch, parse, scan
 
 
 Config.name = "tinder"
@@ -79,7 +79,7 @@ def banner():
 
 def consume(evts):
     done = []
-    for evt in evts:
+    for evt in sorted(evts, key=lambda x: idtime(x._id)):
         evt.wait()
         done.append(evt)
     for todo in done:
