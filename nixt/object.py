@@ -80,9 +80,9 @@ class ObjectDecoder(json.JSONDecoder):
 
     def decode(self, s, _w=None):
         val = json.JSONDecoder.decode(self, s)
-        if not val:
-            val = {}
-        return hook(val)
+        if isinstance(val, dict):
+            return hook(val)
+        return val
 
     def raw_decode(self, s, idx=0):
         return json.JSONDecoder.raw_decode(self, s, idx)
@@ -108,19 +108,14 @@ class ObjectEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, dict):
             return o.items()
-        if isinstance(o, Object):
+        if issubclass(type(o), Object):
             return vars(o)
         if isinstance(o, list):
             return iter(o)
-        if isinstance(o, (type(str), type(True), type(False), type(int), type(float))):
-            return o
         try:
             return json.JSONEncoder.default(self, o)
-        except TypeError:
-            try:
-                return o.__dict__
-            except AttributeError:
-                return repr(o)
+        except:
+            return vars(o)
 
     def encode(self, o) -> str:
         return json.JSONEncoder.encode(self, o)
