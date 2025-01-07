@@ -5,8 +5,8 @@
 "commands"
 
 
-from ..command import Command
+from ..command import Commands
 
 
 def cmd(event):
-    event.reply(",".join(sorted(Command.cmds.keys())))
+    event.reply(",".join(sorted(Commands.cmds.keys())))

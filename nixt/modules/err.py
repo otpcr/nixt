@@ -5,12 +5,12 @@
 "errors"
 
 
-from ..error import Error
+from ..error import Errors
 
 
 def err(event):
     nmr = 0
-    for exc in Error.errors:
+    for exc in Errors.errors:
         for line in exc:
             event.reply(line.strip())
         nmr += 1

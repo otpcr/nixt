@@ -8,7 +8,7 @@
 import traceback
 
 
-class Error:
+class Errors:
 
     errors = []
 
@@ -22,21 +22,21 @@ class Error:
 
 
 def errors():
-    for err in Error.errors:
+    for err in Errors.errors:
         for line in err:
             yield line
 
 
 def later(exc):
     excp = exc.with_traceback(exc.__traceback__)
-    fmt = Error.format(excp)
-    if fmt not in Error.errors:
-        Error.errors.append(fmt)
+    fmt = Errors.format(excp)
+    if fmt not in Errors.errors:
+        Errors.errors.append(fmt)
 
 
 def __dir__():
     return (
-        'Error',
+        'Errors',
         'errors',
         'later'
     )

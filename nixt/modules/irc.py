@@ -17,7 +17,7 @@ import _thread
 
 
 from ..cache   import Cache
-from ..command import Command, command, spl
+from ..command import command, spl
 from ..error   import later
 from ..event   import Event
 from ..find    import format, ident, last, write
@@ -566,7 +566,6 @@ def cb_privmsg(bot, evt):
             evt.txt = evt.txt[0].lower() + evt.txt[1:]
         if evt.txt:
             command(bot, evt)
-            bot.display(evt)
 
 
 def cb_quit(bot, evt):

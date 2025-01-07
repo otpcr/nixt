@@ -17,7 +17,7 @@ p = os.path.join
 
 
 from .cache   import Cache
-from .object  import Object, dumps, fqn, items, keys, loads, update
+from .object  import Object, dumps, fqn, ident, items, keys, loads, update
 
 
 lock     = _thread.allocate_lock()
@@ -123,10 +123,6 @@ def format(obj, args=None, skip=None, plain=False):
         else:
             txt += f'{key}={value} '
     return txt.strip()
-
-
-def ident(obj):
-    return p(fqn(obj), *str(datetime.datetime.now()).split())
 
 
 def laps(seconds, short=True):

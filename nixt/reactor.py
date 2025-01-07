@@ -14,7 +14,7 @@ from .error  import later
 from .thread import launch
 
 
-outputlock = _thread.allocate_lock()
+lock = _thread.allocate_lock()
 
 
 class Reactor:
@@ -37,7 +37,7 @@ class Reactor:
             evt.ready()
 
     def display(self, evt):
-        with outputlock:
+        with lock:
             for txt in evt.result:
                 self.raw(txt)
 

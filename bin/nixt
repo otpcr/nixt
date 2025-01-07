@@ -17,12 +17,11 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.client  import Client
-from nixt.command import Command, command, scan
+from nixt.command import Commands, command, parse, scan
 from nixt.error   import errors, later
 from nixt.event   import Event
 from nixt.find    import Config
 from nixt.modules import face
-from nixt.parse   import parse
 
 
 Config.name = Config.__module__.split(".", maxsplit=2)[-2]
@@ -95,7 +94,7 @@ def console():
 
 
 def control():
-    Command.add(srv)
+    Commands.add(srv)
     parse(cfg, " ".join(sys.argv[1:]))
     if not cfg.otxt:
         return

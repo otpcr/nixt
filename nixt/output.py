@@ -13,7 +13,7 @@ import _thread
 from .thread import launch
 
 
-outputlock = _thread.allocate_lock()
+lock = _thread.allocate_lock()
 
 
 class Output:
@@ -25,7 +25,7 @@ class Output:
         self.dostop = threading.Event()
 
     def display(self, evt):
-        with outputlock:
+        with lock:
             for txt in evt.result:
                 self.oput(evt.channel, txt)
 

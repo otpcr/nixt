@@ -121,7 +121,8 @@ def fqn(obj):
 
 
 def ident(obj):
-    return SEP.join(fqn(obj), *str(datetime.datetime.now()).split())
+    txt = SEP.join(str(datetime.datetime.now()).split())
+    return fqn(obj) + SEP + txt
 
 
 def items(obj):

@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C
+# pylint: disable=C,W0105
 
 
 "cache"
@@ -8,7 +8,7 @@
 import _thread
 
 
-cachelock = _thread.allocate_lock()
+lock = _thread.allocate_lock()
 
 
 class Cache:
@@ -17,21 +17,24 @@ class Cache:
 
     @staticmethod
     def add(path, obj):
-        with cachelock:
+        with lock:
             Cache.objs[path] = obj
 
     @staticmethod
     def get(path):
-        with cachelock:
+        with lock:
             return Cache.objs.get(path)
 
     @staticmethod
     def typed(matcher):
-        with cachelock:
+        with lock:
             for key in Cache.objs:
                 if matcher not in key:
                     continue
                 yield Cache.objs.get(key)
+
+
+"interface"
 
 
 def __dir__():
