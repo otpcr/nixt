@@ -108,7 +108,7 @@ class Fetcher(Object):
                 if uurl in seen:
                     continue
                 if self.dosave:
-                    write(fed)
+                    write(fed, store(ident(fed)))
                 result.append(fed)
             setattr(self.seen, feed.rss, urls)
             if not self.seenfn:
@@ -331,7 +331,7 @@ def rss(event):
             return
     feed = Rss()
     feed.rss = event.args[0]
-    write(feed)
+    write(feed, store(ident(feed)))
     event.reply('ok')
 
 

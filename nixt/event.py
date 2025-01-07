@@ -9,21 +9,20 @@ import threading
 import time
 
 
-class Event:
+from .default import Default
+
+
+class Event(Default):
 
     def __init__(self):
-        self._ctime = time.time()
+        Default.__init__(self)
+        self._ex    = None
         self._ready = threading.Event()
         self._thr   = None
+        self.ctime  = time.time()
         self.result = []
         self.type   = "event"
         self.txt    = ""
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-    def __str__(self):
-        return str(self.__dict__)
 
     def ready(self):
         self._ready.set()

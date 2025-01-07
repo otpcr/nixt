@@ -36,18 +36,17 @@ class Commands:
 
 
 def command(bot, evt):
-    with lock:
-        parse(evt, evt.txt)
-        if "ident" in dir(bot):
-            evt.orig = bot.ident
-        func = Commands.cmds.get(evt.cmd, None)
-        if func:
-            try:
-                func(evt)
-                bot.display(evt)
-            except Exception as ex:
-                later(ex)
-        evt.ready()
+    parse(evt, evt.txt)
+    if "ident" in dir(bot):
+        evt.orig = bot.ident
+    func = Commands.cmds.get(evt.cmd, None)
+    if func:
+        try:
+            func(evt)
+            bot.display(evt)
+        except Exception as ex:
+            later(ex)
+    evt.ready()
 
 
 def modloop(*pkgs, disable=""):
@@ -67,7 +66,6 @@ def parse(obj, txt=None):
     obj.args    = []
     obj.cmd     = ""
     obj.gets    = Default()
-    obj.hasmods = False
     obj.index   = None
     obj.mod     = ""
     obj.opts    = ""
@@ -93,7 +91,6 @@ def parse(obj, txt=None):
         if "=" in spli:
             key, value = spli.split("=", maxsplit=1)
             if key == "mod":
-                obj.hasmods = True
                 if obj.mod:
                     obj.mod += f",{value}"
                 else:

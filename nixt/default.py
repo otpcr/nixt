@@ -5,7 +5,10 @@
 "default"
 
 
-class Default:
+from .object import Object
+
+
+class Default(Object):
 
     def __contains__(self, key):
         return key in dir(self)
@@ -21,7 +24,6 @@ class Default:
 
     def __str__(self):
         return str(self.__dict__)
-
 
 
 def __dir__():

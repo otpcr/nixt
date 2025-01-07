@@ -18,10 +18,11 @@ import _thread
 
 from ..cache   import Cache
 from ..command import command, spl
+from ..default import Default
 from ..disk    import ident, write
 from ..error   import later
 from ..event   import Event
-from ..find    import format, last
+from ..find    import format, last, store
 from ..find    import Config as Main
 from ..object  import Object, edit, keys
 from ..reactor import Reactor
@@ -52,7 +53,7 @@ def init():
     return irc
 
 
-class Config(Object):
+class Config(Default):
 
     channel = f'#{NAME}'
     commands = True
@@ -69,7 +70,7 @@ class Config(Object):
     users = False
 
     def __init__(self):
-        Object.__init__(self)
+        Default.__init__(self)
         self.channel = Config.channel
         self.commands = Config.commands
         self.nick = Config.nick
@@ -591,7 +592,7 @@ def cfg(event):
                    )
     else:
         edit(config, event.sets)
-        write(config)
+        write(config, store(ident(config)))
         event.reply('ok')
 
 

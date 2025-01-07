@@ -82,7 +82,8 @@ def banner():
 
 def consume(evts):
     done = []
-    for evt in sorted(evts, key=lambda x: x._ctime):
+    for evt in evts:
+        print(type(evt))
         evt.wait()
         done.append(evt)
     for todo in done:
@@ -92,15 +93,14 @@ def consume(evts):
 
 def payload(clt):
     nmr = 0
-    with paylock:
-        for cmdd in sorted(Commands.cmds):
-            for ex in getattr(param, cmdd, [""]):
-                evt = Event()
-                evt.txt = cmdd + " " + ex
-                evt.type = "command"
-                events.append(evt)
-                clt.put(evt)
-                nmr += 1
+    for cmdd in sorted(Commands.cmds):
+        for ex in getattr(param, cmdd, [""]):
+            evt = Event()
+            evt.txt = cmdd + " " + ex
+            evt.type = "command"
+            events.append(evt)
+            clt.put(evt)
+            nmr += 1
     return nmr
 
 
@@ -145,8 +145,8 @@ def main():
     for thr in thrs:
         thr.join()
     consume(events)
-    clt.stop()
-    clt.wait()
+    #clt.stop()
+    #clt.wait()
 
 if __name__ == "__main__":
     wrap(main)

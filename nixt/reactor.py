@@ -7,14 +7,10 @@
 
 import queue
 import threading
-import _thread
 
 
 from .error  import later
 from .thread import launch
-
-
-lock = _thread.allocate_lock()
 
 
 class Reactor:
@@ -26,20 +22,17 @@ class Reactor:
 
     def callback(self, evt):
         func = self.cbs.get(evt.type, None)
-        if not func:
-            evt.ready()
-            return
-        try:
-            evt._thr = launch(func, self, evt)
-        except Exception as ex:
-            evt._ex = ex
-            later(ex)
-            evt.ready()
+        if func:
+            try:
+                evt._thr = launch(func, self, evt)
+            except Exception as ex:
+                evt._ex = ex
+                later(ex)
+                evt.ready()
 
     def display(self, evt):
-        with lock:
-            for txt in evt.result:
-                self.raw(txt)
+        for txt in evt.result:
+            self.raw(txt)
 
     def loop(self):
         while not self.stopped.is_set():
@@ -47,8 +40,7 @@ class Reactor:
                 evt = self.poll()
                 if evt is None:
                     break
-                if not self.stopped.is_set():
-                    self.callback(evt)
+                self.callback(evt)
             except (KeyboardInterrupt, EOFError):
                 if "ready" in dir(evt):
                     evt.ready()

@@ -8,8 +8,8 @@
 import time
 
 
-from ..disk   import write
-from ..find   import find, fntime, laps
+from ..disk   import ident, write
+from ..find   import find, fntime, laps, store
 from ..object import Object
 
 
@@ -48,5 +48,5 @@ def tdo(event):
         return
     obj = Todo()
     obj.txt = event.rest
-    write(obj)
+    write(obj, store(ident(obj)))
     event.reply('ok')
