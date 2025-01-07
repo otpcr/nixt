@@ -27,7 +27,6 @@ import nixt.find
 import nixt.modules
 import nixt.object
 import nixt.output
-import nixt.parse
 import nixt.reactor
 import nixt.thread
 import nixt.timer
@@ -44,7 +43,6 @@ PACKAGE = [
     'modules',
     'object',
     'output',
-    'parse',
     'reactor',
     'thread',
     'timer'
