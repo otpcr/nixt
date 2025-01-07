@@ -5,48 +5,24 @@
 "locate objects"
 
 
-import datetime
-import json
 import os
-import pathlib
 import time
 import _thread
 
 
-p = os.path.join
-
-
 from .cache   import Cache
-from .object  import Object, dumps, fqn, ident, items, keys, loads, update
+from .default import Default
+from .disk    import read, doskel, fqn
+from .object  import Object, items, keys, update
 
 
-lock     = _thread.allocate_lock()
-findlock = _thread.allocate_lock()
+lock = _thread.allocate_lock()
+p    = os.path.join
 
 
-class Config:
+class Config(Default):
 
     wdr = ""
-
-    def __contains__(self, key):
-        return key in dir(self)
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-    def __iter__(self):
-        return iter(self.__dict__)
-
-    def __len__(self):
-        return len(self.__dict__)
-
-    def __str__(self):
-        return str(self.__dict__)
-
-
-def cdir(pth):
-    path = pathlib.Path(pth)
-    path.parent.mkdir(parents=True, exist_ok=True)
 
 
 def fns(clz):
@@ -69,7 +45,7 @@ def find(clz, selector=None, index=None, deleted=False, matching=False):
     nrs = -1
     pth = long(clz)
     res = []
-    with findlock:
+    with lock:
         for fnm in fns(pth):
             obj = Cache.get(fnm)
             if not obj:
@@ -193,17 +169,6 @@ def match(obj, txt):
             yield key
 
 
-def read(obj, pth):
-    with lock:
-        with open(pth, 'r', encoding='utf-8') as ofile:
-            try:
-                obj2 = loads(ofile.read())
-                update(obj, obj2)
-            except json.decoder.JSONDecodeError as ex:
-                raise Exception(pth) from ex
-        return os.sep.join(pth.split(os.sep)[-3:])
-
-
 def search(obj, selector, matching=None):
     res = False
     if not selector:
@@ -223,10 +188,7 @@ def search(obj, selector, matching=None):
 
 
 def skel():
-    stor = p(Config.wdr, "store", "")
-    path = pathlib.Path(stor)
-    path.mkdir(parents=True, exist_ok=True)
-    return path
+    return doskel(p(Config.wdr, "store", ""))
 
 
 def store(pth=""):
@@ -241,17 +203,6 @@ def types():
     return os.listdir(store())
 
 
-def write(obj, pth=None):
-    with lock:
-        if pth is None:
-            pth = p(Config.wdr, "store", ident(obj))
-        cdir(pth)
-        txt = dumps(obj, indent=4)
-        with open(pth, 'w', encoding='utf-8') as ofile:
-            ofile.write(txt)
-        return pth
-
-
 def __dir__():
     return (
         'Config',
@@ -259,7 +210,6 @@ def __dir__():
         'format',
         'laps',
         'last',
-        'read',
-        'write'
+        'skel'
     )
     

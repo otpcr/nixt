@@ -11,7 +11,8 @@ import _thread
 
 
 from ..command import spl
-from ..find    import find, write
+from ..disk    import write
+from ..find    import find
 from ..object  import Object, update
 from  .rss     import Rss
 

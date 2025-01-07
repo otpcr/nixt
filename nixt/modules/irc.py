@@ -18,9 +18,10 @@ import _thread
 
 from ..cache   import Cache
 from ..command import command, spl
+from ..disk    import ident, write
 from ..error   import later
 from ..event   import Event
-from ..find    import format, ident, last, write
+from ..find    import format, last
 from ..find    import Config as Main
 from ..object  import Object, edit, keys
 from ..reactor import Reactor
