@@ -70,13 +70,11 @@ def find(clz, selector=None, index=None, deleted=False, matching=False):
     pth = long(clz)
     res = []
     with findlock:
-        for fnm in sorted(fns(pth), key=fntime):
+        for fnm in fns(pth):
             obj = Cache.get(fnm)
-            if obj:
-                yield (fnm, obj)
-                continue
-            obj = Object()
-            read(obj, fnm)
+            if not obj:
+                obj = Object()
+                read(obj, fnm)
             if not deleted and '__deleted__' in dir(obj) and obj.__deleted__:
                 continue
             if selector and not search(obj, selector, matching):
@@ -86,7 +84,7 @@ def find(clz, selector=None, index=None, deleted=False, matching=False):
                 continue
             Cache.add(fnm, obj)
             res.append((fnm, obj))
-    return sorted(res)
+    return sorted(res, key=lambda x: fntime(x[0]))
 
 
 def fntime(daystr):

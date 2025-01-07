@@ -18,13 +18,12 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.client  import Client
-from nixt.command import Command, scan
+from nixt.command import Commands, parse, scan
 from nixt.error   import errors, later
-from nixt.event   import Event, idtime
-from nixt.find    import Config, laps, skel
+from nixt.event   import Event
+from nixt.find    import Config, fntime, laps, skel
 from nixt.modules import face
 from nixt.object  import Object
-from nixt.parse   import parse
 from nixt.thread  import launch
 
 
@@ -83,7 +82,7 @@ def banner():
 
 def consume(evts):
     done = []
-    for evt in sorted(evts, key=lambda x: idtime(x._id)):
+    for evt in sorted(evts, key=lambda x: x._ctime):
         evt.wait()
         done.append(evt)
     for todo in done:
@@ -94,7 +93,7 @@ def consume(evts):
 def payload(clt):
     nmr = 0
     with paylock:
-        for cmdd in sorted(Command.cmds):
+        for cmdd in sorted(Commands.cmds):
             for ex in getattr(param, cmdd, [""]):
                 evt = Event()
                 evt.txt = cmdd + " " + ex
@@ -129,7 +128,7 @@ def main():
     parse(cfg, " ".join(sys.argv[1:]))
     face.rss.DEBUG = True
     scan(face)
-    nrcommand = len(Command.cmds) or 1
+    nrcommand = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()
         print("verbose is on")
