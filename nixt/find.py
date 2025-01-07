@@ -30,15 +30,14 @@ def fns(clz):
     dname = ''
     pth = store(clz)
     res = []
-    with lock:
-        for rootdir, dirs, _files in os.walk(pth, topdown=False):
-            if dirs:
-                for dname in sorted(dirs):
-                    if dname.count('-') == 2:
-                        ddd = p(rootdir, dname)
-                        for fll in os.listdir(ddd):
-                            res.append(p(ddd, fll))
-    return sorted(res)
+    for rootdir, dirs, _files in os.walk(pth, topdown=False):
+        if dirs:
+            for dname in sorted(dirs):
+                if dname.count('-') == 2:
+                    ddd = p(rootdir, dname)
+                    for fll in os.listdir(ddd):
+                        res.append(p(ddd, fll))
+    return res
 
 
 def find(clz, selector=None, index=None, deleted=False, matching=False):
@@ -46,21 +45,20 @@ def find(clz, selector=None, index=None, deleted=False, matching=False):
     nrs = -1
     pth = long(clz)
     res = []
-    with findlock:
-        for fnm in fns(pth):
-            obj = Cache.get(fnm)
-            if not obj:
-                obj = Object()
-                read(obj, fnm)
-                Cache.add(fnm, obj)
-            if not deleted and '__deleted__' in dir(obj) and obj.__deleted__:
-                continue
-            if selector and not search(obj, selector, matching):
-                continue
-            nrs += 1
-            if index is not None and nrs != int(index):
-                continue
-            res.append((fnm, obj))
+    for fnm in fns(pth):
+        obj = Cache.get(fnm)
+        if not obj:
+            obj = Object()
+            read(obj, fnm)
+            Cache.add(fnm, obj)
+        if not deleted and '__deleted__' in dir(obj) and obj.__deleted__:
+            continue
+        if selector and not search(obj, selector, matching):
+            continue
+        nrs += 1
+        if index is not None and nrs != int(index):
+            continue
+        res.append((fnm, obj))
     return sorted(res, key=lambda x: fntime(x[0]))
 
 

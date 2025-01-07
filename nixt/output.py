@@ -7,13 +7,9 @@
 
 import queue
 import threading
-import _thread
 
 
 from .thread import launch
-
-
-lock = _thread.allocate_lock()
 
 
 class Output:
@@ -25,9 +21,8 @@ class Output:
         self.dostop = threading.Event()
 
     def display(self, evt):
-        with lock:
-            for txt in evt.result:
-                self.oput(evt.channel, txt)
+        for txt in evt.result:
+            self.oput(evt.channel, txt)
 
     def dosay(self, channel, txt):
         self.raw(txt)

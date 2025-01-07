@@ -36,17 +36,18 @@ class Commands:
 
 
 def command(bot, evt):
-    parse(evt, evt.txt)
-    if "ident" in dir(bot):
-        evt.orig = bot.ident
-    func = Commands.cmds.get(evt.cmd, None)
-    if func:
-        try:
-            func(evt)
-            bot.display(evt)
-        except Exception as ex:
-            later(ex)
-    evt.ready()
+    with lock:
+        parse(evt, evt.txt)
+        if "ident" in dir(bot):
+            evt.orig = bot.ident
+        func = Commands.cmds.get(evt.cmd, None)
+        if func:
+            try:
+                func(evt)
+                bot.display(evt)
+            except Exception as ex:
+                later(ex)
+        evt.ready()
 
 
 def modloop(*pkgs, disable=""):

@@ -17,7 +17,7 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.client  import Client
+from nixt.client  import Buffered, Client
 from nixt.command import Commands, parse, scan
 from nixt.error   import errors, later
 from nixt.event   import Event
@@ -82,8 +82,7 @@ def banner():
 
 def consume(evts):
     done = []
-    for evt in evts:
-        print(type(evt))
+    for evt in sorted(evts, key=lambda x: x.ctime):
         evt.wait()
         done.append(evt)
     for todo in done:
@@ -145,8 +144,8 @@ def main():
     for thr in thrs:
         thr.join()
     consume(events)
-    #clt.stop()
-    #clt.wait()
+    clt.stop()
+    clt.wait()
 
 if __name__ == "__main__":
     wrap(main)

@@ -7,10 +7,14 @@
 
 import queue
 import threading
+import _thread
 
 
 from .error  import later
 from .thread import launch
+
+
+outlock = _thread.allocate_lock()
 
 
 class Reactor:
@@ -30,10 +34,6 @@ class Reactor:
                 later(ex)
                 evt.ready()
 
-    def display(self, evt):
-        for txt in evt.result:
-            self.raw(txt)
-
     def loop(self):
         while not self.stopped.is_set():
             try:
@@ -41,6 +41,7 @@ class Reactor:
                 if evt is None:
                     break
                 self.callback(evt)
+                self.queue.task_done()
             except (KeyboardInterrupt, EOFError):
                 if "ready" in dir(evt):
                     evt.ready()
@@ -62,6 +63,7 @@ class Reactor:
         launch(self.loop)
 
     def stop(self):
+        self.queue.join()
         self.stopped.set()
         self.queue.put(None)
 
