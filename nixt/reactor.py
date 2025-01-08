@@ -14,9 +14,6 @@ from .error  import later
 from .thread import launch
 
 
-outlock = _thread.allocate_lock()
-
-
 class Reactor:
 
     def __init__(self):

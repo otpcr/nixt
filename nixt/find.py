@@ -21,9 +21,37 @@ lock     = _thread.allocate_lock()
 p        = os.path.join
 
 
+"config"
+
+
 class Config(Default):
 
     wdr = ""
+
+
+def long(name):
+    split = name.split(".")[-1].lower()
+    res = name
+    for names in types():
+        if split == names.split(".")[-1].lower():
+            res = names
+            break
+    return res
+
+
+def skel():
+    return doskel(p(Config.wdr, "store", ""))
+
+
+def store(pth=""):
+    return p(Config.wdr, "store", pth)
+
+
+def types():
+    return os.listdir(store())
+
+
+"find"
 
 
 def fns(clz):
@@ -62,17 +90,7 @@ def find(clz, selector=None, index=None, deleted=False, matching=False):
     return sorted(res, key=lambda x: fntime(x[0]))
 
 
-def fntime(daystr):
-    daystr = daystr.replace('_', ':')
-    datestr = ' '.join(daystr.split(os.sep)[-2:])
-    if '.' in datestr:
-        datestr, rest = datestr.rsplit('.', 1)
-    else:
-        rest = ''
-    timed = time.mktime(time.strptime(datestr, '%Y-%m-%d %H:%M:%S'))
-    if rest:
-        timed += float('.' + rest)
-    return timed
+"methods"
 
 
 def format(obj, args=None, skip=None, plain=False):
@@ -96,6 +114,61 @@ def format(obj, args=None, skip=None, plain=False):
         else:
             txt += f'{key}={value} '
     return txt.strip()
+
+
+def last(obj, selector=None):
+    if selector is None:
+        selector = {}
+    result = sorted(
+                    find(fqn(obj), selector),
+                    key=lambda x: fntime(x[0])
+                   )
+    res = None
+    if result:
+        inp = result[-1]
+        update(obj, inp[-1])
+        res = inp[0]
+    return res
+
+
+def match(obj, txt):
+    for key in keys(obj):
+        if txt in key:
+            yield key
+
+
+def search(obj, selector, matching=None):
+    res = False
+    if not selector:
+        return res
+    for key, value in items(selector):
+        val = getattr(obj, key, None)
+        if not val:
+            continue
+        if matching and value == val:
+            res = True
+        elif str(value).lower() in str(val).lower():
+            res = True
+        else:
+            res = False
+            break
+    return res
+
+
+"utility"
+
+
+def fntime(daystr):
+    daystr = daystr.replace('_', ':')
+    datestr = ' '.join(daystr.split(os.sep)[-2:])
+    if '.' in datestr:
+        datestr, rest = datestr.rsplit('.', 1)
+    else:
+        rest = ''
+    timed = time.mktime(time.strptime(datestr, '%Y-%m-%d %H:%M:%S'))
+    if rest:
+        timed += float('.' + rest)
+    return timed
 
 
 def laps(seconds, short=True):
@@ -137,69 +210,11 @@ def laps(seconds, short=True):
     return txt
 
 
-def last(obj, selector=None):
-    if selector is None:
-        selector = {}
-    result = sorted(
-                    find(fqn(obj), selector),
-                    key=lambda x: fntime(x[0])
-                   )
-    res = None
-    if result:
-        inp = result[-1]
-        update(obj, inp[-1])
-        res = inp[0]
-    return res
-
-
-def long(name):
-    split = name.split(".")[-1].lower()
-    res = name
-    for names in types():
-        if split == names.split(".")[-1].lower():
-            res = names
-            break
-    return res
-
-
-def match(obj, txt):
-    for key in keys(obj):
-        if txt in key:
-            yield key
-
-
-def search(obj, selector, matching=None):
-    res = False
-    if not selector:
-        return res
-    for key, value in items(selector):
-        val = getattr(obj, key, None)
-        if not val:
-            continue
-        if matching and value == val:
-            res = True
-        elif str(value).lower() in str(val).lower():
-            res = True
-        else:
-            res = False
-            break
-    return res
-
-
-def skel():
-    return doskel(p(Config.wdr, "store", ""))
-
-
-def store(pth=""):
-    return p(Config.wdr, "store", pth)
-
-
 def strip(pth, nmr=3):
     return os.sep.join(pth.split(os.sep)[-nmr:])
 
 
-def types():
-    return os.listdir(store())
+"interface"
 
 
 def __dir__():

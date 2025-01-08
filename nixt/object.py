@@ -114,7 +114,7 @@ class ObjectEncoder(json.JSONEncoder):
             return iter(o)
         try:
             return json.JSONEncoder.default(self, o)
-        except:
+        except TypeError:
             return vars(o)
 
     def encode(self, o) -> str:
