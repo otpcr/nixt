@@ -30,6 +30,9 @@ class Buffered(Output, Client):
         Output.__init__(self)
         Client.__init__(self)
 
+    def raw(self, txt):
+        raise NotImplementedError("raw")
+
     def stop(self):
         Output.stop(self)
         Client.stop(self)
