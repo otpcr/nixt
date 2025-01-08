@@ -7,26 +7,18 @@
 
 import os
 import time
-import _thread
 
 
 from .cache   import Cache
-from .default import Default
 from .disk    import read, doskel, fqn
-from .object  import Object, items, keys, update
+from .object  import Default, Object, items, keys, update
+from .runtime import Config
 
 
-findlock = _thread.allocate_lock()
-lock     = _thread.allocate_lock()
-p        = os.path.join
+p = os.path.join
 
 
 "config"
-
-
-class Config(Default):
-
-    wdr = ""
 
 
 def long(name):

@@ -16,7 +16,7 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.client  import Client
+from nixt.client  import Client, Work
 from nixt.command import Commands, command, parse, scan
 from nixt.error   import errors, later
 from nixt.event   import Event

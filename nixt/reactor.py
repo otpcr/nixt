@@ -12,6 +12,7 @@ import _thread
 
 from .error  import later
 from .thread import launch
+from .worker import Pool
 
 
 class Reactor:
@@ -24,12 +25,13 @@ class Reactor:
     def callback(self, evt):
         func = self.cbs.get(evt.type, None)
         if func:
-            try:
-                evt._thr = launch(func, self, evt)
-            except Exception as ex:
-                evt._ex = ex
-                later(ex)
-                evt.ready()
+            Pool.put(self, evt)
+            #try:
+            #    evt._thr = launch(func, self, evt)
+            #except Exception as ex:
+            #    evt._ex = ex
+            #    later(ex)
+            #    evt.ready()
 
     def loop(self):
         while not self.stopped.is_set():
@@ -38,7 +40,6 @@ class Reactor:
                 if evt is None:
                     break
                 self.callback(evt)
-                self.queue.task_done()
             except (KeyboardInterrupt, EOFError):
                 if "ready" in dir(evt):
                     evt.ready()
@@ -60,7 +61,6 @@ class Reactor:
         launch(self.loop)
 
     def stop(self):
-        self.queue.join()
         self.stopped.set()
         self.queue.put(None)
 

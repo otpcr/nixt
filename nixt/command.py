@@ -10,8 +10,8 @@ import types
 import _thread
 
 
-from .default import Default
 from .error   import later
+from .object  import Default
 from .thread  import launch
 
 
@@ -36,18 +36,17 @@ class Commands:
 
 
 def command(bot, evt):
-    with lock:
+    try:
         parse(evt, evt.txt)
         if "ident" in dir(bot):
             evt.orig = bot.ident
         func = Commands.cmds.get(evt.cmd, None)
         if func:
-            try:
-                func(evt)
-                bot.display(evt)
-            except Exception as ex:
-                later(ex)
-        evt.ready()
+            func(evt)
+            bot.display(evt)
+    except Exception as ex:
+        later(ex)
+    evt.ready()
 
 
 def modloop(*pkgs, disable=""):

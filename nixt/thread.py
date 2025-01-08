@@ -74,7 +74,9 @@ def name(obj):
 
 def __dir__():
     return (
+        'Pool',
         'Thread',
+        'Worker',
         'launch',
         'name'
     )
