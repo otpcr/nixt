@@ -11,8 +11,7 @@ import _thread
 
 
 from .default import Default
-from .error   import later
-from .thread  import launch
+from .thread  import later, launch
 
 
 lock = _thread.allocate_lock()

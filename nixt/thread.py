@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C,W0718,E0402
+# pylint: disable=C,R0903,W0718,E0402
 
 
 "thread"
@@ -8,10 +8,34 @@
 import queue
 import threading
 import time
+import traceback
 import _thread
 
 
-from .error import later
+class Errors:
+
+    errors = []
+
+    @staticmethod
+    def format(exc):
+        return traceback.format_exception(
+            type(exc),
+            exc,
+            exc.__traceback__
+        )
+
+
+def errors():
+    for err in Errors.errors:
+        for line in err:
+            yield line
+
+
+def later(exc):
+    excp = exc.with_traceback(exc.__traceback__)
+    fmt = Errors.format(excp)
+    if fmt not in Errors.errors:
+        Errors.errors.append(fmt)
 
 
 class Thread(threading.Thread):
@@ -112,9 +136,12 @@ def name(obj):
 
 def __dir__():
     return (
+        'Errors',
         'Repeater',
         'Thread',
         'Timer',
+        'errors',
+        'later',
         'launch',
         'name'
     )

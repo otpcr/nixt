@@ -21,12 +21,9 @@ import nixt.cache
 import nixt.client
 import nixt.command
 import nixt.default
-import nixt.error
-import nixt.event
 import nixt.find
 import nixt.modules
 import nixt.object
-import nixt.output
 import nixt.reactor
 import nixt.thread
 
@@ -36,12 +33,9 @@ PACKAGE = [
     'client',
     'command',
     'default',
-    'error',
-    'event',
     'find',
     'modules',
     'object',
-    'output',
     'reactor',
     'thread'
 ]

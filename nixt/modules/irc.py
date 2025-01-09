@@ -20,12 +20,10 @@ from ..cache   import Cache
 from ..command import command, spl
 from ..default import Default
 from ..disk    import ident, write
-from ..error   import later
-from ..event   import Event
 from ..find    import Workdir, format, last, store
 from ..object  import Object, edit, keys
-from ..reactor import Reactor
-from ..thread  import launch
+from ..reactor import Event, Reactor
+from ..thread  import later, launch
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]

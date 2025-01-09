@@ -7,11 +7,36 @@
 
 import queue
 import threading
+import time
 import _thread
 
 
-from .error  import later
-from .thread import launch
+from .default import Default
+from .thread  import later, launch
+
+
+class Event(Default):
+
+    def __init__(self):
+        Default.__init__(self)
+        self._ex    = None
+        self._ready = threading.Event()
+        self._thr   = None
+        self.ctime  = time.time()
+        self.result = []
+        self.type   = "event"
+        self.txt    = ""
+
+    def ready(self):
+        self._ready.set()
+
+    def reply(self, txt):
+        self.result.append(txt)
+
+    def wait(self):
+        self._ready.wait()
+        if self._thr:
+            self._thr.join()
 
 
 class Reactor:
@@ -68,5 +93,6 @@ class Reactor:
 
 def __dir__():
     return (
-        'Reactor',
+        'Event',
+        'Reactor'
     )

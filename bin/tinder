@@ -20,12 +20,11 @@ sys.path.insert(0, os.getcwd())
 from nixt.client  import Buffered, Client
 from nixt.command import Commands, parse, scan
 from nixt.default import Config
-from nixt.error   import errors, later
-from nixt.event   import Event
 from nixt.find    import Workdir, fntime, laps, skel
 from nixt.modules import face
 from nixt.object  import Object
-from nixt.thread  import launch
+from nixt.reactor import Event
+from nixt.thread  import errors, later, launch
 
 
 Workdir.name = "tinder"
