@@ -12,7 +12,6 @@ import _thread
 
 from .error  import later
 from .thread import launch
-from .worker import Pool
 
 
 class Reactor:
@@ -25,13 +24,12 @@ class Reactor:
     def callback(self, evt):
         func = self.cbs.get(evt.type, None)
         if func:
-            Pool.put(self, evt)
-            #try:
-            #    evt._thr = launch(func, self, evt)
-            #except Exception as ex:
-            #    evt._ex = ex
-            #    later(ex)
-            #    evt.ready()
+            try:
+                evt._thr = launch(func, self, evt)
+            except Exception as ex:
+                evt._ex = ex
+                later(ex)
+                evt.ready()
 
     def loop(self):
         while not self.stopped.is_set():
@@ -61,6 +59,7 @@ class Reactor:
         launch(self.loop)
 
     def stop(self):
+        Worker.stop()
         self.stopped.set()
         self.queue.put(None)
 

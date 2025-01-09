@@ -8,7 +8,6 @@ import os
 
 
 from .object import Default
-from .worker import Pool
 
 
 class Config(Default):

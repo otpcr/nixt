@@ -8,24 +8,13 @@
 from .command import command
 from .output  import Output
 from .reactor import Reactor
-from .worker  import Worker
+
 
 class Client(Reactor):
 
     def __init__(self):
         Reactor.__init__(self)
         self.register("command", command)
-
-    def display(self, evt):
-        for txt in evt.result:
-            self.raw(txt)
-
-    def raw(self, txt):
-        raise NotImplementedError("raw")
-
-
-class Work(Worker):
-
 
     def display(self, evt):
         for txt in evt.result:
