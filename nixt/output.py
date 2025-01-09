@@ -34,6 +34,7 @@ class Output:
         while not self.dostop.is_set():
             (channel, txt) = self.oqueue.get()
             if channel is None and txt is None:
+                self.oqueue.task_done()
                 break
             self.dosay(channel, txt)
             self.oqueue.task_done()
@@ -48,7 +49,6 @@ class Output:
         self.oqueue.join()
         self.dostop.set()
         self.oqueue.put((None, None))
-        print(self.queue.qsize())
 
     def wait(self):
         self.dostop.wait()
