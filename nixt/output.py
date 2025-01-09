@@ -48,6 +48,7 @@ class Output:
         self.oqueue.join()
         self.dostop.set()
         self.oqueue.put((None, None))
+        print(self.queue.qsize())
 
     def wait(self):
         self.dostop.wait()

@@ -68,7 +68,7 @@ param.thr = [""]
 param.ver = [""]
 
 
-class CLI(Client):
+class CLI(Buffered):
 
     def raw(self, txt):
         if "v" in cfg.opts:
@@ -146,6 +146,7 @@ def main():
     consume(events)
     clt.stop()
     clt.wait()
+
 
 if __name__ == "__main__":
     wrap(main)
