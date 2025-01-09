@@ -59,7 +59,6 @@ class Reactor:
         launch(self.loop)
 
     def stop(self):
-        Worker.stop()
         self.stopped.set()
         self.queue.put(None)
 

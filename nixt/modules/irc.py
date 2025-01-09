@@ -18,12 +18,12 @@ import _thread
 
 from ..cache   import Cache
 from ..command import command, spl
+from ..default import Default
 from ..disk    import ident, write
 from ..error   import later
 from ..event   import Event
-from ..find    import format, last, store
-from ..find    import Config as Main
-from ..object  import Default, Object, edit, keys
+from ..find    import Workdir, format, last, store
+from ..object  import Object, edit, keys
 from ..reactor import Reactor
 from ..thread  import launch
 

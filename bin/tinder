@@ -19,16 +19,17 @@ sys.path.insert(0, os.getcwd())
 
 from nixt.client  import Buffered, Client
 from nixt.command import Commands, parse, scan
+from nixt.default import Config
 from nixt.error   import errors, later
 from nixt.event   import Event
-from nixt.find    import Config, fntime, laps, skel
+from nixt.find    import Workdir, fntime, laps, skel
 from nixt.modules import face
 from nixt.object  import Object
 from nixt.thread  import launch
 
 
-Config.name = "tinder"
-Config.wdr = ".test"
+Workdir.name = "tinder"
+Workdir.wdr = ".test"
 
 
 cfg = Config()
@@ -77,7 +78,7 @@ class CLI(Client):
 
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
-    print(f"{Config.name.upper()} since {tme}")
+    print(f"{Workdir.name.upper()} since {tme}")
 
 
 def consume(evts):
@@ -123,7 +124,6 @@ def wrap(function):
 def main():
     global nrs
     global nrcommand
-    Config.wdr = ".test"
     parse(cfg, " ".join(sys.argv[1:]))
     face.rss.DEBUG = True
     scan(face)
@@ -132,8 +132,8 @@ def main():
         banner()
         print("verbose is on")
     if "f" not in cfg.opts:
-        if os.path.exists(Config.wdr):
-            shutil.rmtree(Config.wdr)
+        if os.path.exists(Workdir.wdr):
+            shutil.rmtree(Workdir.wdr)
     skel()
     clt = CLI()
     clt.start()

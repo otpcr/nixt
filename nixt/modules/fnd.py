@@ -10,35 +10,7 @@ import pathlib
 import time
 
 
-from ..find import Config, find, fntime, format, laps
-
-
-p = os.path.join
-
-
-def skel():
-    stor = p(Config.wdr, "store", "")
-    path = pathlib.Path(stor)
-    path.mkdir(parents=True, exist_ok=True)
-    return path
-
-
-def store():
-    return p(Config.wdr, "store")
-
-
-def types():
-    return os.listdir(store())
-
-
-def long(name):
-    split = name.split(".")[-1].lower()
-    res = name
-    for names in types():
-        if split == names.split(".")[-1].lower():
-            res = names
-            break
-    return res
+from ..find import Workdir, find, fntime, format, laps, long, skel, types
 
 
 def fnd(event):

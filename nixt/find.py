@@ -10,15 +10,26 @@ import time
 
 
 from .cache   import Cache
+from .default import Default
 from .disk    import read, doskel, fqn
-from .object  import Default, Object, items, keys, update
-from .runtime import Config
+from .object  import Object, items, keys, update
 
 
 p = os.path.join
 
 
-"config"
+class Workdir(Default):
+
+    name = Default.__module__.split(".")[0]
+    wdr  = ""
+
+    def __init__(self):
+        Default.__init__(self)
+        self.name = Workdir.name
+        self.wdr  = self.wdr or os.path.expanduser(f"~/.{Workdir.name}")
+
+
+"path"
 
 
 def long(name):
@@ -32,11 +43,11 @@ def long(name):
 
 
 def skel():
-    return doskel(p(Config.wdr, "store", ""))
+    return doskel(p(Workdir.wdr, "store", ""))
 
 
 def store(pth=""):
-    return p(Config.wdr, "store", pth)
+    return p(Workdir.wdr, "store", pth)
 
 
 def types():
@@ -211,7 +222,7 @@ def strip(pth, nmr=3):
 
 def __dir__():
     return (
-        'Config',
+        'Workdir',
         'find',
         'format',
         'laps',

@@ -9,7 +9,7 @@ import threading
 import time
 
 
-from .object import Default
+from .default import Default
 
 
 class Event(Default):

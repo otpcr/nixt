@@ -10,8 +10,8 @@ import types
 import _thread
 
 
+from .default import Default
 from .error   import later
-from .object  import Default
 from .thread  import launch
 
 

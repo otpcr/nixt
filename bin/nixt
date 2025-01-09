@@ -18,14 +18,11 @@ sys.path.insert(0, os.getcwd())
 
 from nixt.client  import Client
 from nixt.command import Commands, command, parse, scan
+from nixt.default import Config
 from nixt.error   import errors, later
 from nixt.event   import Event
-from nixt.find    import Config
+from nixt.find    import Workdir
 from nixt.modules import face
-
-
-Config.name = Config.__module__.split(".", maxsplit=2)[-2]
-Config.wdr  = os.path.expanduser(f"~/.{Config.name}")
 
 
 cfg = Config()
@@ -145,7 +142,7 @@ def pidfile(filename):
 
 
 def pidname(name):
-    return p(Config.wdr, f"{name}.pid")
+    return p(Workdir.wdr, f"{name}.pid")
 
 
 def privileges():
