@@ -23,7 +23,6 @@ from nixt.error   import errors, later
 from nixt.event   import Event
 from nixt.find    import Workdir
 from nixt.modules import face
-from nixt.output  import Output
 
 
 cfg = Config()
@@ -187,7 +186,6 @@ def wrap(func):
     finally:
         if old:
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old)
-    Output.stop()
     for line in errors():
         print(line)
     

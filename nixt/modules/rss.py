@@ -23,8 +23,7 @@ from ..command import spl
 from ..disk    import ident, write
 from ..find    import find, fntime, format, laps, last, store
 from ..object  import Object, update
-from ..timer   import Repeater 
-from ..thread  import launch
+from ..thread  import Repeater, launch
 
 
 DEBUG = False
