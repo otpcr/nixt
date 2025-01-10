@@ -12,6 +12,9 @@ import traceback
 import _thread
 
 
+"errors"
+
+
 class Errors:
 
     errors = []
@@ -36,6 +39,9 @@ def later(exc):
     fmt = Errors.format(excp)
     if fmt not in Errors.errors:
         Errors.errors.append(fmt)
+
+
+"thread"
 
 
 class Thread(threading.Thread):
@@ -72,6 +78,31 @@ class Thread(threading.Thread):
             _thread.interrupt_main()
         except Exception as ex:
             later(ex)
+
+
+def launch(func, *args, **kwargs):
+    nme = kwargs.get("name", name(func))
+    thread = Thread(func, nme, *args, **kwargs)
+    thread.start()
+    return thread
+
+
+def name(obj):
+    typ = type(obj)
+    if '__builtins__' in dir(typ):
+        return obj.__name__
+    if '__self__' in dir(obj):
+        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj) and '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    if '__class__' in dir(obj):
+        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
+    if '__name__' in dir(obj):
+        return f'{obj.__class__.__name__}.{obj.__name__}'
+    return None
+
+
+"timers"
 
 
 class Timer:
@@ -112,26 +143,7 @@ class Repeater(Timer):
         super().run()
 
 
-def launch(func, *args, **kwargs):
-    nme = kwargs.get("name", name(func))
-    thread = Thread(func, nme, *args, **kwargs)
-    thread.start()
-    return thread
-
-
-def name(obj):
-    typ = type(obj)
-    if '__builtins__' in dir(typ):
-        return obj.__name__
-    if '__self__' in dir(obj):
-        return f'{obj.__self__.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj) and '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    if '__class__' in dir(obj):
-        return f"{obj.__class__.__module__}.{obj.__class__.__name__}"
-    if '__name__' in dir(obj):
-        return f'{obj.__class__.__name__}.{obj.__name__}'
-    return None
+"interface"
 
 
 def __dir__():
