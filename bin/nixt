@@ -18,7 +18,7 @@ sys.path.insert(0, os.getcwd())
 
 from nixt.client  import Client
 from nixt.command import Commands, command, parse, scan
-from nixt.find    import Config
+from nixt.find    import Config, pidname
 from nixt.modules import face
 from nixt.reactor import Event
 from nixt.thread  import errors, later
@@ -52,7 +52,7 @@ class Console(CLI):
 
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
-    print(f"{Workdir.name.upper()} since {tme}")
+    print(f"{Config.name.upper()} since {tme}")
 
 
 def background():
@@ -138,10 +138,6 @@ def pidfile(filename):
     path2.parent.mkdir(parents=True, exist_ok=True)
     with open(filename, "w", encoding="utf-8") as fds:
         fds.write(str(os.getpid()))
-
-
-def pidname(name):
-    return p(Workdir.wdr, f"{name}.pid")
 
 
 def privileges():

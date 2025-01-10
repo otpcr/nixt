@@ -9,22 +9,19 @@ import os
 import time
 
 
-from .cache   import Cache
-from .disk    import read, doskel, fqn
-from .object  import Object, items, keys, update
+from .cache  import Cache
+from .disk   import read, doskel, fqn
+from .object import Object, items, keys, update
 
 
-p = os.path.join
+NAME = Object.__module__.rsplit(".", maxsplit=2)[-2]
+p    = os.path.join
 
 
 class Config:
 
-    name = Object.__module__.rsplit(".", maxsplit=2)[-2]
-    wdr  = ""
-
-    def __init__(self):
-        self.name = Config.name
-        self.wdr  = self.wdr or os.path.expanduser(f"~/.{Config.name}")
+    name = NAME
+    wdr  = os.path.expanduser(f"~/.{NAME}")
 
 
 "path"
@@ -38,6 +35,10 @@ def long(name):
             res = names
             break
     return res
+
+
+def pidname(name):
+    return p(Config.wdr, f"{name}.pid")
 
 
 def skel():

@@ -17,7 +17,8 @@ import _thread
 
 
 from ..cache   import Cache
-from ..command import Default, command, spl
+from ..command import command, spl
+from ..default import Default
 from ..disk    import ident, write
 from ..find    import format, last, store
 from ..object  import Object, edit, keys

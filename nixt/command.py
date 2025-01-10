@@ -10,33 +10,11 @@ import types
 import _thread
 
 
+from .default import Default
 from .thread  import later, launch
 
 
 lock = _thread.allocate_lock()
-
-
-class Default:
-
-    def __contains__(self, key):
-        return key in dir(self)
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-    def __iter__(self):
-        return iter(self.__dict__)
-
-    def __len__(self):
-        return len(self.__dict__)
-
-    def __str__(self):
-        return str(self.__dict__)
-
-
-class Config(Default):
-
-    pass
 
 
 class Commands:
@@ -159,8 +137,6 @@ def spl(txt):
 def __dir__():
     return (
         'Commands',
-        'Config',
-        'Default',
         'command',
         'parse',
         'scan'
