@@ -17,14 +17,14 @@ from .object  import Object, items, keys, update
 p = os.path.join
 
 
-class Workdir:
+class Config:
 
     name = Object.__module__.rsplit(".", maxsplit=2)[-2]
     wdr  = ""
 
     def __init__(self):
-        self.name = Workdir.name
-        self.wdr  = self.wdr or os.path.expanduser(f"~/.{Workdir.name}")
+        self.name = Config.name
+        self.wdr  = self.wdr or os.path.expanduser(f"~/.{Config.name}")
 
 
 "path"
@@ -41,11 +41,11 @@ def long(name):
 
 
 def skel():
-    return doskel(p(Workdir.wdr, "store", ""))
+    return doskel(p(Config.wdr, "store", ""))
 
 
 def store(pth=""):
-    return p(Workdir.wdr, "store", pth)
+    return p(Config.wdr, "store", pth)
 
 
 def types():
@@ -220,7 +220,7 @@ def strip(pth, nmr=3):
 
 def __dir__():
     return (
-        'Workdir',
+        'Config',
         'find',
         'format',
         'laps',

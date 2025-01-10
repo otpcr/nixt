@@ -19,7 +19,7 @@ import _thread
 from ..cache   import Cache
 from ..command import Default, command, spl
 from ..disk    import ident, write
-from ..find    import Workdir, format, last, store
+from ..find    import format, last, store
 from ..object  import Object, edit, keys
 from ..reactor import Event, Reactor
 from ..thread  import later, launch

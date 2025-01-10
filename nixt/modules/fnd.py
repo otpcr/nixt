@@ -10,7 +10,7 @@ import pathlib
 import time
 
 
-from ..find import Workdir, find, fntime, format, laps, long, skel, types
+from ..find import find, fntime, format, laps, long, skel, types
 
 
 def fnd(event):
