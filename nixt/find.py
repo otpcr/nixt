@@ -19,11 +19,10 @@ p = os.path.join
 
 class Workdir:
 
-    name = Object.__module__.split(".")[0]
+    name = Object.__module__.rsplit(".", maxsplit=2)[-2]
     wdr  = ""
 
     def __init__(self):
-        Default.__init__(self)
         self.name = Workdir.name
         self.wdr  = self.wdr or os.path.expanduser(f"~/.{Workdir.name}")
 

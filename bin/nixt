@@ -22,7 +22,7 @@ from nixt.find    import Workdir
 from nixt.modules import face
 from nixt.reactor import Event
 from nixt.thread  import errors, later
-
+print(Workdir.name)
 
 cfg = Config()
 p   = os.path.join
@@ -52,7 +52,7 @@ class Console(CLI):
 
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
-    print(f"{cfg.name.upper()} since {tme}")
+    print(f"{Workdir.name.upper()} since {tme}")
 
 
 def background():
