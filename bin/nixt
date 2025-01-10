@@ -17,8 +17,7 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.client  import Client
-from nixt.command import Commands, command, parse, scan
-from nixt.default import Config
+from nixt.command import Commands, Config, command, parse, scan
 from nixt.find    import Workdir
 from nixt.modules import face
 from nixt.reactor import Event

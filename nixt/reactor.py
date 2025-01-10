@@ -11,14 +11,12 @@ import time
 import _thread
 
 
-from .default import Default
 from .thread  import later, launch
 
 
-class Event(Default):
+class Event:
 
     def __init__(self):
-        Default.__init__(self)
         self._ex    = None
         self._ready = threading.Event()
         self._thr   = None
@@ -26,6 +24,9 @@ class Event(Default):
         self.result = []
         self.type   = "event"
         self.txt    = ""
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
 
     def ready(self):
         self._ready.set()

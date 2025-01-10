@@ -20,7 +20,6 @@ from nixt.object import *
 import nixt.cache
 import nixt.client
 import nixt.command
-import nixt.default
 import nixt.find
 import nixt.modules
 import nixt.object
@@ -32,7 +31,6 @@ PACKAGE = [
     'cache',
     'client',
     'command',
-    'default',
     'find',
     'modules',
     'object',

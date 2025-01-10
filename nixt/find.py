@@ -10,7 +10,6 @@ import time
 
 
 from .cache   import Cache
-from .default import Default
 from .disk    import read, doskel, fqn
 from .object  import Object, items, keys, update
 
@@ -18,9 +17,9 @@ from .object  import Object, items, keys, update
 p = os.path.join
 
 
-class Workdir(Default):
+class Workdir:
 
-    name = Default.__module__.split(".")[0]
+    name = Object.__module__.split(".")[0]
     wdr  = ""
 
     def __init__(self):
