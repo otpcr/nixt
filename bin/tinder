@@ -18,7 +18,7 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.client  import Buffered, Client
-from nixt.command import Commands, Config, parse, scan
+from nixt.command import Commands, parse, scan
 from nixt.find    import Config, fntime, laps, skel
 from nixt.modules import face
 from nixt.object  import Object
