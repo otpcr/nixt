@@ -17,12 +17,13 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.clients import Buffered, Client
+from nixt.client  import Buffered, Client
 from nixt.command import Commands, parse, scan
 from nixt.modules import face
-from nixt.objects import Object
+from nixt.object  import Object
 from nixt.persist import Config, fntime, laps, skel
-from nixt.runtime import Event, errors, later, launch
+from nixt.reactor import Event
+from nixt.thread  import errors, later, launch
 
 
 Config.name = "tinder"

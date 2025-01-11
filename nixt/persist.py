@@ -11,8 +11,8 @@ import pathlib
 import time
 
 
-from .caching import Cache
-from .objects import Object, items, keys, read, update
+from .cache  import Cache
+from .object import Object, items, keys, read, update
 
 
 NAME = Object.__module__.rsplit(".", maxsplit=2)[-2]

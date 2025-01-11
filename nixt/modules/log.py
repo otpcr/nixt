@@ -8,7 +8,7 @@
 import time
 
 
-from ..objects import Object, write
+from ..object  import Object, write
 from ..persist import find, fntime, ident, laps, store
 
 

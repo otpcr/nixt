@@ -5,7 +5,7 @@
 "errors"
 
 
-from ..runtime import Errors
+from ..thread import Errors
 
 
 def err(event):

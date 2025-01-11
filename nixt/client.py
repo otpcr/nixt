@@ -10,7 +10,8 @@ import threading
 
 
 from .command import command
-from .runtime import Reactor, launch
+from .reactor import Reactor
+from .thread  import launch
 
 
 class Client(Reactor):

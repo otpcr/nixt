@@ -10,8 +10,8 @@ import types
 import _thread
 
 
-from .objects import Obj
-from .runtime import later, launch
+from .object import Obj
+from .thread import later, launch
 
 
 lock = _thread.allocate_lock()

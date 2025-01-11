@@ -16,11 +16,12 @@ import time
 import _thread
 
 
-from ..caching import Cache
+from ..cache   import Cache
 from ..command import command, spl
-from ..objects import Object, Obj, edit, keys, write
+from ..object  import Object, Obj, edit, keys, write
 from ..persist import format, ident, last, store
-from ..runtime import Event, Reactor, later, launch
+from ..reactor import Event, Reactor
+from ..thread  import later, launch
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]
