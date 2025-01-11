@@ -16,9 +16,9 @@ import time
 import _thread
 
 
-from ..cache   import Cache
+from ..caching import Cache
 from ..command import command, spl
-from ..object  import Object, Obj, edit, keys, write
+from ..objects import Object, Obj, edit, keys, write
 from ..persist import format, ident, last, store
 from ..runtime import Event, Reactor, later, launch
 

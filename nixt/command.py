@@ -10,7 +10,7 @@ import types
 import _thread
 
 
-from .object  import Obj
+from .objects import Obj
 from .runtime import later, launch
 
 
