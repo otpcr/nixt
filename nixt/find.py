@@ -12,17 +12,22 @@ import time
 
 
 from .cache  import Cache
+from .config import Config
 from .object import Object, items, keys, read, update
 
 
-NAME = Object.__module__.rsplit(".", maxsplit=2)[-2]
-p    = os.path.join
+"defines"
 
 
-class Config:
+p = os.path.join
 
-    name = NAME
-    wdr  = os.path.expanduser(f"~/.{NAME}")
+
+"workdir"
+
+
+class Workdir:
+
+    wdr  = ""
 
 
 "path"
@@ -39,7 +44,7 @@ def long(name):
 
 
 def pidname(name):
-    return p(Config.wdr, f"{name}.pid")
+    return p(Workdir.wdr, f"{name}.pid")
 
 
 def skel():
@@ -49,7 +54,7 @@ def skel():
 
 
 def store(pth=""):
-    return p(Config.wdr, "store", pth)
+    return p(Workdir.wdr, "store", pth)
 
 
 def types():
@@ -69,8 +74,7 @@ def fns(clz):
                 if dname.count('-') == 2:
                     ddd = p(rootdir, dname)
                     for fll in os.listdir(ddd):
-                        res.append(p(ddd, fll))
-    return res
+                        yield p(ddd, fll)
 
 
 def find(clz, selector=None, index=None, deleted=False, matching=False):
@@ -79,11 +83,8 @@ def find(clz, selector=None, index=None, deleted=False, matching=False):
     pth = long(clz)
     res = []
     for fnm in fns(pth):
-        obj = Cache.get(fnm)
-        if not obj:
-            obj = Object()
-            read(obj, fnm)
-            Cache.add(fnm, obj)
+        obj = Object()
+        read(obj, fnm)
         if not deleted and '__deleted__' in dir(obj) and obj.__deleted__:
             continue
         if selector and not search(obj, selector, matching):
@@ -92,21 +93,6 @@ def find(clz, selector=None, index=None, deleted=False, matching=False):
         if index is not None and nrs != int(index):
             continue
         res.append((fnm, obj))
-    return sorted(res, key=lambda x: fntime(x[0]))
-
-
-def last(obj, selector=None):
-    if selector is None:
-        selector = {}
-    result = sorted(
-                    find(fqn(obj), selector),
-                    key=lambda x: fntime(x[0])
-                   )
-    res = None
-    if result:
-        inp = result[-1]
-        update(obj, inp[-1])
-        res = inp[0]
     return res
 
 
@@ -153,6 +139,21 @@ def match(obj, txt):
             yield key
 
 
+def last(obj, selector=None):
+    if selector is None:
+        selector = {}
+    result = sorted(
+                    find(fqn(obj), selector),
+                    key=lambda x: fntime(x[0])
+                   )
+    res = None
+    if result:
+        inp = result[-1]
+        update(obj, inp[-1])
+        res = inp[0]
+    return res
+
+
 def search(obj, selector, matching=None):
     res = False
     if not selector:
@@ -187,58 +188,14 @@ def fntime(daystr):
     return timed
 
 
-def laps(seconds, short=True):
-    txt = ""
-    nsec = float(seconds)
-    if nsec < 1:
-        return f"{nsec:.2f}s"
-    yea = 365*24*60*60
-    week = 7*24*60*60
-    nday = 24*60*60
-    hour = 60*60
-    minute = 60
-    yeas = int(nsec/yea)
-    nsec -= yeas*yea
-    weeks = int(nsec/week)
-    nsec -= weeks*week
-    nrdays = int(nsec/nday)
-    nsec -= nrdays*nday
-    hours = int(nsec/hour)
-    nsec -= hours*hour
-    minutes = int(nsec/minute)
-    nsec -= int(minute*minutes)
-    sec = int(nsec)
-    if yeas:
-        txt += f"{yeas}y"
-    if weeks:
-        nrdays += weeks * 7
-    if nrdays:
-        txt += f"{nrdays}d"
-    if short and txt:
-        return txt.strip()
-    if hours:
-        txt += f"{hours}h"
-    if minutes:
-        txt += f"{minutes}m"
-    if sec:
-        txt += f"{sec}s"
-    txt = txt.strip()
-    return txt
-
-
-def strip(pth, nmr=3):
-    return os.sep.join(pth.split(os.sep)[-nmr:])
-
-
 "interface"
 
 
 def __dir__():
     return (
-        'Config',
+        'Workdir',
         'find',
         'format',
-        'laps',
         'last',
         'skel'
     )

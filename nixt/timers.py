@@ -11,6 +11,9 @@ import time
 from .thread import launch, name
 
 
+"timer"
+
+
 class Timer:
 
     def __init__(self, sleep, func, *args, thrname=None, **kwargs):
@@ -40,6 +43,9 @@ class Timer:
     def stop(self):
         if self.timer:
             self.timer.cancel()
+
+
+"repeater"
 
 
 class Repeater(Timer):

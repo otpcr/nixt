@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C,R0912,R0915,W0718,E0402
+# pylint: disable=C,R0912,R0915,W0105,W0718,E0402
 
 
 "commands"
@@ -10,11 +10,20 @@ import types
 import _thread
 
 
+from .cache  import Fleet
 from .object import Obj
+from .parse  import parse
 from .thread import later, launch
+from .utils  import locked
+
+
+"defines"
 
 
 lock = _thread.allocate_lock()
+
+
+"commands"
 
 
 class Commands:
@@ -37,19 +46,14 @@ class Commands:
 "callbacks"
 
 
-def command(bot, evt):
-    with lock:
-        try:
-            parse(evt, evt.txt)
-            if "ident" in dir(bot):
-                evt.orig = bot.ident
-            func = Commands.cmds.get(evt.cmd, None)
-            if func:
-                func(evt)
-                bot.display(evt)
-        except Exception as ex:
-            later(ex)
-        evt.ready()
+def command(evt):
+    parse(evt)
+    func = Commands.cmds.get(evt.cmd, None)
+    if func:
+        func(evt)
+    bot = Fleet.get(evt.orig)
+    bot.display(evt)
+    evt.ready()
 
 
 "utilities"
@@ -63,60 +67,6 @@ def modloop(*pkgs, disable=""):
             if modname.startswith("__"):
                 continue
             yield getattr(pkg, modname)
-
-
-def parse(obj, txt=None):
-    if txt is None:
-        txt = ""
-    args = []
-    obj.args    = []
-    obj.cmd     = ""
-    obj.gets    = Obj()
-    obj.index   = None
-    obj.mod     = ""
-    obj.opts    = ""
-    obj.result  = []
-    obj.sets    = Obj()
-    obj.txt     = txt or ""
-    obj.otxt    = obj.txt
-    _nr = -1
-    for spli in obj.otxt.split():
-        if spli.startswith("-"):
-            try:
-                obj.index = int(spli[1:])
-            except ValueError:
-                obj.opts += spli[1:]
-            continue
-        if "==" in spli:
-            key, value = spli.split("==", maxsplit=1)
-            val = getattr(obj.gets, key, None)
-            if val:
-                value = val + "," + value
-                setattr(obj.gets, key, value)
-            continue
-        if "=" in spli:
-            key, value = spli.split("=", maxsplit=1)
-            if key == "mod":
-                if obj.mod:
-                    obj.mod += f",{value}"
-                else:
-                    obj.mod = value
-                continue
-            setattr(obj.sets, key, value)
-            continue
-        _nr += 1
-        if _nr == 0:
-            obj.cmd = spli
-            continue
-        args.append(spli)
-    if args:
-        obj.args = args
-        obj.txt  = obj.cmd or ""
-        obj.rest = " ".join(obj.args)
-        obj.txt  = obj.cmd + " " + obj.rest
-    else:
-        obj.txt = obj.cmd or ""
-    return obj
 
 
 def scan(*pkgs, init=False, disable=""):
@@ -147,6 +97,5 @@ def __dir__():
     return (
         'Commands',
         'command',
-        'parse',
         'scan'
     )

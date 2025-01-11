@@ -2,13 +2,16 @@
 # pylint: disable=C,R0903,W0105,W0718,E0402
 
 
-"thread"
+"threading"
 
 
 import queue
 import threading
 import time
 import traceback
+
+
+"thread"
 
 
 class Thread(threading.Thread):

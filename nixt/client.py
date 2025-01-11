@@ -9,15 +9,21 @@ import queue
 import threading
 
 
+from .cache   import Fleet
 from .command import command
+from .output  import Output
 from .reactor import Reactor
 from .thread  import launch
+
+
+"client"
 
 
 class Client(Reactor):
 
     def __init__(self):
         Reactor.__init__(self)
+        Fleet.add(self)
         self.register("command", command)
 
     def display(self, evt):
@@ -28,46 +34,7 @@ class Client(Reactor):
         raise NotImplementedError("raw")
 
 
-class Output:
-
-    cache = {}
-
-    def __init__(self):
-        self.oqueue = queue.Queue()
-        self.dostop = threading.Event()
-
-    def display(self, evt):
-        for txt in evt.result:
-            self.oput(evt.channel, txt)
-
-    def dosay(self, channel, txt):
-        self.raw(txt)
-
-    def oput(self, channel, txt):
-        self.oqueue.put((channel, txt))
-
-    def output(self):
-        while not self.dostop.is_set():
-            (channel, txt) = self.oqueue.get()
-            if channel is None and txt is None:
-                self.oqueue.task_done()
-                break
-            self.dosay(channel, txt)
-            self.oqueue.task_done()
-
-    def raw(self, txt):
-        raise NotImplementedError
-
-    def start(self):
-        launch(self.output)
-
-    def stop(self):
-        self.oqueue.join()
-        self.dostop.set()
-        self.oqueue.put((None, None))
-
-    def wait(self):
-        self.dostop.wait()
+"buffer"
 
 
 class Buffered(Output, Client):
@@ -75,6 +42,13 @@ class Buffered(Output, Client):
     def __init__(self):
         Output.__init__(self)
         Client.__init__(self)
+
+    def display(self, evt):
+        for txt in evt.result:
+            self.oput(evt.channel, txt)
+
+    def dosay(self, channel, txt):
+        self.raw(txt)
 
     def raw(self, txt):
         raise NotImplementedError("raw")
@@ -98,6 +72,5 @@ class Buffered(Output, Client):
 def __dir__():
     return (
         'Buffered',
-        'Client',
-        'Output'
+        'Client'
     )

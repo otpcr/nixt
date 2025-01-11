@@ -7,10 +7,16 @@
 
 import json
 import pathlib
-import _thread
+import threading
 
 
-lock = _thread.allocate_lock()
+"defines"
+
+
+lock = threading.RLock()
+
+
+"object"
 
 
 class Object:
@@ -174,7 +180,7 @@ def read(obj, pth):
                 update(obj, obj2)
             except json.decoder.JSONDecodeError as ex:
                 raise Exception(pth) from ex
-        return pth
+    return pth
 
 
 def write(obj, pth):

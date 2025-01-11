@@ -19,15 +19,19 @@ sys.path.insert(0, os.getcwd())
 
 from nixt.client  import Buffered, Client
 from nixt.command import Commands, parse, scan
+from nixt.config  import Config
+from nixt.event   import Event
+from nixt.find    import Workdir, fntime, skel
 from nixt.modules import face
-from nixt.object  import Object
-from nixt.persist import Config, fntime, laps, skel
-from nixt.reactor import Event
+from nixt.object  import Object, keys
 from nixt.thread  import errors, later, launch
+from nixt.utils   import elapsed
 
 
-Config.name = "tinder"
-Config.wdr = ".test"
+"defines"
+
+
+Workdir.wdr  = ".test"
 
 
 cfg = Config()
@@ -67,7 +71,10 @@ param.thr = [""]
 param.ver = [""]
 
 
-class CLI(Buffered):
+"console"
+
+
+class CLI(Client):
 
     def raw(self, txt):
         if "v" in cfg.opts:
@@ -75,10 +82,14 @@ class CLI(Buffered):
             sys.stdout.flush()
 
 
+"utilities"
+
+
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{Config.name.upper()} since {tme}")
-    print(Commands.cmds)
+    print(keys(Commands.cmds))
+
 
 def consume(evts):
     done = []
@@ -101,6 +112,9 @@ def payload(clt):
             clt.put(evt)
             nmr += 1
     return nmr
+
+
+"runtime"
 
 
 def wrap(function):
@@ -131,8 +145,8 @@ def main():
         banner()
         print("verbose is on")
     if "f" not in cfg.opts:
-        if os.path.exists(Config.wdr):
-            shutil.rmtree(Config.wdr)
+        if os.path.exists(Workdir.wdr):
+            shutil.rmtree(Workdir.wdr)
     skel()
     clt = CLI()
     clt.start()
@@ -150,7 +164,7 @@ def main():
 if __name__ == "__main__":
     wrap(main)
     endtime = time.time()
-    lap = laps(endtime-starttime)
+    lap = elapsed(endtime-starttime)
     percall = (endtime-starttime)/(nrs*nrcommand)
     for line in errors():
         print(line)

@@ -11,24 +11,22 @@ import _thread
 
 
 from ..command import spl
+from ..find    import find, ident, store
 from ..object  import Object, update, write
-from ..persist import find, ident, store
 from  .rss     import Rss
+
+
+"defines"
 
 
 importlock = _thread.allocate_lock()
 skipped    = []
 
 
-TEMPLATE = """<opml version="1.0">
-    <head>
-        <title>OPML</title>
-    </head>
-    <body>
-        <outline title="opml" text="rss feeds">"""
+"parser"
 
 
-class OPMLParser:
+class Parser:
 
     @staticmethod
     def getnames(line):
@@ -73,16 +71,16 @@ class OPMLParser:
     @staticmethod
     def parse(txt, toke="outline", itemz=None):
         if itemz is None:
-            itemz = ",".join(OPMLParser.getnames(txt))
+            itemz = ",".join(Parser.getnames(txt))
         result = []
-        for attrz in OPMLParser.getattrs(txt, toke):
+        for attrz in Parser.getattrs(txt, toke):
             if not attrz:
                 continue
             obj = Object()
             for itm in spl(itemz):
                 if itm == "link":
                     itm = "href"
-                val = OPMLParser.getvalue(attrz, itm)
+                val = Parser.getvalue(attrz, itm)
                 if not val:
                     continue
                 if itm == "href":
@@ -96,7 +94,7 @@ class OPMLParser:
 
 
 def attrs(obj, txt):
-    update(obj, OPMLParser.parse(txt))
+    update(obj, Parser.parse(txt))
 
 
 def shortid():
@@ -131,7 +129,7 @@ def imp(event):
         return
     with open(fnm, "r", encoding="utf-8") as file:
         txt = file.read()
-    prs = OPMLParser()
+    prs = Parser()
     nrs = 0
     nrskip = 0
     insertid = shortid()
@@ -157,3 +155,15 @@ def imp(event):
         event.reply(f"skipped {nrskip} urls.")
     if nrs:
         event.reply(f"added {nrs} urls.")
+
+
+"data"
+
+
+TEMPLATE = """<opml version="1.0">
+    <head>
+        <title>OPML</title>
+    </head>
+    <body>
+        <outline title="opml" text="rss feeds">"""
+

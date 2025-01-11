@@ -13,30 +13,7 @@ import time
 from .thread import launch
 
 
-class Event:
-
-    def __init__(self):
-        self._ex    = None
-        self._ready = threading.Event()
-        self._thr   = None
-        self.ctime  = time.time()
-        self.result = []
-        self.type   = "event"
-        self.txt    = ""
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-    def ready(self):
-        self._ready.set()
-
-    def reply(self, txt):
-        self.result.append(txt)
-
-    def wait(self):
-        self._ready.wait()
-        if self._thr:
-            self._thr.join()
+"reactor"
 
 
 class Reactor:
@@ -50,7 +27,7 @@ class Reactor:
         func = self.cbs.get(evt.type, None)
         if func:
             try:
-                evt._thr = launch(func, self, evt)
+                evt._thr = launch(func, evt)
             except Exception as ex:
                 evt._ex = ex
                 later(ex)
@@ -62,6 +39,7 @@ class Reactor:
                 evt = self.poll()
                 if evt is None:
                     break
+                evt.orig = repr(self)
                 self.callback(evt)
             except (KeyboardInterrupt, EOFError):
                 if "ready" in dir(evt):
@@ -96,6 +74,5 @@ class Reactor:
 
 def __dir__():
     return (
-        'Event',
         'Reactor'
     )
