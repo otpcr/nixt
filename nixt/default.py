@@ -23,7 +23,6 @@ class Default:
         return str(self.__dict__)
 
 
-
 def __dir__():
     return (
         'Default',

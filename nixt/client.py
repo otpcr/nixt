@@ -14,6 +14,20 @@ from .reactor import Reactor
 from .thread  import launch
 
 
+class Client(Reactor):
+
+    def __init__(self):
+        Reactor.__init__(self)
+        self.register("command", command)
+
+    def display(self, evt):
+        for txt in evt.result:
+            self.raw(txt)
+
+    def raw(self, txt):
+        raise NotImplementedError("raw")
+
+
 class Output:
 
     cache = {}
@@ -54,20 +68,6 @@ class Output:
 
     def wait(self):
         self.dostop.wait()
-
-
-class Client(Reactor):
-
-    def __init__(self):
-        Reactor.__init__(self)
-        self.register("command", command)
-
-    def display(self, evt):
-        for txt in evt.result:
-            self.raw(txt)
-
-    def raw(self, txt):
-        raise NotImplementedError("raw")
 
 
 class Buffered(Output, Client):

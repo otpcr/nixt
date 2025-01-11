@@ -19,9 +19,8 @@ import _thread
 from ..cache   import Cache
 from ..command import command, spl
 from ..default import Default
-from ..disk    import ident, write
-from ..find    import format, last, store
-from ..object  import Object, edit, keys
+from ..find    import format, ident, last, store
+from ..object  import Object, edit, keys, write
 from ..reactor import Event, Reactor
 from ..thread  import later, launch
 

@@ -20,9 +20,8 @@ from urllib.parse import quote_plus, urlencode
 
 from ..cache   import Cache
 from ..command import spl
-from ..disk    import ident, write
-from ..find    import find, fntime, format, laps, last, store
-from ..object  import Object, update
+from ..find    import find, fntime, format, ident, laps, last, store
+from ..object  import Object, update, write
 from ..thread  import Repeater, launch
 
 

@@ -5,13 +5,14 @@
 "locate objects"
 
 
+import datetime
 import os
+import pathlib
 import time
 
 
 from .cache  import Cache
-from .disk   import read, doskel, fqn
-from .object import Object, items, keys, update
+from .object import Object, items, keys, read, update
 
 
 NAME = Object.__module__.rsplit(".", maxsplit=2)[-2]
@@ -42,7 +43,9 @@ def pidname(name):
 
 
 def skel():
-    return doskel(p(Config.wdr, "store", ""))
+    path = pathlib.Path(store())
+    path.mkdir(parents=True, exist_ok=True)
+    return path
 
 
 def store(pth=""):
@@ -116,6 +119,17 @@ def format(obj, args=None, skip=None, plain=False):
         else:
             txt += f'{key}={value} '
     return txt.strip()
+
+
+def fqn(obj):
+    kin = str(type(obj)).split()[-1][1:-2]
+    if kin == "type":
+        kin = f"{obj.__module__}.{obj.__name__}"
+    return kin
+
+
+def ident(obj):
+    return p(fqn(obj),*str(datetime.datetime.now()).split())
 
 
 def last(obj, selector=None):
