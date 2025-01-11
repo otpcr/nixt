@@ -19,11 +19,10 @@ sys.path.insert(0, os.getcwd())
 
 from nixt.client  import Buffered, Client
 from nixt.command import Commands, parse, scan
-from nixt.find    import Config, fntime, laps, skel
 from nixt.modules import face
 from nixt.object  import Object
-from nixt.reactor import Event
-from nixt.thread  import errors, later, launch
+from nixt.persist import Config, fntime, laps, skel
+from nixt.runtime import Event, errors, later, launch
 
 
 Config.name = "tinder"
@@ -46,6 +45,7 @@ paylock = _thread.allocate_lock()
 
 
 param = Object()
+param.cfg = ["cfg nick=mekker", ""]
 param.cmd = [""]
 param.dne = ["mekker", ""]
 param.dpl = ["hnrss title,url", ""]
@@ -77,7 +77,7 @@ class CLI(Buffered):
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{Config.name.upper()} since {tme}")
-
+    print(Commands.cmds)
 
 def consume(evts):
     done = []

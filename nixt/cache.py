@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C
+# pylint: disable=C,W0105
 
 
 "cache"
@@ -23,6 +23,9 @@ class Cache:
             if matcher not in key:
                 continue
             yield Cache.objs.get(key)
+
+
+"interface"
 
 
 def __dir__():

@@ -95,6 +95,21 @@ def find(clz, selector=None, index=None, deleted=False, matching=False):
     return sorted(res, key=lambda x: fntime(x[0]))
 
 
+def last(obj, selector=None):
+    if selector is None:
+        selector = {}
+    result = sorted(
+                    find(fqn(obj), selector),
+                    key=lambda x: fntime(x[0])
+                   )
+    res = None
+    if result:
+        inp = result[-1]
+        update(obj, inp[-1])
+        res = inp[0]
+    return res
+
+
 "methods"
 
 
@@ -130,21 +145,6 @@ def fqn(obj):
 
 def ident(obj):
     return p(fqn(obj),*str(datetime.datetime.now()).split())
-
-
-def last(obj, selector=None):
-    if selector is None:
-        selector = {}
-    result = sorted(
-                    find(fqn(obj), selector),
-                    key=lambda x: fntime(x[0])
-                   )
-    res = None
-    if result:
-        inp = result[-1]
-        update(obj, inp[-1])
-        res = inp[0]
-    return res
 
 
 def match(obj, txt):

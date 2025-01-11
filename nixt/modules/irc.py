@@ -18,11 +18,9 @@ import _thread
 
 from ..cache   import Cache
 from ..command import command, spl
-from ..default import Default
-from ..find    import format, ident, last, store
-from ..object  import Object, edit, keys, write
-from ..reactor import Event, Reactor
-from ..thread  import later, launch
+from ..object  import Object, Obj, edit, keys, write
+from ..persist import format, ident, last, store
+from ..runtime import Event, Reactor, later, launch
 
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]
@@ -49,7 +47,7 @@ def init():
     return irc
 
 
-class Config(Default):
+class Config(Obj):
 
     channel = f'#{NAME}'
     commands = True
@@ -66,7 +64,7 @@ class Config(Default):
     users = False
 
     def __init__(self):
-        Default.__init__(self)
+        Obj.__init__(self)
         self.channel = Config.channel
         self.commands = Config.commands
         self.nick = Config.nick

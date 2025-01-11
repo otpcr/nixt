@@ -15,8 +15,23 @@ lock = _thread.allocate_lock()
 
 class Object:
 
+    def __contains__(self, key):
+        return key in dir(self)
+
+    def __iter__(self):
+        return iter(self.__dict__)
+
+    def __len__(self):
+        return len(self.__dict__)
+
     def __str__(self):
         return str(self.__dict__)
+
+
+class Obj(Object):
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
 
 
 "methods"
@@ -177,6 +192,7 @@ def write(obj, pth):
 def __dir__():
     return (
         'Object',
+        'Obj',
         'construct',
         'dumps',
         'edit',

@@ -10,8 +10,8 @@ import types
 import _thread
 
 
-from .default import Default
-from .thread  import later, launch
+from .object  import Obj
+from .runtime import later, launch
 
 
 lock = _thread.allocate_lock()
@@ -34,6 +34,9 @@ class Commands:
                 Commands.add(cmdz)
 
 
+"callbacks"
+
+
 def command(bot, evt):
     with lock:
         try:
@@ -47,6 +50,9 @@ def command(bot, evt):
         except Exception as ex:
             later(ex)
         evt.ready()
+
+
+"utilities"
 
 
 def modloop(*pkgs, disable=""):
@@ -65,12 +71,12 @@ def parse(obj, txt=None):
     args = []
     obj.args    = []
     obj.cmd     = ""
-    obj.gets    = Default()
+    obj.gets    = Obj()
     obj.index   = None
     obj.mod     = ""
     obj.opts    = ""
     obj.result  = []
-    obj.sets    = Default()
+    obj.sets    = Obj()
     obj.txt     = txt or ""
     obj.otxt    = obj.txt
     _nr = -1
@@ -132,6 +138,9 @@ def spl(txt):
     except (TypeError, ValueError):
         result = txt
     return [x for x in result if x]
+
+
+"interface"
 
 
 def __dir__():

@@ -11,8 +11,8 @@ import _thread
 
 
 from ..command import spl
-from ..find    import find, ident, store
 from ..object  import Object, update, write
+from ..persist import find, ident, store
 from  .rss     import Rss
 
 

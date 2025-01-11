@@ -18,10 +18,9 @@ sys.path.insert(0, os.getcwd())
 
 from nixt.client  import Client
 from nixt.command import Commands, command, parse, scan
-from nixt.find    import Config, pidname
 from nixt.modules import face
-from nixt.reactor import Event
-from nixt.thread  import errors, later
+from nixt.persist import Config, pidname
+from nixt.runtime import Event, errors, later
 
 
 cfg = Config()

@@ -8,8 +8,8 @@
 import time
 
 
-from ..find   import find, fntime, ident, laps, store
-from ..object import Object, write
+from ..object  import Object, write
+from ..persist import find, fntime, ident, laps, store
 
 
 class Log(Object):

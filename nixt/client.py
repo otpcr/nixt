@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C,R0903,W0613,E0402
+# pylint: disable=C,R0903,W0105,W0613,E0402
 
 
 "client"
@@ -10,8 +10,7 @@ import threading
 
 
 from .command import command
-from .reactor import Reactor
-from .thread  import launch
+from .runtime import Reactor, launch
 
 
 class Client(Reactor):
@@ -90,6 +89,9 @@ class Buffered(Output, Client):
     def wait(self):
         Output.wait(self)
         Client.wait(self)
+
+
+"interface"
 
 
 def __dir__():
