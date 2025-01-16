@@ -14,28 +14,26 @@ import unittest
 import nixt
 
 
-from nixt.object import *
+from nixt.objects import *
 
 
-import nixt.cache
-import nixt.client
+import nixt.clients
 import nixt.command
-import nixt.find
+import nixt.locater
 import nixt.modules
-import nixt.object
+import nixt.objects
 import nixt.reactor
-import nixt.thread
+import nixt.threads
 
 
 PACKAGE = [
-    'cache',
-    'client',
+    'clients',
     'command',
-    'find',
+    'locater',
     'modules',
-    'object',
+    'objects',
     'reactor',
-    'thread'
+    'threads'
 ]
 
 
