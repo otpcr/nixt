@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,W0105,W0622,E0402
 
 
 "Functions with the object as the first argument."
@@ -13,9 +12,6 @@ from .objects import items, keys
 
 
 p = os.path.join
-
-
-"methods"
 
 
 def edit(obj, setter, skip=False):
@@ -96,9 +92,6 @@ def search(obj, selector, matching=None):
             res = False
             break
     return res
-
-
-"interface"
 
 
 def __dir__():
