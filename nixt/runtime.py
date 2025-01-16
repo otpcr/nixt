@@ -83,7 +83,14 @@ class Thread(threading.Thread):
 
     def run(self):
         func, args = self.queue.get()
-        func(*args)
+        try:
+            func(*args)
+        except Exception as ex:
+            later(ex)
+            try:
+                args[0].ready()
+            except (IndexError, AttributeError):
+                pass
 
 
 def launch(func, *args, **kwargs):

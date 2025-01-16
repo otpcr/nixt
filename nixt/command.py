@@ -61,8 +61,11 @@ def command(bot, evt):
     parse(evt)
     func = Commands.cmds.get(evt.cmd, None)
     if func:
-        func(evt)
-    bot.display(evt)
+        try:
+            func(evt)
+            bot.display(evt)
+        except Exception as ex:
+            later(ex)
     evt.ready()
 
 
