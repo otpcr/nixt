@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,R0903,W0105,W0612,E0402
+# pylint: disable=C0103,C0115,C0116,R0903,W0105,W0612,E0402
 
 
 "clients"
@@ -7,12 +7,19 @@
 
 import queue
 import threading
+import time
 
 
-from .command import command
-from .objects import Default
-from .reactor import Reactor
-from .threads import launch
+from .command import Default, command
+from .runtime import Reactor, launch
+
+
+"default"
+
+
+class Config(Default):
+
+    name = Default.__module__.split(".")[0]
 
 
 "client"
@@ -33,12 +40,33 @@ class Client(Reactor):
         raise NotImplementedError("raw")
 
 
-"config"
+"event"
 
 
-class Config(Default):
+class Event(Default):
 
-    name = Default.__module__.split(".")[0]
+    def __init__(self):
+        Default.__init__(self)
+        self._ready = threading.Event()
+        self._thr   = None
+        self.ctime  = time.time()
+        self.result = []
+        self.type   = "event"
+        self.txt    = ""
+
+    def ok(self):
+        self.reply("ok")
+
+    def ready(self):
+        self._ready.set()
+
+    def reply(self, txt):
+        self.result.append(txt)
+
+    def wait(self):
+        self._ready.wait()
+        if self._thr:
+            self._thr.join()
 
 
 "fleet"

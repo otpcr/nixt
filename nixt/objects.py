@@ -6,11 +6,6 @@
 
 
 import json
-import pathlib
-import threading
-
-
-lock = threading.RLock()
 
 
 "object"
@@ -20,24 +15,6 @@ class Object:
 
     def __str__(self):
         return str(self.__dict__)
-
-
-"default"
-
-
-class Default(Object):
-
-    def __contains__(self, key):
-        return key in dir(self)
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-    def __iter__(self):
-        return iter(self.__dict__)
-
-    def __len__(self):
-        return len(self.__dict__)
 
 
 "methods"
@@ -54,28 +31,6 @@ def construct(obj, *args, **kwargs):
             update(obj, vars(val))
     if kwargs:
         update(obj, kwargs)
-
-
-def edit(obj, setter, skip=False):
-    for key, val in items(setter):
-        if skip and val == "":
-            continue
-        try:
-            setattr(obj, key, int(val))
-            continue
-        except ValueError:
-            pass
-        try:
-            setattr(obj, key, float(val))
-            continue
-        except ValueError:
-            pass
-        if val in ["True", "true"]:
-            setattr(obj, key, True)
-        elif val in ["False", "false"]:
-            setattr(obj, key, False)
-        else:
-            setattr(obj, key, val)
 
 
 def items(obj):
@@ -102,11 +57,6 @@ def values(obj):
 
 
 "decoder"
-
-
-class DecodeError(Exception):
-
-    pass
 
 
 class ObjectDecoder(json.JSONDecoder):
@@ -139,11 +89,6 @@ def loads(string, *args, **kw):
 "encoder"
 
 
-class EncodeError(Exception):
-
-    pass
-
-
 class ObjectEncoder(json.JSONEncoder):
 
     def __init__(self, *args, **kwargs):
@@ -173,49 +118,17 @@ def dumps(*args, **kw):
     return json.dumps(*args, **kw)
 
 
-"disk"
-
-
-def cdir(pth):
-    path = pathlib.Path(pth)
-    path.parent.mkdir(parents=True, exist_ok=True)
-
-
-def read(obj, pth):
-    with lock:
-        with open(pth, 'r', encoding='utf-8') as ofile:
-            try:
-                obj2 = loads(ofile.read())
-                update(obj, obj2)
-            except json.decoder.JSONDecodeError as ex:
-                raise DecodeError(pth) from ex
-    return pth
-
-
-def write(obj, pth):
-    with lock:
-        cdir(pth)
-        txt = dumps(obj, indent=4)
-        with open(pth, 'w', encoding='utf-8') as ofile:
-            ofile.write(txt)
-    return pth
-
-
 "interface"
 
 
 def __dir__():
     return (
-        'Default',
         'Object',
         'construct',
         'dumps',
-        'edit',
         'items',
         'keys',
         'loads',
-        'read',
         'update',
         'values',
-        'write'
     )

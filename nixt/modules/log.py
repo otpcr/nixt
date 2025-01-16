@@ -8,8 +8,9 @@
 import time
 
 
-from ..locater import elapsed, find, fntime, ident, store
-from ..objects import Object, write
+from ..methods import ident
+from ..objects import Object
+from ..persist import elapsed, find, fntime, store, write
 
 
 "log"

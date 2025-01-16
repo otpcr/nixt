@@ -2,21 +2,35 @@
 # pylint: disable=C0115,C0116,R0903,W0105,W0622,E0402
 
 
-"locate objects"
+"persistence"
 
 
-import datetime
+import json
 import os
 import pathlib
 import time
 import _thread
 
 
-from .objects import Object, items, keys, read, update
+from .methods import fqn, search
+from .objects import Object, dumps, loads, update
 
 
 lock = _thread.allocate_lock()
 p    = os.path.join
+
+
+"exceptions"
+
+
+class DecodeError(Exception):
+
+    pass
+
+
+class EncodeError(Exception):
+
+    pass
 
 
 "workdir"
@@ -99,7 +113,6 @@ def fns(clz):
 def find(clz, selector=None, deleted=False, matching=False):
     skel()
     with lock:
-        nrs = -1
         pth = long(clz)
         res = []
         for fnm in fns(pth):
@@ -119,46 +132,6 @@ def find(clz, selector=None, deleted=False, matching=False):
 "methods"
 
 
-def format(obj, args=None, skip=None, plain=False):
-    if args is None:
-        args = keys(obj)
-    if skip is None:
-        skip = []
-    txt = ""
-    for key in args:
-        if key.startswith("__"):
-            continue
-        if key in skip:
-            continue
-        value = getattr(obj, key, None)
-        if value is None:
-            continue
-        if plain:
-            txt += f"{value} "
-        elif isinstance(value, str) and len(value.split()) >= 2:
-            txt += f'{key}="{value}" '
-        else:
-            txt += f'{key}={value} '
-    return txt.strip()
-
-
-def fqn(obj):
-    kin = str(type(obj)).split()[-1][1:-2]
-    if kin == "type":
-        kin = f"{obj.__module__}.{obj.__name__}"
-    return kin
-
-
-def ident(obj):
-    return p(fqn(obj),*str(datetime.datetime.now()).split())
-
-
-def match(obj, txt):
-    for key in keys(obj):
-        if txt in key:
-            yield key
-
-
 def last(obj, selector=None):
     if selector is None:
         selector = {}
@@ -174,25 +147,32 @@ def last(obj, selector=None):
     return res
 
 
-def search(obj, selector, matching=None):
-    res = False
-    if not selector:
-        return res
-    for key, value in items(selector):
-        val = getattr(obj, key, None)
-        if not val:
-            continue
-        if matching and value == val:
-            res = True
-        elif str(value).lower() in str(val).lower() or value == "match":
-            res = True
-        else:
-            res = False
-            break
-    return res
+def read(obj, pth):
+    with lock:
+        with open(pth, 'r', encoding='utf-8') as ofile:
+            try:
+                obj2 = loads(ofile.read())
+                update(obj, obj2)
+            except json.decoder.JSONDecodeError as ex:
+                raise DecodeError(pth) from ex
+    return pth
+
+
+def write(obj, pth):
+    with lock:
+        cdir(pth)
+        txt = dumps(obj, indent=4)
+        with open(pth, 'w', encoding='utf-8') as ofile:
+            ofile.write(txt)
+    return pth
 
 
 "utilities"
+
+
+def cdir(pth):
+    path = pathlib.Path(pth)
+    path.parent.mkdir(parents=True, exist_ok=True)
 
 
 def elapsed(seconds, short=True):
@@ -258,9 +238,11 @@ def __dir__():
     return (
         'Cache',
         'Workdir',
+        'cdir',
         'elapsed',
         'find',
-        'format',
         'last',
-        'skel'
+        'read',
+        'skel',
+        'write'
     )

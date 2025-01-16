@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,R0912,R0915,W0105,E0402
+# pylint: disable=C0115,C0116,R0912,R0903,R0915,W0105,E0402
 
 
 "user commands"
@@ -9,8 +9,32 @@ import inspect
 import types
 
 
-from .objects import Default
-from .threads import launch
+from .objects import Object
+from .runtime import launch
+
+
+"default"
+
+
+class Default(Object):
+
+    def __contains__(self, key):
+        return key in dir(self)
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
+
+    def __iter__(self):
+        return iter(self.__dict__)
+
+    def __len__(self):
+
+        return len(self.__dict__)
+
+
+class Config(Default):
+
+    name = Default.__module__.split(".", maxsplit=1)[0]
 
 
 "commands"
@@ -136,6 +160,8 @@ def spl(txt):
 def __dir__():
     return (
         'Commands',
+        'Config',
+        'Default',
         'command',
         'parse',
         'scan'

@@ -19,21 +19,21 @@ from nixt.objects import *
 
 import nixt.clients
 import nixt.command
-import nixt.locater
+import nixt.methods
 import nixt.modules
 import nixt.objects
-import nixt.reactor
-import nixt.threads
+import nixt.persist
+import nixt.runtime
 
 
 PACKAGE = [
     'clients',
     'command',
-    'locater',
+    'methods',
     'modules',
     'objects',
-    'reactor',
-    'threads'
+    'persist',
+    'runtime'
 ]
 
 

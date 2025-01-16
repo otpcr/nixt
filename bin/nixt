@@ -16,12 +16,11 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.clients import Client, Config
+from nixt.clients import Client, Config, Event
 from nixt.command import Commands, command, parse, scan
 from nixt.modules import face as MODS
-from nixt.locater import Workdir, pidname
-from nixt.reactor import Event
-from nixt.threads import errors, later
+from nixt.persist import Workdir, pidname
+from nixt.runtime import errors, later
 
 
 cfg = Config()

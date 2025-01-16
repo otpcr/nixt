@@ -17,13 +17,12 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.clients import Client, Config
+from nixt.clients import Client, Config, Event
 from nixt.command import Commands, parse, scan
-from nixt.locater import Workdir, elapsed, skel
 from nixt.objects import Object, keys
 from nixt.modules import face as MODS
-from nixt.reactor import Event
-from nixt.threads import launch, errors, later
+from nixt.persist import Workdir, elapsed, skel
+from nixt.runtime import launch, errors, later
 
 
 "defines"
