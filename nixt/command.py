@@ -10,7 +10,7 @@ import types
 
 
 from .objects import Object
-from .runtime import launch
+from .runtime import later, launch
 
 
 "default"
@@ -57,13 +57,13 @@ class Commands:
                 Commands.add(cmdz)
 
 
-def command(bot, evt):
+def command(evt):
     parse(evt)
     func = Commands.cmds.get(evt.cmd, None)
     if func:
         try:
             func(evt)
-            bot.display(evt)
+            evt.display()
         except Exception as ex:
             later(ex)
     evt.ready()

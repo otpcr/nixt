@@ -25,11 +25,7 @@ class Reactor:
     def callback(self, evt):
         func = self.cbs.get(evt.type, None)
         if func:
-            try:
-                evt._thr = launch(func, self, evt)
-            except Exception as ex:
-                later(ex)
-                evt.ready()
+            func(evt)
 
     def loop(self):
         while not self.stopped.is_set():
@@ -38,8 +34,9 @@ class Reactor:
                 if evt is None:
                     break
                 evt.orig = repr(self)
-                self.callback(evt)
-            except (KeyboardInterrupt, EOFError):
+                launch(self.callback, evt)
+            except (KeyboardInterrupt, EOFError) as ex:
+                later(ex)
                 if "ready" in dir(evt):
                     evt.ready()
                 _thread.interrupt_main()
@@ -74,23 +71,37 @@ class Reactor:
 class Thread(threading.Thread):
 
     def __init__(self, func, thrname, *args, daemon=True, **kwargs):
-        super().__init__(None, self.run, name, (), {}, daemon=daemon)
-        self.name = thrname
-        self.queue = queue.Queue()
+        super().__init__(None, self.run, thrname, (), {}, daemon=daemon)
+        self.name      = thrname
+        self.queue     = queue.Queue()
+        self.result    = None
         self.starttime = time.time()
-        self.stopped = threading.Event()
-        self.queue.put((func, args))
+        self.queue.put_nowait((func, args))
+
+    def __contains__(self, key):
+        return key in self.__dict__
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        yield from dir(self)
+
+    def size(self):
+        return self.queue.qsize()
+
+    def join(self, timeout=None):
+        super().join(timeout)
+        return self.result
 
     def run(self):
-        func, args = self.queue.get()
         try:
-            func(*args)
+            func, args = self.queue.get()
+            self.result = func(*args)
+        except (KeyboardInterrupt, EOFError):
+            _thread.interrupt_main()
         except Exception as ex:
             later(ex)
-            try:
-                args[0].ready()
-            except (IndexError, AttributeError):
-                pass
 
 
 def launch(func, *args, **kwargs):

@@ -32,12 +32,11 @@ class Client(Reactor):
         self.register("command", command)
         Fleet.add(self)
 
-    def display(self, evt):
-        for txt in evt.result:
-            self.raw(txt)
-
     def raw(self, txt):
         raise NotImplementedError("raw")
+
+    def say(self, channel, txt):
+        self.raw(txt)
 
 
 "event"
@@ -53,6 +52,10 @@ class Event(Default):
         self.result = []
         self.type   = "event"
         self.txt    = ""
+
+    def display(self):
+        for txt in self.result:
+            Fleet.say(self.orig, self.channel, txt)
 
     def ok(self):
         self.reply("ok")
@@ -89,6 +92,11 @@ class Fleet:
     def get(name):
         return Fleet.bots.get(name, None)
 
+    @staticmethod
+    def say(orig, channel, txt):
+        bot = Fleet.bots.get(orig, None)
+        if bot:
+            bot.say(channel, txt)
 
 "output"
 

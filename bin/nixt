@@ -58,6 +58,7 @@ class Console(CLI):
 
     def poll(self):
         evt = Event()
+        evt.orig = repr(self)
         evt.txt = input("> ")
         evt.type = "command"
         return evt
@@ -164,8 +165,8 @@ def control():
     evt.orig = repr(csl)
     evt.type = "command"
     evt.txt = cfg.otxt
-    command(csl, evt)
-    evt.wait()
+    command(evt)
+    #evt.wait()
 
 
 def service():
@@ -183,22 +184,6 @@ def srv(event):
     name = getpass.getuser()
     event.reply(TXT % (Config.name.upper(), name, name, name, Config.name))
 
-
-"data"
-
-
-TXT = """[Unit]
-Description=%s
-After=network-online.target
-
-[Service]
-Type=simple
-User=%s
-Group=%s
-ExecStart=/home/%s/.local/bin/%s -s
-
-[Install]
-WantedBy=multi-user.target"""
 
 
 "runtime"
@@ -241,6 +226,23 @@ def main():
         wrap(service)
     else:
         control()
+
+
+"data"
+
+
+TXT = """[Unit]
+Description=%s
+After=network-online.target
+
+[Service]
+Type=simple
+User=%s
+Group=%s
+ExecStart=/home/%s/.local/bin/%s -s
+
+[Install]
+WantedBy=multi-user.target"""
 
 
 if __name__ == "__main__":

@@ -16,8 +16,9 @@ from .methods import fqn, search
 from .objects import Object, dumps, loads, update
 
 
-lock = _thread.allocate_lock()
-p    = os.path.join
+lock   = _thread.allocate_lock()
+p      = os.path.join
+rwlock = _thread.allocate_lock()
 
 
 "exceptions"
@@ -148,7 +149,7 @@ def last(obj, selector=None):
 
 
 def read(obj, pth):
-    with lock:
+    with rwlock:
         with open(pth, 'r', encoding='utf-8') as ofile:
             try:
                 obj2 = loads(ofile.read())
@@ -159,7 +160,7 @@ def read(obj, pth):
 
 
 def write(obj, pth):
-    with lock:
+    with rwlock:
         cdir(pth)
         txt = dumps(obj, indent=4)
         with open(pth, 'w', encoding='utf-8') as ofile:
