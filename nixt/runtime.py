@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,R0903,W0105,W0212,W0718
+# pylint: disable=C0115,C0116,R0903,W0105,W0212,W0718.E0402
 
 
 "runtime"
@@ -25,21 +25,12 @@ class Reactor:
     def callback(self, evt):
         func = self.cbs.get(evt.type, None)
         if func:
-            func(evt)
+            evt.orig = repr(self)
+            evt._thr = launch(func, evt)
 
     def loop(self):
         while not self.stopped.is_set():
-            try:
-                evt = self.poll()
-                if evt is None:
-                    break
-                evt.orig = repr(self)
-                launch(self.callback, evt)
-            except (KeyboardInterrupt, EOFError) as ex:
-                later(ex)
-                if "ready" in dir(evt):
-                    evt.ready()
-                _thread.interrupt_main()
+            self.callback(self.poll())
 
     def poll(self):
         return self.queue.get()
@@ -58,7 +49,6 @@ class Reactor:
 
     def stop(self):
         self.stopped.set()
-        self.queue.put(None)
 
     def wait(self):
         self.queue.join()
@@ -102,6 +92,10 @@ class Thread(threading.Thread):
             _thread.interrupt_main()
         except Exception as ex:
             later(ex)
+            try:
+                args[0].ready()
+            except (IndexError, AttributeError):
+                pass
 
 
 def launch(func, *args, **kwargs):
@@ -145,7 +139,7 @@ class Timer:
         launch(self.func, *self.args)
 
     def start(self):
-        timer = threading.Timer(self.sleep, self.run)
+        timer        = threading.Timer(self.sleep, self.func)
         timer.name   = self.name
         timer.sleep  = self.sleep
         timer.state  = self.state

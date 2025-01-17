@@ -16,8 +16,8 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.clients import Client, Config, Event
-from nixt.command import Commands, command, parse, scan
+from nixt.clients import Client, Event
+from nixt.command import Commands, Config, command, parse, scan
 from nixt.modules import face as MODS
 from nixt.persist import Workdir, pidname
 from nixt.runtime import errors, later
@@ -45,6 +45,9 @@ class CLI(Client):
     def raw(self, txt):
         print(txt.encode('utf-8', 'replace').decode("utf-8"))
         sys.stdout.flush()
+
+    def say(self, _channel, txt):
+        self.raw(txt)
 
 
 class Console(CLI):

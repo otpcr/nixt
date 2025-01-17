@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=C0115,C0116,R0903,W0105,E0402
 
 
 "user commands"
@@ -9,12 +10,13 @@ import types
 
 
 from .objects import Object
-from .runtime import later, launch
+from .runtime import launch
+
+
+"default"
 
 
 class Default(Object):
-
-    "Default"
 
     def __contains__(self, key):
         return key in dir(self)
@@ -26,20 +28,21 @@ class Default(Object):
         return iter(self.__dict__)
 
     def __len__(self):
-
         return len(self.__dict__)
+
+
+"config"
 
 
 class Config(Default):
 
-    "Config"
-
     name = Default.__module__.split(".", maxsplit=1)[0]
 
 
-class Commands:
+"commands"
 
-    "Commands"
+
+class Commands:
 
     cmds = {}
 
@@ -50,7 +53,6 @@ class Commands:
 
     @staticmethod
     def scan(mod):
-        "scan modules for commands."
         for key, cmdz in inspect.getmembers(mod, inspect.isfunction):
             if key.startswith("cb"):
                 continue
@@ -59,23 +61,18 @@ class Commands:
 
 
 def command(evt):
-    "check for and execute command."
     parse(evt)
     func = Commands.cmds.get(evt.cmd, None)
     if func:
-        try:
-            func(evt)
-            evt.display()
-        except Exception as ex:
-            later(ex)
+        func(evt)
+        evt.display()
     evt.ready()
 
 
-"utilities"
+"utilitites"
 
 
 def modloop(*pkgs, disable=""):
-    "return modules names in a directory."
     for pkg in pkgs:
         for modname in dir(pkg):
             if modname in spl(disable):
@@ -86,7 +83,6 @@ def modloop(*pkgs, disable=""):
 
 
 def parse(obj, txt=None):
-    "parse an object for commands." 
     if txt is None:
         if "txt" in dir(obj):
             txt = obj.txt
@@ -117,12 +113,6 @@ def parse(obj, txt=None):
             continue
         if "=" in spli:
             key, value = spli.split("=", maxsplit=1)
-            if key == "mod":
-                if obj.mod:
-                    obj.mod += f",{value}"
-                else:
-                    obj.mod = value
-                continue
             setattr(obj.sets, key, value)
             continue
         _nr += 1
@@ -141,7 +131,6 @@ def parse(obj, txt=None):
 
 
 def scan(*pkgs, init=False, disable=""):
-    "scan all modules in a package."
     result = []
     for mod in modloop(*pkgs, disable=disable):
         if not isinstance(mod, types.ModuleType):
@@ -155,12 +144,14 @@ def scan(*pkgs, init=False, disable=""):
 
 
 def spl(txt):
-    "comma seprated value string."
     try:
         result = txt.split(',')
     except (TypeError, ValueError):
         result = txt
     return [x for x in result if x]
+
+
+"interface"
 
 
 def __dir__():

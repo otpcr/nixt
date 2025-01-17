@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=C0115,C0116,R0903,W0105,E0402
 
 
 "persistence"
@@ -20,50 +21,54 @@ p      = os.path.join
 rwlock = _thread.allocate_lock()
 
 
+"exceptions"
+
+
 class DecodeError(Exception):
 
-    "DecodeError"
+    pass
 
 
 class EncodeError(Exception):
 
-    "EncodeError"
+    pass
+
+
+"workdir"
 
 
 class Workdir:
 
-    "Workdir"
-
     wdr  = ""
 
 
-class Cache:
+"cache"
 
-    "Cache"
+
+class Cache:
 
     objs = {}
 
     @staticmethod
     def add(path, obj):
-        "add object with its path."
         Cache.objs[path] = obj
 
     @staticmethod
     def get(path):
-        "return object by path."
         return Cache.objs.get(path, None)
 
     @staticmethod
     def typed(matcher):
-        "return cached object by type."
         for key in Cache.objs:
             if matcher not in key:
                 continue
             yield Cache.objs.get(key)
 
 
+"path"
+
+
 def long(name):
-    "return fqn name from store."
     split = name.split(".")[-1].lower()
     res = name
     for names in types():
@@ -74,29 +79,27 @@ def long(name):
 
 
 def pidname(name):
-    "return pidfile in workdir."
     return p(Workdir.wdr, f"{name}.pid")
 
 
 def skel():
-    "create necessary files."
     path = pathlib.Path(store())
     path.mkdir(parents=True, exist_ok=True)
     return path
 
 
 def store(pth=""):
-    "return path to store."
     return p(Workdir.wdr, "store", pth)
 
 
 def types():
-    "return all types in store."
     return os.listdir(store())
 
 
+"find"
+
+
 def fns(clz):
-    "find all matching paths."
     dname = ''
     pth = store(clz)
     for rootdir, dirs, _files in os.walk(pth, topdown=False):
@@ -109,7 +112,6 @@ def fns(clz):
 
 
 def find(clz, selector=None, deleted=False, matching=False):
-    "find matching objects."
     skel()
     with lock:
         pth = long(clz)
@@ -128,8 +130,10 @@ def find(clz, selector=None, deleted=False, matching=False):
         return res
 
 
+"methods"
+
+
 def last(obj, selector=None):
-    "return last object."
     if selector is None:
         selector = {}
     result = sorted(
@@ -145,7 +149,6 @@ def last(obj, selector=None):
 
 
 def read(obj, pth):
-    "read object from path."
     with rwlock:
         with open(pth, 'r', encoding='utf-8') as ofile:
             try:
@@ -157,7 +160,6 @@ def read(obj, pth):
 
 
 def write(obj, pth):
-    "Write to path/"
     with rwlock:
         cdir(pth)
         txt = dumps(obj, indent=4)
@@ -166,14 +168,15 @@ def write(obj, pth):
     return pth
 
 
+"utilities"
+
+
 def cdir(pth):
-    "create directory."
     path = pathlib.Path(pth)
     path.parent.mkdir(parents=True, exist_ok=True)
 
 
 def elapsed(seconds, short=True):
-    "show string representing elapsed time (seconds)."
     txt = ""
     nsec = float(seconds)
     if nsec < 1:
@@ -213,7 +216,6 @@ def elapsed(seconds, short=True):
 
 
 def fntime(daystr):
-    "extract time from filename."
     daystr = daystr.replace('_', ':')
     datestr = ' '.join(daystr.split(os.sep)[-2:])
     if '.' in datestr:
@@ -227,8 +229,10 @@ def fntime(daystr):
 
 
 def strip(pth, nmr=3):
-    "right strip path."
     return os.sep.join(pth.split(os.sep)[-nmr:])
+
+
+"interface"
 
 
 def __dir__():
