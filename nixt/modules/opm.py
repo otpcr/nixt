@@ -11,8 +11,7 @@ import _thread
 
 
 from ..command import spl
-from ..methods import ident
-from ..persist import find, store, write
+from ..persist import find, ident, store, write
 from ..objects import Object, update
 
 

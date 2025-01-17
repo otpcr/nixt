@@ -5,6 +5,7 @@
 "persistence"
 
 
+import datetime
 import json
 import os
 import pathlib
@@ -133,6 +134,10 @@ def find(clz, selector=None, deleted=False, matching=False):
 "methods"
 
 
+def ident(obj):
+    return p(fqn(obj),*str(datetime.datetime.now()).split())
+
+
 def last(obj, selector=None):
     if selector is None:
         selector = {}
@@ -242,6 +247,7 @@ def __dir__():
         'cdir',
         'elapsed',
         'find',
+        'ident',
         'last',
         'read',
         'skel',

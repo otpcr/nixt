@@ -5,14 +5,7 @@
 "functions with the object as the first argument."
 
 
-import datetime
-import os
-
-
 from .objects import items, keys
-
-
-p = os.path.join
 
 
 "methods"
@@ -70,10 +63,6 @@ def fqn(obj):
     return kin
 
 
-def ident(obj):
-    return p(fqn(obj),*str(datetime.datetime.now()).split())
-
-
 def match(obj, txt):
     for key in keys(obj):
         if txt in key:
@@ -106,7 +95,6 @@ def __dir__():
         'edit',
         'format',
         'fqn',
-        'ident',
         'match',
         'search'
     )

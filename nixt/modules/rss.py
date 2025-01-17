@@ -20,8 +20,8 @@ from urllib.parse import quote_plus, urlencode
 
 from ..clients import Fleet
 from ..command import spl
-from ..methods import format, ident
-from ..persist import elapsed, find, fntime, last, store, write
+from ..methods import format
+from ..persist import elapsed, find, fntime, ident, last, store, write
 from ..objects import Object, update
 from ..runtime import Repeater, launch
 
