@@ -175,7 +175,7 @@ def control():
 def service():
     privileges()
     pidfile(pidname(Config.name))
-    scan(face, init=True)
+    scan(MODS, mods, init=True)
     forever()
 
 

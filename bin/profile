@@ -20,7 +20,7 @@ def main():
     with open(sys.argv[1], "r", encoding="utf-8") as src:
         srce = src.read()
     code = compile(srce, fnm, "exec")
-    profile.runctx(code, __main__.__dict__, __main__.__dict__, sort="cumtime")
+    profile.runctx(code, __main__.__dict__, __main__.__dict__, sort="ncalls")
 
 
 if __name__ == "__main__":
