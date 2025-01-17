@@ -28,7 +28,7 @@ class Client(Reactor):
         raise NotImplementedError("raw")
 
     def say(self, channel, txt):
-        raise NotImplementedError("say")
+        self.raw(txt)
 
 
 "event"
