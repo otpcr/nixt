@@ -13,32 +13,6 @@ from .objects import Object
 from .runtime import launch
 
 
-"default"
-
-
-class Default(Object):
-
-    def __contains__(self, key):
-        return key in dir(self)
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-    def __iter__(self):
-        return iter(self.__dict__)
-
-    def __len__(self):
-        return len(self.__dict__)
-
-
-"config"
-
-
-class Config(Default):
-
-    name = Default.__module__.split(".", maxsplit=1)[0]
-
-
 "commands"
 
 
@@ -67,6 +41,32 @@ def command(evt):
         func(evt)
         evt.display()
     evt.ready()
+
+
+"default"
+
+
+class Default(Object):
+
+    def __contains__(self, key):
+        return key in dir(self)
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
+
+    def __iter__(self):
+        return iter(self.__dict__)
+
+    def __len__(self):
+        return len(self.__dict__)
+
+
+"config"
+
+
+class Config(Default):
+
+    name = Default.__module__.split(".", maxsplit=1)[0]
 
 
 "utilitites"
@@ -159,6 +159,7 @@ def __dir__():
         'Commands',
         'Config',
         'Default',
+        'Event',
         'command',
         'parse',
         'scan'

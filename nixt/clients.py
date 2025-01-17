@@ -27,7 +27,7 @@ class Client(Reactor):
     def raw(self, txt):
         raise NotImplementedError("raw")
 
-    def say(self, channel, txt):
+    def say(self, _channel, txt):
         self.raw(txt)
 
 
@@ -62,6 +62,7 @@ class Event(Default):
         self._ready.wait()
         if self._thr:
             self._thr.join()
+
 
 
 "fleet"
@@ -135,7 +136,6 @@ class Output:
 def __dir__():
     return (
         'Client',
-        'EVent',
         'Fleet',
         'Output'
     )
