@@ -9,7 +9,6 @@
 import hashlib
 import os
 import pathlib
-import pprint
 import sys
 import time
 import _thread
@@ -26,7 +25,7 @@ from nixt.runtime import errors, later
 
 
 from nixt import modules as MODS
-print(dir(MODS))
+
 
 "defines"
 

@@ -153,11 +153,12 @@ def spl(txt):
 
 "data"
 
+
 MD5 = {
     "cmd": "e78043b056cf96aaf89f1c7120c1cd2d",
     "err": "5be6a5e9979ce54ee6732042e2f94ca0",
-    "fnd": "1de0a5361a06505f9a88f16298e27b8a",
-    "irc": "b0b09db40dcf00e9137b2753652bf458",
+    "fnd": "01bf50246b2359fb50b2525be1534224",
+    "irc": "c0269eaa2541a990eadd3b186044fe41",
     "log": "8eb40f6b95daf57780d28d7f1b7a80c5",
     "mod": "abb31624685eaa65b5d9d2aa93024347",
     "opm": "cc5f3d72512e0cc07c0211ad4db173b8",
