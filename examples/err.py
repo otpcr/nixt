@@ -5,7 +5,7 @@
 "errors"
 
 
-from ..runtime import Errors
+from nixt.runtime import Errors
 
 
 "commands"

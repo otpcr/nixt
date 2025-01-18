@@ -5,7 +5,7 @@
 "show list of commands"
 
 
-from ..command import Commands
+from nixt.command import Commands
 
 
 "commands"

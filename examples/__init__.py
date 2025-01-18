@@ -15,11 +15,12 @@ from nixt.command import MD5
 
 
 DIR  = os.path.dirname(__file__)
-NAME = ".".join(DIR.rsplit(os.sep, maxsplit=2)[-2:])
+MODS = []
+NAME = ".".join(DIR.rsplit(os.sep, maxsplit=1)[-1:])
 
 
-def importer(fqn):
-    return importlib.import_module(fqn)
+def importer(fqn, modname):
+    return importlib.import_module(fqn, modname)
 
 
 def md5sum(txt):
@@ -33,16 +34,20 @@ def importdir(pth):
             continue
         if not fnm.endswith(".py"):
             continue
-        skip = True
-        with open(f"{pth}/{fnm}", "r", encoding="utf-8").read() as data:
-            if MD5.get(fnm) == md5sum(data):
-                skip = False
-        if skip:
-            continue
         modname = fnm[:-3]
-        mod = importer(f"{NAME}.{modname}")
-        mods.append(mod)
-    return mods
+        data = open(f"{pth}/{fnm}", "r", encoding="utf-8").read()
+        if MD5.get(modname) == md5sum(data):
+            print(f"skip {modname}")
+            continue
+        mod = importer(f"{NAME}.{modname}", f"{NAME}")
+        MODS.append(modname)
 
 
 importdir(DIR)
+
+
+def __dir__():
+    return MODS
+
+
+print(MODS)

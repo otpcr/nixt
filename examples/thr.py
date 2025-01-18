@@ -9,8 +9,8 @@ import threading
 import time
 
 
-from ..objects import Object, update
-from ..persist import elapsed
+from nixt.objects import Object, update
+from nixt.persist import elapsed
 
 
 STARTTIME = time.time()
