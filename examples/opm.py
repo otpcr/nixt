@@ -12,7 +12,7 @@ import _thread
 
 from nixt.command import spl
 from nixt.persist import find, ident, store, write
-from nixt.objects import Object, set, update
+from nixt.objects import Object, update
 
 
 from  .rss     import Rss
@@ -84,7 +84,7 @@ class Parser:
                     continue
                 if itm == "href":
                     itm = "link"
-                set(obj, itm, val.strip())
+                setattr(obj, itm, val.strip())
             result.append(obj)
         return result
 

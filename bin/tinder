@@ -36,8 +36,8 @@ cfg.index = 0
 
 
 
-if os.path.exists("mods"):
-    import mods
+if os.path.exists("examples"):
+    import examples as mods
 else:
     mods = None
 
@@ -141,7 +141,7 @@ def main():
     global nrs
     global nrcommand
     parse(cfg, " ".join(sys.argv[1:]))
-    MODS.rss.DEBUG = True
+    mods.rss.DEBUG = True
     scan(MODS, mods)
     nrcommand = len(Commands.cmds) or 1
     if "v" in cfg.opts:

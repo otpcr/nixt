@@ -9,7 +9,7 @@ import inspect
 import types
 
 
-from .objects import Object, set
+from .objects import Object
 from .runtime import launch
 
 
@@ -109,11 +109,11 @@ def parse(obj, txt=None):
             continue
         if "==" in spli:
             key, value = spli.split("==", maxsplit=1)
-            set(obj.gets, key, value)
+            setattr(obj.gets, key, value)
             continue
         if "=" in spli:
             key, value = spli.split("=", maxsplit=1)
-            set(obj.sets, key, value)
+            setattr(obj.sets, key, value)
             continue
         _nr += 1
         if _nr == 0:

@@ -22,7 +22,7 @@ from nixt.clients import Fleet
 from nixt.command import spl
 from nixt.methods import format
 from nixt.persist import elapsed, find, fntime, ident, last, store, write
-from nixt.objects import Object, get, set, update
+from nixt.objects import Object, update
 from nixt.runtime import Repeater, launch
 
 
@@ -95,7 +95,7 @@ class Fetcher(Object):
         for key in displaylist.split(","):
             if not key:
                 continue
-            data = get(obj, key, None)
+            data = getattr(obj, key, None)
             if not data:
                 continue
             data = data.replace('\n', ' ')
@@ -108,7 +108,7 @@ class Fetcher(Object):
     def fetch(self, feed, silent=False):
         with fetchlock:
             result = []
-            seen = get(self.seen, feed.rss, [])
+            seen = getattr(self.seen, feed.rss, [])
             urls = []
             counter = 0
             for obj in reversed(getfeed(feed.rss, feed.display_list)):
@@ -127,14 +127,14 @@ class Fetcher(Object):
                 if self.dosave:
                     write(fed, store(ident(fed)))
                 result.append(fed)
-            set(self.seen, feed.rss, urls)
+            setattr(self.seen, feed.rss, urls)
             if not self.seenfn:
                 self.seenfn = store(ident(self.seen))
             write(self.seen, self.seenfn)
         if silent:
             return counter
         txt = ''
-        feedname = get(feed, 'name', None)
+        feedname = getattr(feed, 'name', None)
         if feedname:
             txt = f'[{feedname}] '
         for obj in result:
@@ -205,7 +205,7 @@ class Parser:
                     val = unescape(val.strip())
                     val = val.replace("\n", "")
                     val = striphtml(val)
-                    set(obj, itm, val)
+                    setattr(obj, itm, val)
             result.append(obj)
         return result
 

@@ -19,7 +19,7 @@ import _thread
 from nixt.clients import Client, Default, Event, Fleet
 from nixt.command import command
 from nixt.methods import format, edit
-from nixt.objects import Object, get, keys, set
+from nixt.objects import Object, keys
 from nixt.persist import ident, last, store, write
 from nixt.runtime import Reactor, later, launch
 
@@ -120,14 +120,14 @@ class Output:
     def extend(channel, txtlist):
         if channel not in dir(Output.cache):
             Output.cache[channel] = []
-        chanlist = get(Output.cache, channel)
+        chanlist = getattr(Output.cache, channel)
         chanlist.extend(txtlist)
 
     @staticmethod
     def gettxt(channel):
         txt = None
         try:
-            che = get(Output.cache, channel, None)
+            che = getattr(Output.cache, channel, None)
             if che:
                 txt = che.pop(0)
         except (KeyError, IndexError):
@@ -136,7 +136,7 @@ class Output:
 
     def oput(self, channel, txt):
         if channel and channel not in dir(Output.cache):
-            set(Output.cache, channel, [])
+            setattr(Output.cache, channel, [])
         self.oqueue.put_nowait((channel, txt))
 
     def out(self):
@@ -165,7 +165,7 @@ class Output:
     @staticmethod
     def size(chan):
         if chan in dir(Output.cache):
-            return len(get(Output.cache, chan, []))
+            return len(getattr(Output.cache, chan, []))
         return 0
 
 

@@ -33,10 +33,6 @@ def construct(obj, *args, **kwargs):
         update(obj, kwargs)
 
 
-def get(obj, key, default=None):
-    return getattr(obj, key, default)
-
-
 def items(obj):
     if isinstance(obj,type({})):
         return obj.items()
@@ -47,10 +43,6 @@ def keys(obj):
     if isinstance(obj, type({})):
         return obj.keys()
     return list(obj.__dict__.keys())
-
-
-def set(obj, key, value):
-    setattr(obj, key, value)
 
 
 def update(obj, data):
