@@ -36,8 +36,7 @@ def importdir(pth):
             continue
         modname = fnm[:-3]
         data = open(f"{pth}/{fnm}", "r", encoding="utf-8").read()
-        if MD5.get(modname) == md5sum(data):
-            print(f"skip {modname}")
+        if MD5.get(modname) != md5sum(data):
             continue
         mod = importer(f"{NAME}.{modname}", f"{NAME}")
         MODS.append(modname)
@@ -45,9 +44,5 @@ def importdir(pth):
 
 importdir(DIR)
 
-
 def __dir__():
     return MODS
-
-
-print(MODS)

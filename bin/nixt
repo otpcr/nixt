@@ -38,7 +38,9 @@ Workdir.wdr = os.path.expanduser(f"~/.{Config.name}")
 sys.path.insert(0, Workdir.wdr)
 
 
-if os.path.exists(p(Workdir.wdr, "mods")):
+if os.path.exists(p("examples")):
+    import examples as mods
+elif os.path.exists(p(Workdir.wdr, "mods")):
     import mods
 else:
     mods = None    
@@ -206,8 +208,8 @@ def md5(event):
         if not fnm.endswith(".py"):
             continue
         data = open(f"{path}/{fnm}", "r").read()
-        res[fnm] = md5sum(data)
-    event.reply(dumps(res, indent=4))
+        res[fnm[:-3]] = md5sum(data)
+    event.reply(dumps(res, indent=4, sort_keys=True))
 
 
 def srv(event):
