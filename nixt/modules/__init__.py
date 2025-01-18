@@ -37,9 +37,9 @@ def importdir(pth):
         if not fnm.endswith(".py"):
             continue
         modname = fnm[:-3]
-        data = open(f"{pth}/{fnm}", "r", encoding="utf-8").read()
-        if MD5.get(modname) != md5sum(data):
-            continue
+        #data = open(f"{pth}/{fnm}", "r", encoding="utf-8").read()
+        #if MD5.get(modname) != md5sum(data):
+        #    continue
         importer(f"{NAME}.{modname}", f"{NAME}")
         MODS.append(modname)
 

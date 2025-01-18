@@ -193,6 +193,7 @@ class IRC(Client, Output):
         self.state.keeprunning = False
         self.state.lastline = ""
         self.state.nrconnect = 0
+        self.state.nrerror = 0
         self.state.nrsend = 0
         self.state.stopkeep = False
         self.zelf = ''
