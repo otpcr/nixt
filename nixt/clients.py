@@ -64,7 +64,6 @@ class Event(Default):
             self._thr.join()
 
 
-
 "fleet"
 
 
@@ -136,6 +135,7 @@ class Output:
 def __dir__():
     return (
         'Client',
+        'Event',
         'Fleet',
         'Output'
     )

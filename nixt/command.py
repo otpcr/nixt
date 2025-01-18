@@ -9,7 +9,7 @@ import inspect
 import types
 
 
-from .objects import Object
+from .objects import Object, set
 from .runtime import launch
 
 
@@ -109,11 +109,11 @@ def parse(obj, txt=None):
             continue
         if "==" in spli:
             key, value = spli.split("==", maxsplit=1)
-            setattr(obj.gets, key, value)
+            set(obj.gets, key, value)
             continue
         if "=" in spli:
             key, value = spli.split("=", maxsplit=1)
-            setattr(obj.sets, key, value)
+            set(obj.sets, key, value)
             continue
         _nr += 1
         if _nr == 0:
@@ -162,5 +162,6 @@ def __dir__():
         'Event',
         'command',
         'parse',
-        'scan'
+        'scan',
+        'spl'
     )

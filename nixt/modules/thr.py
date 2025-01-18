@@ -9,7 +9,7 @@ import threading
 import time
 
 
-from ..objects import Object, update
+from ..objects import Object, get, update
 from ..persist import elapsed
 
 
@@ -26,11 +26,11 @@ def thr(event):
             continue
         obj = Object()
         update(obj, vars(thread))
-        if getattr(obj, 'current', None):
+        if get(obj, 'current', None):
             thread.name = obj.current
-        if getattr(obj, 'sleep', None):
+        if get(obj, 'sleep', None):
             uptime = obj.sleep - int(time.time() - obj.state["latest"])
-        elif getattr(obj, 'starttime', None):
+        elif get(obj, 'starttime', None):
             uptime = int(time.time() - obj.starttime)
         else:
             uptime = int(time.time() - STARTTIME)

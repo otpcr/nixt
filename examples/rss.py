@@ -18,12 +18,12 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from ..clients import Fleet
-from ..command import spl
-from ..methods import format
-from ..persist import elapsed, find, fntime, ident, last, store, write
-from ..objects import Object, update
-from ..runtime import Repeater, launch
+from nixt.clients import Fleet
+from nixt.command import spl
+from nixt.methods import format
+from nixt.persist import elapsed, find, fntime, ident, last, store, write
+from nixt.objects import Object, get, set, update
+from nixt.runtime import Repeater, launch
 
 
 "defines"
@@ -95,7 +95,7 @@ class Fetcher(Object):
         for key in displaylist.split(","):
             if not key:
                 continue
-            data = getattr(obj, key, None)
+            data = get(obj, key, None)
             if not data:
                 continue
             data = data.replace('\n', ' ')
@@ -108,7 +108,7 @@ class Fetcher(Object):
     def fetch(self, feed, silent=False):
         with fetchlock:
             result = []
-            seen = getattr(self.seen, feed.rss, [])
+            seen = get(self.seen, feed.rss, [])
             urls = []
             counter = 0
             for obj in reversed(getfeed(feed.rss, feed.display_list)):
@@ -127,14 +127,14 @@ class Fetcher(Object):
                 if self.dosave:
                     write(fed, store(ident(fed)))
                 result.append(fed)
-            setattr(self.seen, feed.rss, urls)
+            set(self.seen, feed.rss, urls)
             if not self.seenfn:
                 self.seenfn = store(ident(self.seen))
             write(self.seen, self.seenfn)
         if silent:
             return counter
         txt = ''
-        feedname = getattr(feed, 'name', None)
+        feedname = get(feed, 'name', None)
         if feedname:
             txt = f'[{feedname}] '
         for obj in result:
@@ -205,7 +205,7 @@ class Parser:
                     val = unescape(val.strip())
                     val = val.replace("\n", "")
                     val = striphtml(val)
-                    setattr(obj, itm, val)
+                    set(obj, itm, val)
             result.append(obj)
         return result
 

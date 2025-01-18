@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-#pylint: disable=C0115,C0116,R0903,W0105,E0402
+# pylint: disable=C0115,C0116,R0903,W0105
 
 
 "a clean namespace"
@@ -33,6 +33,10 @@ def construct(obj, *args, **kwargs):
         update(obj, kwargs)
 
 
+def get(obj, key, default=None):
+    return getattr(obj, key, default)
+
+
 def items(obj):
     if isinstance(obj,type({})):
         return obj.items()
@@ -43,6 +47,10 @@ def keys(obj):
     if isinstance(obj, type({})):
         return obj.keys()
     return list(obj.__dict__.keys())
+
+
+def set(obj, key, value):
+    setattr(obj, key, value)
 
 
 def update(obj, data):

@@ -16,12 +16,12 @@ import time
 import _thread
 
 
-from ..clients import Client, Default, Event, Fleet
-from ..command import command
-from ..methods import format, edit
-from ..objects import Object, keys
-from ..persist import ident, last, store, write
-from ..runtime import Reactor, later, launch
+from nixt.clients import Client, Default, Event, Fleet
+from nixt.command import command
+from nixt.methods import format, edit
+from nixt.objects import Object, get, keys, set
+from nixt.persist import ident, last, store, write
+from nixt.runtime import Reactor, later, launch
 
 
 "defines"
@@ -120,14 +120,14 @@ class Output:
     def extend(channel, txtlist):
         if channel not in dir(Output.cache):
             Output.cache[channel] = []
-        chanlist = getattr(Output.cache, channel)
+        chanlist = get(Output.cache, channel)
         chanlist.extend(txtlist)
 
     @staticmethod
     def gettxt(channel):
         txt = None
         try:
-            che = getattr(Output.cache, channel, None)
+            che = get(Output.cache, channel, None)
             if che:
                 txt = che.pop(0)
         except (KeyError, IndexError):
@@ -136,7 +136,7 @@ class Output:
 
     def oput(self, channel, txt):
         if channel and channel not in dir(Output.cache):
-            setattr(Output.cache, channel, [])
+            set(Output.cache, channel, [])
         self.oqueue.put_nowait((channel, txt))
 
     def out(self):
@@ -165,7 +165,7 @@ class Output:
     @staticmethod
     def size(chan):
         if chan in dir(Output.cache):
-            return len(getattr(Output.cache, chan, []))
+            return len(get(Output.cache, chan, []))
         return 0
 
 

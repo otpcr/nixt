@@ -10,9 +10,9 @@ import uuid
 import _thread
 
 
-from ..command import spl
-from ..persist import find, ident, store, write
-from ..objects import Object, update
+from nixt.command import spl
+from nixt.persist import find, ident, store, write
+from nixt.objects import Object, set, update
 
 
 from  .rss     import Rss
@@ -84,7 +84,7 @@ class Parser:
                     continue
                 if itm == "href":
                     itm = "link"
-                setattr(obj, itm, val.strip())
+                set(obj, itm, val.strip())
             result.append(obj)
         return result
 

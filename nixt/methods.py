@@ -5,7 +5,7 @@
 "functions with the object as the first argument."
 
 
-from .objects import items, keys
+from .objects import get, items, keys, set
 
 
 "methods"
@@ -16,21 +16,21 @@ def edit(obj, setter, skip=False):
         if skip and val == "":
             continue
         try:
-            setattr(obj, key, int(val))
+            set(obj, key, int(val))
             continue
         except ValueError:
             pass
         try:
-            setattr(obj, key, float(val))
+            set(obj, key, float(val))
             continue
         except ValueError:
             pass
         if val in ["True", "true"]:
-            setattr(obj, key, True)
+            set(obj, key, True)
         elif val in ["False", "false"]:
-            setattr(obj, key, False)
+            set(obj, key, False)
         else:
-            setattr(obj, key, val)
+            set(obj, key, val)
 
 
 def format(obj, args=None, skip=None, plain=False):
@@ -44,7 +44,7 @@ def format(obj, args=None, skip=None, plain=False):
             continue
         if key in skip:
             continue
-        value = getattr(obj, key, None)
+        value = get(obj, key, None)
         if value is None:
             continue
         if plain:
@@ -74,7 +74,7 @@ def search(obj, selector, matching=None):
     if not selector:
         return res
     for key, value in items(selector):
-        val = getattr(obj, key, None)
+        val = get(obj, key, None)
         if not val:
             continue
         if matching and value == val:

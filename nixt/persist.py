@@ -17,9 +17,12 @@ from .methods import fqn, search
 from .objects import Object, dumps, loads, update
 
 
+"locks"
+
+
 lock   = _thread.allocate_lock()
-p      = os.path.join
 rwlock = _thread.allocate_lock()
+p      = os.path.join
 
 
 "exceptions"

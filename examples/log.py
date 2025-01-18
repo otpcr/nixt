@@ -8,8 +8,8 @@
 import time
 
 
-from ..objects import Object
-from ..persist import elapsed, find, fntime, ident, store, write
+from nixt.objects import Object
+from nixt.persist import elapsed, find, fntime, ident, store, write
 
 
 "log"
