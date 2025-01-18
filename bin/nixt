@@ -35,7 +35,9 @@ p   = os.path.join
 Workdir.wdr = os.path.expanduser(f"~/.{Config.name}")
 
 
-if os.path.exists(p(Workdir.wdr, "mods")):
+if os.path.exists("examples"):
+    import examples as mods
+elif os.path.exists(p(Workdir.wdr, "mods")):
     sys.path.insert(0, Workdir.wdr)
     import mods
 else:
