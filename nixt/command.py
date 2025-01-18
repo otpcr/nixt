@@ -34,15 +34,6 @@ class Commands:
                 Commands.add(cmdz)
 
 
-def command(evt):
-    parse(evt)
-    func = Commands.cmds.get(evt.cmd, None)
-    if func:
-        func(evt)
-        evt.display()
-    evt.ready()
-
-
 "default"
 
 
@@ -68,6 +59,18 @@ class Config(Default):
 
     mods = ""
     name = Default.__module__.split(".", maxsplit=1)[0]
+
+
+"callbacks"
+
+
+def command(evt):
+    parse(evt)
+    func = Commands.cmds.get(evt.cmd, None)
+    if func:
+        func(evt)
+        evt.display()
+    evt.ready()
 
 
 "utilitites"

@@ -8,6 +8,9 @@
 from .objects import items, keys
 
 
+"methods"
+
+
 def edit(obj, setter, skip=False):
     for key, val in items(setter):
         if skip and val == "":
