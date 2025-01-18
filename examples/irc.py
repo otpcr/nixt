@@ -18,8 +18,7 @@ import _thread
 
 from nixt.clients import Client, Default, Event, Fleet
 from nixt.command import command
-from nixt.methods import format, edit
-from nixt.objects import Object, keys
+from nixt.objects import Object, edit, format, keys
 from nixt.persist import ident, last, store, write
 from nixt.runtime import Reactor, later, launch
 

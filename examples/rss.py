@@ -20,9 +20,8 @@ from urllib.parse import quote_plus, urlencode
 
 from nixt.clients import Fleet
 from nixt.command import spl
-from nixt.methods import format
 from nixt.persist import elapsed, find, fntime, ident, last, store, write
-from nixt.objects import Object, update
+from nixt.objects import Object, format, update
 from nixt.runtime import Repeater, launch
 
 

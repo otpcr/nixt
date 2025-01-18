@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C,R0903,W0105,W0212,W0611,W0718,E0402
+# pylint: disable=C,R0903,R1732,W0105,W0212,W0611,W0718,W1514,E0402
 
 
 "main"
@@ -25,6 +25,9 @@ from nixt.persist import Workdir, pidname
 from nixt.runtime import errors, later
 
 
+from nixt import modules as MODS
+print(dir(MODS))
+
 "defines"
 
 
@@ -35,12 +38,8 @@ p   = os.path.join
 Workdir.wdr = os.path.expanduser(f"~/.{Config.name}")
 
 
-sys.path.insert(0, Workdir.wdr)
-
-
-if os.path.exists(p("examples")):
-    import examples as mods # pylint: disable=E0401
-elif os.path.exists(p(Workdir.wdr, "mods")):
+if os.path.exists(p(Workdir.wdr, "mods")):
+    sys.path.insert(0, Workdir.wdr)
     import mods # pylint: disable=E0401
 else:
     mods = None    
@@ -151,7 +150,7 @@ def background():
     daemon(True)
     privileges()
     pidfile(pidname(Config.name))
-    scan(mods, init=True)
+    scan(MODS, mods, init=True)
     forever()
 
 
@@ -160,7 +159,7 @@ def console():
     parse(cfg, " ".join(sys.argv[1:]))
     if "v" in cfg.opts:
         banner()
-    for mod, thr in scan(mods, init="i" in cfg.opts, disable=cfg.sets.dis):
+    for mod, thr in scan(MODS, mods, init="i" in cfg.opts, disable=cfg.sets.dis):
         if "v" in cfg.opts and "output" in dir(mod):
             mod.output = print
         if thr and "w" in cfg.opts:
@@ -177,7 +176,7 @@ def control():
     Commands.add(srv)
     parse(cfg, " ".join(sys.argv[1:]))
     csl = CLI()
-    scan(mods)
+    scan(MODS, mods)
     evt = Event()
     evt.orig = repr(csl)
     evt.type = "command"
@@ -189,7 +188,7 @@ def control():
 def service():
     privileges()
     pidfile(pidname(Config.name))
-    scan(mods, init=True)
+    scan(MODS, mods, init=True)
     forever()
 
 
@@ -209,7 +208,7 @@ def md5(event):
             continue
         data = open(f"{path}/{fnm}", "r").read()
         res[fnm[:-3]] = md5sum(data)
-    event.reply(dumps(res, indent=4, sort_keys=True))
+    event.reply("MD5 = %s" %dumps(res, indent=4, sort_keys=True))
 
 
 def srv(event):

@@ -8,7 +8,7 @@
 import time
 
 
-from nixt.methods import format
+from nixt.objects import format
 from nixt.persist import elapsed, find, fntime, long, skel, types
 
 

@@ -38,12 +38,6 @@ cfg.index = 0
 
 
 
-if os.path.exists("examples"):
-    import examples as mods
-else:
-    mods = None
-
-
 lap = 1
 nrs = 1
 nrcommand = 1
@@ -143,8 +137,8 @@ def main():
     global nrs
     global nrcommand
     parse(cfg, " ".join(sys.argv[1:]))
-    mods.rss.DEBUG = True
-    scan(MODS, mods)
+    MODS.rss.DEBUG = True
+    scan(MODS)
     nrcommand = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()
