@@ -6,8 +6,10 @@
 "main"
 
 
+import hashlib
 import os
 import pathlib
+import pprint
 import sys
 import time
 import _thread
@@ -18,9 +20,12 @@ sys.path.insert(0, os.getcwd())
 
 from nixt.clients import Client, Event
 from nixt.command import Commands, Config, command, parse, scan
-from nixt.modules import face as MODS
+from nixt.objects import dumps 
 from nixt.persist import Workdir, pidname
 from nixt.runtime import errors, later
+
+
+from nixt import modules as MODS
 
 
 cfg = Config()
@@ -114,6 +119,10 @@ def forever():
             _thread.interrupt_main()
 
 
+def md5sum(txt):
+    return hashlib.md5(txt.encode("utf-8")).hexdigest()
+
+
 def pidfile(filename):
     if os.path.exists(filename):
         os.unlink(filename)
@@ -160,6 +169,7 @@ def console():
 def control():
     if len(sys.argv) == 1:
         return
+    Commands.add(md5)
     Commands.add(srv)
     parse(cfg, " ".join(sys.argv[1:]))
     csl = CLI()
@@ -180,6 +190,21 @@ def service():
 
 
 "commands"
+
+def md5(event):
+    if not event.args:
+        event.reply("md5 <path>")
+        return
+    path = event.args[0]
+    res = {}
+    for fnm in os.listdir(path):
+        if fnm.startswith("__"):
+            continue
+        if not fnm.endswith(".py"):
+            continue
+        data = open(f"{path}/{fnm}", "r").read()
+        res[fnm] = md5sum(data)
+    event.reply(dumps(res, indent=4))
 
 
 def srv(event):
