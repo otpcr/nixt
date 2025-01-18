@@ -12,7 +12,7 @@ import os
 
 
 DIR  = os.path.dirname(__file__)
-ENABLE = ["irc.py",]
+ENABLE = ["irc", "rss", "log", "opm", "fnd", "ir"]
 NAME = ".".join(DIR.rsplit(os.sep, maxsplit=1)[-1:])
 MD5  = {
     "req.py": "faddd66da68fbcb979b25297113916c6",
@@ -35,7 +35,7 @@ def md5sum(txt):
 def importdir(pth):
     mods = []
     for fnm in os.listdir(pth):
-        if fnm not in ENABLE:
+        if fnm[:-3] not in ENABLE:
             continue
         data = open(f"{pth}/{fnm}", "r").read()
         if MD5.get(fnm, "") != md5sum(data):

@@ -20,9 +20,11 @@ sys.path.insert(0, os.getcwd())
 from nixt.clients import Client, Event
 from nixt.command import Commands, Config, parse, scan
 from nixt.objects import Object, keys
-from nixt.modules import face as MODS
 from nixt.persist import Workdir, elapsed, skel
 from nixt.runtime import launch, errors, later
+
+
+from nixt import modules as MODS
 
 
 "defines"
