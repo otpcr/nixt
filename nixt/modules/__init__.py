@@ -11,7 +11,7 @@ import importlib
 import os
 
 
-from ..command import MD5
+from ..command import Config, MD5
 
 
 "defines"

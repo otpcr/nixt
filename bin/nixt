@@ -31,6 +31,7 @@ from nixt import modules as MODS
 
 
 cfg = Config()
+cfg.dis = "upt"
 p   = os.path.join
 
 
@@ -149,9 +150,11 @@ def background():
 def console():
     import readline # noqa: F401
     parse(cfg, " ".join(sys.argv[1:]))
+    Config.dis  = cfg.sets.dis or Config.dis
+    Config.mods = cfg.sets.mods or Config.mods
     if "v" in cfg.opts:
         banner()
-    for mod, thr in scan(MODS, init="i" in cfg.opts, disable=cfg.sets.dis):
+    for mod, thr in scan(MODS, init="i" in cfg.opts, disable=Config.dis):
         if "v" in cfg.opts and "output" in dir(mod):
             mod.output = print
         if thr and "w" in cfg.opts:
@@ -167,8 +170,9 @@ def control():
     Commands.add(md5)
     Commands.add(srv)
     parse(cfg, " ".join(sys.argv[1:]))
+    cfg.dis = cfg.sets.dis or cfg.dis
     csl = CLI()
-    scan(MODS)
+    scan(MODS, disable=cfg.dis)
     evt = Event()
     evt.orig = repr(csl)
     evt.type = "command"

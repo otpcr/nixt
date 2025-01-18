@@ -66,6 +66,7 @@ class Default(Object):
 
 class Config(Default):
 
+    mods = ""
     name = Default.__module__.split(".", maxsplit=1)[0]
 
 
@@ -133,6 +134,9 @@ def parse(obj, txt=None):
 def scan(*pkgs, init=False, disable=""):
     result = []
     for mod in modloop(*pkgs, disable=disable):
+        modname = mod.__name__.split(".")[-1]
+        if Config.mods and modname not in spl(Config.mods):
+            continue
         if not isinstance(mod, types.ModuleType):
             continue
         Commands.scan(mod)
