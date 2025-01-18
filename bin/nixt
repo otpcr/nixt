@@ -39,9 +39,9 @@ sys.path.insert(0, Workdir.wdr)
 
 
 if os.path.exists(p("examples")):
-    import examples as mods
+    import examples as mods # pylint: disable=E0401
 elif os.path.exists(p(Workdir.wdr, "mods")):
-    import mods
+    import mods # pylint: disable=E0401
 else:
     mods = None    
 

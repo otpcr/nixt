@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0116,W0105,W0611,E0402
+# pylint: disable=C0116,R1732,W0105,W0611,E0402
 # ruff: noqa: F401
 
 
@@ -28,7 +28,6 @@ def md5sum(txt):
 
 
 def importdir(pth):
-    mods = []
     for fnm in os.listdir(pth):
         if fnm.startswith("__"):
             continue
@@ -38,7 +37,7 @@ def importdir(pth):
         data = open(f"{pth}/{fnm}", "r", encoding="utf-8").read()
         if MD5.get(modname) != md5sum(data):
             continue
-        mod = importer(f"{NAME}.{modname}", f"{NAME}")
+        importer(f"{NAME}.{modname}", f"{NAME}")
         MODS.append(modname)
 
 
