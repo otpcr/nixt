@@ -21,13 +21,18 @@ from nixt.clients import Client, Event
 from nixt.command import Commands, Config, parse, scan
 from nixt.objects import Object, keys
 from nixt.persist import Workdir, elapsed, skel
-from nixt.runtime import launch, errors, later
+from nixt.runtime import exceptions, launch, errors, later
 
 
 from nixt import modules as MODS
 
 
 "defines"
+
+
+class MyException(Exception):
+
+    """ My Exception. """
 
 
 Workdir.wdr  = ".test"
@@ -126,16 +131,21 @@ def wrap(function):
         function()
     except (KeyboardInterrupt, EOFError):
         pass
-    except Exception as ex:
+    except exceptions as ex:
         later(ex)
     finally:
         if old3:
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old3)
 
 
+def dbg(evt):
+    raise MyException("yooo!")
+
+
 def main():
     global nrs
     global nrcommand
+    Commands.add(dbg)
     parse(cfg, " ".join(sys.argv[1:]))
     MODS.rss.DEBUG = True
     scan(MODS)

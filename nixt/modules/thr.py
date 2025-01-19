@@ -2,24 +2,22 @@
 # pylint: disable=C0116,W0105,E0402
 
 
-"show running threads."
+""" show running threads. """
 
 
 import threading
 import time
 
 
-from ..objects import Object, update
-from ..persist import elapsed
+from nixt.objects import Object, update
+from nixt.persist import elapsed
 
 
 STARTTIME = time.time()
 
 
-"commands"
-
-
 def thr(event):
+    """ show running threads. """
     result = []
     for thread in sorted(threading.enumerate(), key=lambda x: x.name):
         if str(thread).startswith('<_'):

@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,R0903,W0105,E0402
 
 
 "persistence"
@@ -13,11 +12,8 @@ import time
 import _thread
 
 
-from .methods import fqn, search
-from .objects import Object, dumps, loads, update
-
-
-"locks"
+from nixt.methods import fqn, search
+from nixt.objects import Object, dumps, loads, update
 
 
 lock   = _thread.allocate_lock()
@@ -25,85 +21,8 @@ rwlock = _thread.allocate_lock()
 p      = os.path.join
 
 
-"exceptions"
-
-
-class DecodeError(Exception):
-
-    pass
-
-
-class EncodeError(Exception):
-
-    pass
-
-
-"workdir"
-
-
-class Workdir:
-
-    wdr  = ""
-
-
-"cache"
-
-
-class Cache:
-
-    objs = {}
-
-    @staticmethod
-    def add(path, obj):
-        Cache.objs[path] = obj
-
-    @staticmethod
-    def get(path):
-        return Cache.objs.get(path, None)
-
-    @staticmethod
-    def typed(matcher):
-        for key in Cache.objs:
-            if matcher not in key:
-                continue
-            yield Cache.objs.get(key)
-
-
-"path"
-
-
-def long(name):
-    split = name.split(".")[-1].lower()
-    res = name
-    for names in types():
-        if split == names.split(".")[-1].lower():
-            res = names
-            break
-    return res
-
-
-def pidname(name):
-    return p(Workdir.wdr, f"{name}.pid")
-
-
-def skel():
-    path = pathlib.Path(store())
-    path.mkdir(parents=True, exist_ok=True)
-    return path
-
-
-def store(pth=""):
-    return p(Workdir.wdr, "store", pth)
-
-
-def types():
-    return os.listdir(store())
-
-
-"find"
-
-
 def fns(clz):
+    """ return filenames by class. """
     dname = ''
     pth = store(clz)
     for rootdir, dirs, _files in os.walk(pth, topdown=False):
@@ -116,6 +35,7 @@ def fns(clz):
 
 
 def find(clz, selector=None, deleted=False, matching=False):
+    """ find objects by class and selector dict. """
     skel()
     with lock:
         pth = long(clz)
@@ -134,14 +54,84 @@ def find(clz, selector=None, deleted=False, matching=False):
         return res
 
 
-"methods"
+class Workdir:
+
+    """ Workdir """
+
+    wdr  = ""
+
+    def __len__(self):
+        return len(self.__dict__)
+
+    def __str__(self):
+        return str(self.__dict__)
+
+
+def long(name):
+    """ extrapolate single name to full qualified name. """
+    split = name.split(".")[-1].lower()
+    res = name
+    for names in types():
+        if split == names.split(".")[-1].lower():
+            res = names
+            break
+    return res
+
+
+def pidname(name):
+    """ return pidfile path. """
+    return p(Workdir.wdr, f"{name}.pid")
+
+
+def skel():
+    """ skel directories. """
+    path = pathlib.Path(store())
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def store(pth=""):
+    """ return store path, """
+    return p(Workdir.wdr, "store", pth)
+
+
+def types():
+    """ return types in store. """
+    return os.listdir(store())
+
+
+class Cache:
+
+    """ Cache """
+
+    objs = {}
+
+    @staticmethod
+    def add(path, obj):
+        """ add object to cache. """
+        Cache.objs[path] = obj
+
+    @staticmethod
+    def get(path):
+        """ get object from cache. """
+        return Cache.objs.get(path, None)
+
+    @staticmethod
+    def typed(matcher):
+        """ match typed objects. """
+        for key in Cache.objs:
+            if matcher not in key:
+                continue
+            yield Cache.objs.get(key)
 
 
 def ident(obj):
+    """ create an id. """
     return p(fqn(obj),*str(datetime.datetime.now()).split())
 
 
 def last(obj, selector=None):
+    """ return last object of a type. """
     if selector is None:
         selector = {}
     result = sorted(
@@ -157,6 +147,7 @@ def last(obj, selector=None):
 
 
 def read(obj, pth):
+    """ read object from path. """
     with rwlock:
         with open(pth, 'r', encoding='utf-8') as ofile:
             try:
@@ -168,6 +159,7 @@ def read(obj, pth):
 
 
 def write(obj, pth):
+    """ write object to path. """
     with rwlock:
         cdir(pth)
         txt = dumps(obj, indent=4)
@@ -176,15 +168,24 @@ def write(obj, pth):
     return pth
 
 
-"utilities"
+class DecodeError(Exception):
+
+    """ DecoderError """
+
+
+class EncodeError(Exception):
+
+    """ EncoderError """
 
 
 def cdir(pth):
+    """ create directory. """
     path = pathlib.Path(pth)
     path.parent.mkdir(parents=True, exist_ok=True)
 
 
 def elapsed(seconds, short=True):
+    """ return elapsed string from seconds. """
     txt = ""
     nsec = float(seconds)
     if nsec < 1:
@@ -224,6 +225,7 @@ def elapsed(seconds, short=True):
 
 
 def fntime(daystr):
+    """ derive time from filename. """
     daystr = daystr.replace('_', ':')
     datestr = ' '.join(daystr.split(os.sep)[-2:])
     if '.' in datestr:
@@ -237,10 +239,8 @@ def fntime(daystr):
 
 
 def strip(pth, nmr=3):
+    """ strip from end of path. """
     return os.sep.join(pth.split(os.sep)[-nmr:])
-
-
-"interface"
 
 
 def __dir__():

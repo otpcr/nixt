@@ -1,32 +1,32 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,R0903,W0105,E0402
 
 
-"user commands"
+""" user commands """
 
 
 import inspect
 import types
 
 
-from .objects import Object
-from .runtime import launch
+from nixt.objects import Object
+from nixt.runtime import launch
 
-
-"commands"
 
 
 class Commands:
+
+    """ Commands """
 
     cmds = {}
 
     @staticmethod
     def add(func):
-        "add command."
+        """ add command. """
         Commands.cmds[func.__name__] = func
 
     @staticmethod
     def scan(mod):
+        """ scan module for commands. """
         for key, cmdz in inspect.getmembers(mod, inspect.isfunction):
             if key.startswith("cb"):
                 continue
@@ -34,16 +34,17 @@ class Commands:
                 Commands.add(cmdz)
 
 
-"default"
-
-
 class Default(Object):
+
+    """ Default """
+
+    default = ""
 
     def __contains__(self, key):
         return key in dir(self)
 
     def __getattr__(self, key):
-        return self.__dict__.get(key, "")
+        return self.__dict__.get(key, self.default)
 
     def __iter__(self):
         return iter(self.__dict__)
@@ -51,20 +52,28 @@ class Default(Object):
     def __len__(self):
         return len(self.__dict__)
 
+    @staticmethod
+    def getdefault():
+        """ return default. """
+        return Default.default
 
-"config"
+    @staticmethod
+    def setdefault(default):
+        """ set default. """
+        Default.default = default
 
 
 class Config(Default):
 
+    """ Config. """
+
+    dis  = ""
     mods = ""
     name = Default.__module__.split(".", maxsplit=1)[0]
 
 
-"callbacks"
-
-
 def command(evt):
+    """ command callback. """
     parse(evt)
     func = Commands.cmds.get(evt.cmd, None)
     if func:
@@ -73,10 +82,8 @@ def command(evt):
     evt.ready()
 
 
-"utilitites"
-
-
 def modloop(*pkgs, disable=""):
+    """ yield modules in package. """
     for pkg in pkgs:
         for modname in dir(pkg):
             if modname in spl(disable):
@@ -87,6 +94,7 @@ def modloop(*pkgs, disable=""):
 
 
 def parse(obj, txt=None):
+    """ parse text into object. """
     if txt is None:
         if "txt" in dir(obj):
             txt = obj.txt
@@ -135,6 +143,7 @@ def parse(obj, txt=None):
 
 
 def scan(*pkgs, init=False, disable=""):
+    """ scan package for command and init scripts. """
     result = []
     for mod in modloop(*pkgs, disable=disable):
         modname = mod.__name__.split(".")[-1]
@@ -151,14 +160,12 @@ def scan(*pkgs, init=False, disable=""):
 
 
 def spl(txt):
+    """ comma seperated string. """
     try:
         result = txt.split(',')
     except (TypeError, ValueError):
         result = txt
     return [x for x in result if x]
-
-
-"data"
 
 
 MD5 = {
@@ -174,9 +181,6 @@ MD5 = {
     "thr": "e7c0a98c0eec0d2c8186ea23651ae7e2",
     "upt": "22016f78b86dd0a4f4fa25b2de2ff76b"
 }
-
-
-"interface"
 
 
 def __dir__():

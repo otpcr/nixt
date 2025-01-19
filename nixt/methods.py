@@ -1,17 +1,14 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,R0903,W0105
 
 
-"a function with the object as the first argument"
+""" a function with the object as the first argument """
 
 
-from .objects import items, keys
-
-
-"methods"
+from nixt.objects import items, keys
 
 
 def edit(obj, setter, skip=False):
+    """ edit by setter dict."""
     for key, val in items(setter):
         if skip and val == "":
             continue
@@ -33,7 +30,8 @@ def edit(obj, setter, skip=False):
             setattr(obj, key, val)
 
 
-def format(obj, args=None, skip=None, plain=False):
+def fmt(obj, args=None, skip=None, plain=False):
+    """ format for output. """
     if args is None:
         args = keys(obj)
     if skip is None:
@@ -57,6 +55,7 @@ def format(obj, args=None, skip=None, plain=False):
 
 
 def fqn(obj):
+    """ full qualified name. """
     kin = str(type(obj)).split()[-1][1:-2]
     if kin == "type":
         kin = f"{obj.__module__}.{obj.__name__}"
@@ -64,12 +63,14 @@ def fqn(obj):
 
 
 def match(obj, txt):
+    """ match by key. """
     for key in keys(obj):
         if txt in key:
             yield key
 
 
 def search(obj, selector, matching=None):
+    """ match by selector dict. """
     res = False
     if not selector:
         return res
@@ -87,13 +88,10 @@ def search(obj, selector, matching=None):
     return res
 
 
-"interface"
-
-
 def __dir__():
     return (
          'edit',
-         'format',
+         'fmt',
          'fqn',
          'match',
          'search'

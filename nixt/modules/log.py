@@ -1,31 +1,33 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,R0903,W0105,E0402
 
 
-"log text"
+""" log text """
 
 
 import time
 
 
-from ..objects import Object
-from ..persist import elapsed, find, fntime, ident, store, write
-
-
-"log"
+from nixt.objects import Object
+from nixt.persist import elapsed, find, fntime, ident, store, write
 
 
 class Log(Object):
+
+    """ Log """
 
     def __init__(self):
         super().__init__()
         self.txt = ''
 
+    def __len__(self):
+        return len(self.__dict__)
 
-"commands"
+    def __str__(self):
+        return str(self.__dict__)
 
 
 def log(event):
+    """ log some text. """
     if not event.rest:
         nmr = 0
         for fnm, obj in find('log'):

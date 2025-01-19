@@ -1,21 +1,18 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0116,,W0105,W0622,E0402
 
 
-"find"
+""" find """
 
 
 import time
 
 
-from ..methods import format
-from ..persist import elapsed, find, fntime, long, skel, types
-
-
-"commands"
+from nixt.methods import fmt
+from nixt.persist import elapsed, find, fntime, long, skel, types
 
 
 def fnd(event):
+    """ locate objects. """
     skel()
     if not event.rest:
         res = sorted([x.split('.')[-1].lower() for x in types()])
@@ -26,7 +23,7 @@ def fnd(event):
     clz = long(otype)
     nmr = 0
     for fnm, obj in find(clz, event.gets):
-        event.reply(f"{nmr} {format(obj)} {elapsed(time.time()-fntime(fnm))}")
+        event.reply(f"{nmr} {fmt(obj)} {elapsed(time.time()-fntime(fnm))}")
         nmr += 1
     if not nmr:
         event.reply("no result")

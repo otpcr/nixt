@@ -2,20 +2,18 @@
 # pylint: disable=C0116,W0105,E0402
 
 
-"uptime"
+"""uptime"""
 
 
 import time
 
 
-from ..persist import elapsed
+from nixt.persist import elapsed
 
 
 STARTTIME = time.time()
 
 
-"commands"
-
-
 def upt(event):
+    """ show uptime. """
     event.reply(elapsed(time.time()-STARTTIME))
