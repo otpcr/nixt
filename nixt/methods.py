@@ -2,7 +2,7 @@
 # pylint: disable=W0105
 
 
-""" a function with the object as the first argument """
+"a function with the object as the first argument."
 
 
 from nixt.objects import items, keys

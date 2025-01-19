@@ -2,7 +2,7 @@
 # pylint: disable=W0105
 
 
-""" user commands """
+"commands"
 
 
 import inspect
@@ -12,40 +12,6 @@ import types
 
 from nixt.objects import Object
 from nixt.runtime import launch
-
-
-"commands"
-
-
-class Commands:
-
-    """ Commands """
-
-    cmds = {}
-
-    @staticmethod
-    def add(func):
-        """ add command. """
-        Commands.cmds[func.__name__] = func
-
-    @staticmethod
-    def scan(mod):
-        """ scan module for commands. """
-        for key, cmdz in inspect.getmembers(mod, inspect.isfunction):
-            if key.startswith("cb"):
-                continue
-            if 'event' in cmdz.__code__.co_varnames:
-                Commands.add(cmdz)
-
-
-def command(evt):
-    """ command callback. """
-    parse(evt)
-    func = Commands.cmds.get(evt.cmd, None)
-    if func:
-        func(evt)
-        evt.display()
-    evt.ready()
 
 
 "default"
@@ -90,6 +56,40 @@ class Config(Default):
     dis  = ""
     mods = ""
     name = Default.__module__.split(".", maxsplit=1)[0]
+
+
+"commands"
+
+
+class Commands:
+
+    """ Commands """
+
+    cmds = {}
+
+    @staticmethod
+    def add(func):
+        """ add command. """
+        Commands.cmds[func.__name__] = func
+
+    @staticmethod
+    def scan(mod):
+        """ scan module for commands. """
+        for key, cmdz in inspect.getmembers(mod, inspect.isfunction):
+            if key.startswith("cb"):
+                continue
+            if 'event' in cmdz.__code__.co_varnames:
+                Commands.add(cmdz)
+
+
+def command(evt):
+    """ command callback. """
+    parse(evt)
+    func = Commands.cmds.get(evt.cmd, None)
+    if func:
+        func(evt)
+        evt.display()
+    evt.ready()
 
 
 "utilities"
