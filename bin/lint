@@ -23,4 +23,4 @@ if os.path.exists("bin/clean"):
     popen("bin/clean")
 
 
-popen("pylint nixt tests bin/nixt bin/tinder")
+popen(f"pylint {NAME} tests/*.py bin/*")

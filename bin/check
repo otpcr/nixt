@@ -14,6 +14,7 @@ NAME = "nixt"
 
 
 def ignore(txt):
+    """ check for ignore """
     for ign in IGNORE:
         if ign in txt:
             return True
@@ -21,14 +22,16 @@ def ignore(txt):
 
 
 def popen(txt):
+    """ run command in popen """
     for line in os.popen(txt).readlines():
         if ignore(line):
-             continue
+            continue
         print(line.rstrip())
         sys.stdout.flush()
 
 
 def main():
+    """ main """
     popen(f'grep -R "print(" {NAME}')
     popen(f'grep -R __import__ {NAME}')
     popen(f'grep -R "import sys" {NAME}')
