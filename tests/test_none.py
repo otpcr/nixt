@@ -7,7 +7,6 @@
 import unittest
 
 
-
 class TestNone(unittest.TestCase):
 
     """ TestNone """

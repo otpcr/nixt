@@ -16,7 +16,7 @@ description = "NIXT"
 readme = "README.rst"
 license = { text="Public Domain"}
 classifiers=[
-    'Development Status :: 4 - Beta',
+    'Development Status :: 3 - Alpha',
     'License :: Public Domain',
     'Operating System :: Unix',
     'Programming Language :: Python :: 3',
