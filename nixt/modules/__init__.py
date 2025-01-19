@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=E0402
 
 
 """ modules """
@@ -8,7 +9,7 @@ import importlib
 import os
 
 
-from nixt.command import MD5, md5sum
+from ..command import MD5, md5sum
 
 
 DIR  = os.path.dirname(__file__)
