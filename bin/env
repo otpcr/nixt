@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+# This file is placed in the Public Domain.
+
+
+"create environment."
+
+
+import os
+import sys
+import time
+
+
+IGNORE = []
+NAME   = 'nixt'
+
+
+def banner():
+    """ show banner. """
+    tme = time.ctime(time.time()).replace("  ", " ")
+    print(f"{NAME.upper()} since {tme}")
+
+
+def ignore(txt):
+    """ check for ignore """
+    for ign in IGNORE:
+        if ign in txt:
+            return True
+    return False
+
+
+def popen(txt):
+    """ run command in popen """
+    for line in os.popen(txt).readlines():
+        if ignore(line):
+            continue
+        print(line.rstrip())
+        sys.stdout.flush()
+
+
+def main():
+    """ main. """
+    banner()
+    print("\nclean")
+    popen("bin/clean -f")
+    print("\nbuild\n")
+    popen('python3 setup.py sdist')
+    print("\ntwine\n")
+    popen('twine check dist/*')
+    print("\nmaking env\n")
+    popen("python3 -mvirtualenv env")
+    print("\ninstalling\n")
+    popen(f"env/bin/pip3 install {NAME} -f dist --upgrade --force")
+    print("\nfinal\n")
+    popen("env/bin/nixt cmd")
+    print("\ndone")
+
+
+if __name__ == "__main__":
+    main()
