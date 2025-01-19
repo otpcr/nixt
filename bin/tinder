@@ -145,7 +145,7 @@ def dbg(evt):
 def main():
     global nrs
     global nrcommand
-    Commands.add(dbg)
+    #Commands.add(dbg)
     parse(cfg, " ".join(sys.argv[1:]))
     MODS.rss.DEBUG = True
     scan(MODS)
