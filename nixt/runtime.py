@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=W0105
 
 
 """ runtime """
@@ -11,43 +12,7 @@ import traceback
 import _thread
 
 
-
-
-class Errors:
-
-    """ Errors """
-
-    errors = []
-
-    def __len__(self):
-        return len(self.__dict__)
-
-    def __str__(self):
-        return str(self.__dict__)
-
-    @staticmethod
-    def format(exc):
-        """ format exception. """
-        return traceback.format_exception(
-            type(exc),
-            exc,
-            exc.__traceback__
-        )
-
-
-def errors():
-    """ yield printable error lines. """
-    for err in Errors.errors:
-        for line in err:
-            yield line
-
-
-def later(exc):
-    """ defer exception. """
-    excp = exc.with_traceback(exc.__traceback__)
-    fmt = Errors.format(excp)
-    if fmt not in Errors.errors:
-        Errors.errors.append(fmt)
+"reactor"
 
 
 class Reactor:
@@ -99,6 +64,9 @@ class Reactor:
         """ wait for stop. """
         self.queue.join()
         self.stopped.wait()
+
+
+"thread"
 
 
 class Thread(threading.Thread):
@@ -170,6 +138,9 @@ def name(obj):
     return None
 
 
+"timer"
+
+
 class Timer:
 
     """ Timer """
@@ -206,6 +177,9 @@ class Timer:
             self.timer.cancel()
 
 
+"repeater"
+
+
 class Repeater(Timer):
 
     """ Repeater """
@@ -214,6 +188,49 @@ class Repeater(Timer):
         """ run at repeated intervals. """
         launch(self.start)
         super().run()
+
+
+"errors"
+
+
+class Errors:
+
+    """ Errors """
+
+    errors = []
+
+    def __len__(self):
+        return len(self.__dict__)
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    @staticmethod
+    def format(exc):
+        """ format exception. """
+        return traceback.format_exception(
+            type(exc),
+            exc,
+            exc.__traceback__
+        )
+
+
+def errors():
+    """ yield printable error lines. """
+    for err in Errors.errors:
+        for line in err:
+            yield line
+
+
+def later(exc):
+    """ defer exception. """
+    excp = exc.with_traceback(exc.__traceback__)
+    fmt = Errors.format(excp)
+    if fmt not in Errors.errors:
+        Errors.errors.append(fmt)
+
+
+"exceptions"
 
 
 exceptions = (
@@ -231,6 +248,9 @@ exceptions = (
     SyntaxError,
     SystemError
 )
+
+
+"interface"
 
 
 def __dir__():

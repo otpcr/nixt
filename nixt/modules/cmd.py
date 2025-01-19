@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 
 
-""" show list of commands """
+"list of commands"
 
 
 from nixt.command import Commands

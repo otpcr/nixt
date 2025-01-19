@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=W0105
 
 
 "persistence"
@@ -16,42 +17,56 @@ from nixt.methods import fqn, search
 from nixt.objects import Object, dumps, loads, update
 
 
+"locks"
+
+
 lock   = _thread.allocate_lock()
 rwlock = _thread.allocate_lock()
 p      = os.path.join
 
 
-def fns(clz):
-    """ return filenames by class. """
-    dname = ''
-    pth = store(clz)
-    for rootdir, dirs, _files in os.walk(pth, topdown=False):
-        if dirs:
-            for dname in sorted(dirs):
-                if dname.count('-') == 2:
-                    ddd = p(rootdir, dname)
-                    for fll in os.listdir(ddd):
-                        yield p(ddd, fll)
+"exceptions"
 
 
-def find(clz, selector=None, deleted=False, matching=False):
-    """ find objects by class and selector dict. """
-    skel()
-    with lock:
-        pth = long(clz)
-        res = []
-        for fnm in fns(pth):
-            obj = Cache.get(fnm)
-            if not obj:
-                obj = Object()
-                read(obj, fnm)
-                Cache.add(fnm, obj)
-            if not deleted and '__deleted__' in dir(obj) and obj.__deleted__:
+class DecodeError(Exception):
+
+    """ DecoderError """
+
+
+class EncodeError(Exception):
+
+    """ EncoderError """
+
+
+"cache"
+
+
+class Cache:
+
+    """ Cache """
+
+    objs = {}
+
+    @staticmethod
+    def add(path, obj):
+        """ add object to cache. """
+        Cache.objs[path] = obj
+
+    @staticmethod
+    def get(path):
+        """ get object from cache. """
+        return Cache.objs.get(path, None)
+
+    @staticmethod
+    def typed(matcher):
+        """ match typed objects. """
+        for key in Cache.objs:
+            if matcher not in key:
                 continue
-            if selector and not search(obj, selector, matching):
-                continue
-            res.append((fnm, obj))
-        return res
+            yield Cache.objs.get(key)
+
+
+"workdir"
 
 
 class Workdir:
@@ -100,82 +115,42 @@ def types():
     return os.listdir(store())
 
 
-class Cache:
+"find"
 
-    """ Cache """
 
-    objs = {}
+def fns(clz):
+    """ return filenames by class. """
+    dname = ''
+    pth = store(clz)
+    for rootdir, dirs, _files in os.walk(pth, topdown=False):
+        if dirs:
+            for dname in sorted(dirs):
+                if dname.count('-') == 2:
+                    ddd = p(rootdir, dname)
+                    for fll in os.listdir(ddd):
+                        yield p(ddd, fll)
 
-    @staticmethod
-    def add(path, obj):
-        """ add object to cache. """
-        Cache.objs[path] = obj
 
-    @staticmethod
-    def get(path):
-        """ get object from cache. """
-        return Cache.objs.get(path, None)
-
-    @staticmethod
-    def typed(matcher):
-        """ match typed objects. """
-        for key in Cache.objs:
-            if matcher not in key:
+def find(clz, selector=None, deleted=False, matching=False):
+    """ find objects by class and selector dict. """
+    skel()
+    with lock:
+        pth = long(clz)
+        res = []
+        for fnm in fns(pth):
+            obj = Cache.get(fnm)
+            if not obj:
+                obj = Object()
+                read(obj, fnm)
+                Cache.add(fnm, obj)
+            if not deleted and '__deleted__' in dir(obj) and obj.__deleted__:
                 continue
-            yield Cache.objs.get(key)
+            if selector and not search(obj, selector, matching):
+                continue
+            res.append((fnm, obj))
+        return res
 
-
-def ident(obj):
-    """ create an id. """
-    return p(fqn(obj),*str(datetime.datetime.now()).split())
-
-
-def last(obj, selector=None):
-    """ return last object of a type. """
-    if selector is None:
-        selector = {}
-    result = sorted(
-                    find(fqn(obj), selector),
-                    key=lambda x: fntime(x[0])
-                   )
-    res = None
-    if result:
-        inp = result[-1]
-        update(obj, inp[-1])
-        res = inp[0]
-    return res
-
-
-def read(obj, pth):
-    """ read object from path. """
-    with rwlock:
-        with open(pth, 'r', encoding='utf-8') as ofile:
-            try:
-                obj2 = loads(ofile.read())
-                update(obj, obj2)
-            except json.decoder.JSONDecodeError as ex:
-                raise DecodeError(pth) from ex
-    return pth
-
-
-def write(obj, pth):
-    """ write object to path. """
-    with rwlock:
-        cdir(pth)
-        txt = dumps(obj, indent=4)
-        with open(pth, 'w', encoding='utf-8') as ofile:
-            ofile.write(txt)
-    return pth
-
-
-class DecodeError(Exception):
-
-    """ DecoderError """
-
-
-class EncodeError(Exception):
-
-    """ EncoderError """
+"utilities"
 
 
 def cdir(pth):
@@ -241,6 +216,56 @@ def fntime(daystr):
 def strip(pth, nmr=3):
     """ strip from end of path. """
     return os.sep.join(pth.split(os.sep)[-nmr:])
+
+
+"methods"
+
+
+def ident(obj):
+    """ create an id. """
+    return p(fqn(obj),*str(datetime.datetime.now()).split())
+
+
+def last(obj, selector=None):
+    """ return last object of a type. """
+    if selector is None:
+        selector = {}
+    result = sorted(
+                    find(fqn(obj), selector),
+                    key=lambda x: fntime(x[0])
+                   )
+    res = None
+    if result:
+        inp = result[-1]
+        update(obj, inp[-1])
+        res = inp[0]
+    return res
+
+
+def read(obj, pth):
+    """ read object from path. """
+    with rwlock:
+        with open(pth, 'r', encoding='utf-8') as ofile:
+            try:
+                obj2 = loads(ofile.read())
+                update(obj, obj2)
+            except json.decoder.JSONDecodeError as ex:
+                raise DecodeError(pth) from ex
+    return pth
+
+
+def write(obj, pth):
+    """ write object to path. """
+    with rwlock:
+        cdir(pth)
+        txt = dumps(obj, indent=4)
+        with open(pth, 'w', encoding='utf-8') as ofile:
+            ofile.write(txt)
+    return pth
+
+
+
+"interface"
 
 
 def __dir__():

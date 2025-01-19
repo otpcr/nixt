@@ -1,10 +1,14 @@
 # This file is placed in the Public Domain.
+# pylint: disable=W0105
 
 
 """ a function with the object as the first argument """
 
 
 from nixt.objects import items, keys
+
+
+"methods"
 
 
 def edit(obj, setter, skip=False):
@@ -86,6 +90,9 @@ def search(obj, selector, matching=None):
             res = False
             break
     return res
+
+
+"interface"
 
 
 def __dir__():

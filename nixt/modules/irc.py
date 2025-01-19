@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=W0105
 
 
 "internet relay chat"
@@ -24,12 +25,18 @@ from nixt.persist import ident, last, store, write
 from nixt.runtime import exceptions, later, launch
 
 
+"defines"
+
+
 IGNORE = ["PING", "PONG", "PRIVMSG"]
 NAME   = Object.__module__.rsplit(".", maxsplit=2)[-2]
 
 
 output  = logging.debug
 saylock = _thread.allocate_lock()
+
+
+"init"
 
 
 def debug(txt):
@@ -47,6 +54,9 @@ def init():
     irc.events.ready.wait()
     debug(f'{fmt(Config, skip="edited,password")}')
     return irc
+
+
+"config"
 
 
 class Config(Default):
@@ -77,55 +87,7 @@ class Config(Default):
         self.username = Config.username
 
 
-def cfg(event):
-    """ configure IRC client. """
-    config = Config()
-    last(config)
-    if not event.sets:
-        event.reply(
-                    fmt(
-                        config,
-                        keys(config),
-                        skip='control,password,realname,sleep,username'.split(",")
-                       )
-                   )
-    else:
-        edit(config, event.sets)
-        write(config, store(ident(config)))
-        event.done()
-
-
-def mre(event):
-    """ fetch more output from channel buffer. """
-    if not event.channel:
-        event.reply('channel is not set.')
-        return
-    bot = Fleet.get(event.orig)
-    if 'cache' not in dir(bot):
-        event.reply('bot is missing cache')
-        return
-    if event.channel not in dir(Output.cache):
-        event.reply(f'no output in {event.channel} cache.')
-        return
-    for _x in range(3):
-        txt = Output.gettxt(event.channel)
-        event.reply(txt)
-    size = IRC.size(event.channel)
-    event.reply(f'{size} more in cache')
-
-
-def pwd(event):
-    """ return SASL password. """
-    if len(event.args) != 2:
-        event.reply('pwd <nick> <password>')
-        return
-    arg1 = event.args[0]
-    arg2 = event.args[1]
-    txt = f'\x00{arg1}\x00{arg2}'
-    enc = txt.encode('ascii')
-    base = base64.b64encode(enc)
-    dcd = base.decode('ascii')
-    event.reply(dcd)
+"wrapper"
 
 
 class TextWrap(textwrap.TextWrapper):
@@ -143,6 +105,9 @@ class TextWrap(textwrap.TextWrapper):
 
 
 wrapper = TextWrap()
+
+
+"output"
 
 
 class Output:
@@ -215,6 +180,9 @@ class Output:
         if chan in dir(Output.cache):
             return len(getattr(Output.cache, chan, []))
         return 0
+
+
+"irc"
 
 
 class IRC(Client, Output):
@@ -583,6 +551,9 @@ class IRC(Client, Output):
         Client.stop(self)
 
 
+"callbacks"
+
+
 def cb_auth(evt):
     """ authorisation callback. """
     bot = Fleet.get(evt.orig)
@@ -674,3 +645,57 @@ def cb_quit(evt):
     debug(f"quit from {bot.cfg.server}")
     if evt.orig and evt.orig in bot.zelf:
         bot.stop()
+
+
+"commands"
+
+
+def cfg(event):
+    """ configure IRC client. """
+    config = Config()
+    last(config)
+    if not event.sets:
+        event.reply(
+                    fmt(
+                        config,
+                        keys(config),
+                        skip='control,password,realname,sleep,username'.split(",")
+                       )
+                   )
+    else:
+        edit(config, event.sets)
+        write(config, store(ident(config)))
+        event.done()
+
+
+def mre(event):
+    """ fetch more output from channel buffer. """
+    if not event.channel:
+        event.reply('channel is not set.')
+        return
+    bot = Fleet.get(event.orig)
+    if 'cache' not in dir(bot):
+        event.reply('bot is missing cache')
+        return
+    if event.channel not in dir(Output.cache):
+        event.reply(f'no output in {event.channel} cache.')
+        return
+    for _x in range(3):
+        txt = Output.gettxt(event.channel)
+        event.reply(txt)
+    size = IRC.size(event.channel)
+    event.reply(f'{size} more in cache')
+
+
+def pwd(event):
+    """ return SASL password. """
+    if len(event.args) != 2:
+        event.reply('pwd <nick> <password>')
+        return
+    arg1 = event.args[0]
+    arg2 = event.args[1]
+    txt = f'\x00{arg1}\x00{arg2}'
+    enc = txt.encode('ascii')
+    base = base64.b64encode(enc)
+    dcd = base.decode('ascii')
+    event.reply(dcd)

@@ -1,7 +1,8 @@
 # This file is placed in the Public Domain.
+# pylint: disable=W0105
 
 
-""" rich site syndicate """
+"rich site syndicate"
 
 
 import os
@@ -27,6 +28,9 @@ from nixt.objects import Object, update
 from nixt.runtime import Repeater, launch
 
 
+"defines"
+
+
 importlock = _thread.allocate_lock()
 skipped    = []
 
@@ -38,11 +42,17 @@ DEBUG = False
 fetchlock  = _thread.allocate_lock()
 
 
+"init"
+
+
 def init():
     """ init rss module. """
     fetcher = Fetcher()
     fetcher.start()
     return fetcher
+
+
+"feed"
 
 
 class Feed(Object):
@@ -58,6 +68,9 @@ class Feed(Object):
 
     def __str__(self):
         return str(self.__dict__)
+
+
+"rss"
 
 
 class Rss(Object):
@@ -77,6 +90,9 @@ class Rss(Object):
         return str(self.__dict__)
 
 
+"urls"
+
+
 class Urls(Object):
 
     """ Urls """
@@ -86,6 +102,9 @@ class Urls(Object):
 
     def __str__(self):
         return str(self.__dict__)
+
+
+"fetcher"
 
 
 class Fetcher(Object):
@@ -173,6 +192,9 @@ class Fetcher(Object):
             repeater.start()
 
 
+"parser"
+
+
 class Parser:
 
     """ Parser """
@@ -229,14 +251,8 @@ class Parser:
         return result
 
 
-def attrs(obj, txt):
-    """ update attributes. """
-    update(obj, OPMLParser.parse(txt))
+"utilities"
 
-
-def shortid():
-    """ create shortid. """
-    return str(uuid.uuid4())[:8]
 
 
 def cdata(line):
@@ -314,6 +330,9 @@ def useragent(txt):
     return 'Mozilla/5.0 (X11; Linux x86_64) ' + txt
 
 
+"opml"
+
+
 class OPMLParser:
 
     """ OPMLParser """
@@ -382,6 +401,19 @@ class OPMLParser:
                 setattr(obj, itm, val.strip())
             result.append(obj)
         return result
+
+
+def attrs(obj, txt):
+    """ update attributes. """
+    update(obj, OPMLParser.parse(txt))
+
+
+def shortid():
+    """ create shortid. """
+    return str(uuid.uuid4())[:8]
+
+
+"commands"
 
 
 def dpl(event):
@@ -530,6 +562,9 @@ def syn(event):
         thr.join()
         nrs += 1
     event.reply(f"{nrs} feeds synced")
+
+
+"data"
 
 
 TEMPLATE = """<opml version="1.0">

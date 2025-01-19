@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 
 
-""" log text """
+"log text"
 
 
 import time
