@@ -1,8 +1,7 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C,R,W0105,W0622
 
 
-"objects"
+""" objects """
 
 
 import unittest
@@ -24,9 +23,9 @@ attrs1 = (
     'dumps',
     'fqn',
     'items',
+    'update',
     'keys',
     'loads',
-    'update',
     'values'
 )
 
@@ -71,7 +70,10 @@ PACKAGE = nixt.objects
 
 class TestObject(unittest.TestCase):
 
+    """ TestObject """
+
     def test_attributes(self):
+        """ attribute test. """
         okd = True
         for meth in attrs2:
             print(meth)
@@ -81,44 +83,53 @@ class TestObject(unittest.TestCase):
         self.assertTrue(okd)
 
     def test_constructor(self):
+        """ constructor test. """
         obj = Object()
         self.assertTrue(type(obj), Object)
 
     def test_class(self):
+        """ class tests. """
         obj = Object()
         clz = obj.__class__()
         self.assertTrue("Object" in str(type(clz)))
 
     def test_delattr(self):
+        """ detelete attribute test. """
         obj = Object()
         obj.key = "value"
         del obj.key
         self.assertTrue("key" not in dir(obj))
 
     def test_dict(self):
+        """ dictionary test. """
         obj = Object()
         self.assertEqual(obj.__dict__, {})
 
     def test_getattribute(self):
+        """ getattributes test. """
         obj = Object()
         obj.key = "value"
-        self.assertEqual(obj.__getattribute__("key"), "value")
+        self.assertEqual(getattr(obj, "key"), "value")
 
     def test_getattr(self):
+        """ getattr test. """
         obj = Object()
         obj.key = "value"
         self.assertEqual(getattr(obj, "key"), "value")
 
     def test_hash(self):
+        """ hash test. """
         obj = Object()
         hsj = hash(obj)
         self.assertTrue(isinstance(hsj, int))
 
     def test_init(self):
+        """ init test. """
         obj = Object()
         self.assertTrue(type(Object.__init__(obj)), Object)
 
     def test_items(self):
+        """ items test. """
         obj = Object()
         obj.key = "value"
         self.assertEqual(
@@ -129,6 +140,7 @@ class TestObject(unittest.TestCase):
         )
 
     def test_keys(self):
+        """ keys test. """
         obj = Object()
         obj.key = "value"
         self.assertEqual(
@@ -139,6 +151,7 @@ class TestObject(unittest.TestCase):
         )
 
     def test_methods(self):
+        """ methods test. """
         okd = True
         for attr in attrs1:
             att = getattr(PACKAGE, attr, None)
@@ -148,22 +161,27 @@ class TestObject(unittest.TestCase):
         self.assertTrue(okd)
 
     def test_module(self):
+        """ module test. """
         self.assertEqual(Object().__module__, "nixt.objects")
 
     def test_register(self):
+        """ register test. """
         obj = Object()
         setattr(obj, "key", "value")
         self.assertEqual(obj.key, "value")
 
     def test_repr(self):
-        self.assertTrue(update(Object(), {"key": "value"}).__repr__(), {"key": "value"})
+        """ repr test. """
+        self.assertTrue(repr(update(Object(), {"key": "value"})), {"key": "value"})
 
     def test_setattr(self):
+        """ setattr test. """
         obj = Object()
-        obj.__setattr__("key", "value")
+        setattr(obj, "key", "value")
         self.assertTrue(obj.key, "value")
 
     def test_update(self):
+        """ update test. """
         obj = Object()
         obj.key = "value"
         oobj = Object()
@@ -171,6 +189,7 @@ class TestObject(unittest.TestCase):
         self.assertTrue(oobj.key, "value")
 
     def test_values(self):
+        """ values test. """
         obj = Object()
         obj.key = "value"
         self.assertEqual(

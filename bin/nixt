@@ -1,66 +1,67 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C,R0903,R1732,W0105,W0212,W0611,W0718,W1514,E0402
 
 
-"main"
+""" main """
 
 
-import hashlib
+import getpass
 import os
 import pathlib
+import pwd
+import readline
 import sys
+import termios
 import time
 import _thread
 
 
-sys.path.insert(0, os.getcwd())
-
-
 from nixt.clients import Client, Event
-from nixt.command import Commands, Config, command, parse, scan
-from nixt.objects import dumps 
+from nixt.command import Commands, Config, command, md5sum, parse, scan
+from nixt.objects import dumps
 from nixt.persist import Workdir, pidname
-from nixt.runtime import errors, later
+from nixt.runtime import errors, exceptions, later
 
 
 from nixt import modules as MODS
 
 
-"defines"
-
-
-cfg = Config()
+cfg     = Config()
 cfg.dis = "upt"
-p   = os.path.join
+p       = os.path.join
 
 
 Workdir.wdr = os.path.expanduser(f"~/.{Config.name}")
 
 
-"console"
-
-
 class CLI(Client):
 
+    """ Command Line Interface """
+
     def raw(self, txt):
+        """ echo raw text. """
         print(txt.encode('utf-8', 'replace').decode("utf-8"))
         sys.stdout.flush()
 
     def say(self, _channel, txt):
+        """ relay to raw. """
         self.raw(txt)
 
 
 class Console(CLI):
 
+    """ Console """
+
     def announce(self, txt):
-        pass
+        """ disable announce. """
 
     def callback(self, evt):
+        """ wait for callback to finish. """
         CLI.callback(self, evt)
         evt.wait()
 
     def poll(self):
+        """ poll for event. """
         evt = Event()
         evt.orig = repr(self)
         evt.txt = input("> ")
@@ -68,33 +69,33 @@ class Console(CLI):
         return evt
 
 
-"utilities"
-
-
 def banner():
+    """ show banner. """
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{Config.name.upper()} since {tme}")
 
 
 def check(txt):
+    """ check for options. """
     args = sys.argv[1:]
     for arg in args:
         if not arg.startswith("-"):
             continue
-        for c in txt:
-            if c in arg:
+        for char in txt:
+            if char in arg:
                 return True
     return False
 
 
 def daemon(verbose=False):
+    """ run in the background. """
     pid = os.fork()
     if pid != 0:
-        os._exit(0)
+        os._exit(0) # pylint: disable=W0212
     os.setsid()
     pid2 = os.fork()
     if pid2 != 0:
-        os._exit(0)
+        os._exit(0) # pylint: disable=W0212
     if not verbose:
         with open('/dev/null', 'r', encoding="utf-8") as sis:
             os.dup2(sis.fileno(), sys.stdin.fileno())
@@ -108,6 +109,7 @@ def daemon(verbose=False):
 
 
 def forever():
+    """ run forever. """
     while True:
         try:
             time.sleep(0.1)
@@ -115,11 +117,8 @@ def forever():
             _thread.interrupt_main()
 
 
-def md5sum(txt):
-    return hashlib.md5(txt.encode("utf-8")).hexdigest()
-
-
 def pidfile(filename):
+    """ write the pid to a file. """
     if os.path.exists(filename):
         os.unlink(filename)
     path2 = pathlib.Path(filename)
@@ -129,17 +128,14 @@ def pidfile(filename):
 
 
 def privileges():
-    import getpass
-    import pwd
+    """ drop privileges. """
     pwnam2 = pwd.getpwnam(getpass.getuser())
     os.setgid(pwnam2.pw_gid)
     os.setuid(pwnam2.pw_uid)
 
 
-"scripts"
-
-
 def background():
+    """ run in the background. """
     daemon(True)
     privileges()
     pidfile(pidname(Config.name))
@@ -148,7 +144,7 @@ def background():
 
 
 def console():
-    import readline # noqa: F401
+    """ run console. """
     parse(cfg, " ".join(sys.argv[1:]))
     Config.dis  = cfg.sets.dis or Config.dis
     Config.mods = cfg.sets.mods or Config.mods
@@ -165,6 +161,7 @@ def console():
 
 
 def control():
+    """ daemon control. """
     if len(sys.argv) == 1:
         return
     Commands.add(md5)
@@ -182,16 +179,15 @@ def control():
 
 
 def service():
+    """ run as service. """
     privileges()
     pidfile(pidname(Config.name))
     scan(MODS, init=True)
     forever()
 
 
-"commands"
-
-
 def md5(event):
+    """ command to create md5 sum dictionary. """
     if not event.args:
         event.reply("md5 <path>")
         return
@@ -202,22 +198,20 @@ def md5(event):
             continue
         if not fnm.endswith(".py"):
             continue
-        data = open(f"{path}/{fnm}", "r").read()
-        res[fnm[:-3]] = md5sum(data)
-    event.reply("MD5 = %s" %dumps(res, indent=4, sort_keys=True))
+        with open(f"{path}/{fnm}", "r", encoding="utf-8") as file:
+            data = file.read()
+            res[fnm[:-3]] = md5sum(data)
+    event.reply(f"MD5 = {dumps(res, indent=4, sort_keys=True)}")
 
 
 def srv(event):
-    import getpass
+    """ command to create service file. """
     name = getpass.getuser()
     event.reply(TXT % (Config.name.upper(), name, name, name, Config.name))
 
 
-"runtime"
-
-
 def wrap(func):
-    import termios
+    """ wrapper to restore console. """
     old = None
     try:
         old = termios.tcgetattr(sys.stdin.fileno())
@@ -227,7 +221,7 @@ def wrap(func):
         func()
     except (KeyboardInterrupt, EOFError):
         print("")
-    except Exception as exc:
+    except exceptions as exc:
         later(exc)
     finally:
         if old:
@@ -237,15 +231,19 @@ def wrap(func):
 
 
 def wrapped():
+    """ wrap main. """
     wrap(main)
 
 
 def wraps():
+    """ wrap service. """
     wrap(service)
 
 
 def main():
+    """ main """
     if check("c"):
+        readline.redisplay()
         wrap(console)
     elif check("d"):
         background()
@@ -253,9 +251,6 @@ def main():
         wrap(service)
     else:
         control()
-
-
-"data"
 
 
 TXT = """[Unit]

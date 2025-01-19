@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C,R0903,W0105,W0201,W0212,W0603,W0613,W0718,E0401
 
 
 "tinder"
@@ -14,9 +13,6 @@ import time
 import _thread
 
 
-sys.path.insert(0, os.getcwd())
-
-
 from nixt.clients import Client, Event
 from nixt.command import Commands, Config, parse, scan
 from nixt.objects import Object, keys
@@ -25,9 +21,6 @@ from nixt.runtime import exceptions, launch, errors, later
 
 
 from nixt import modules as MODS
-
-
-"defines"
 
 
 class MyException(Exception):
@@ -42,12 +35,7 @@ cfg = Config()
 cfg.index = 0
 
 
-
-lap = 1
-nrs = 1
-nrcommand = 1
-percall   = 1
-starttime = time.time()
+STARTTIME = time.time()
 
 
 events = []
@@ -81,21 +69,23 @@ param.ver = [""]
 
 class CLI(Client):
 
+    """ CLI """
+
     def raw(self, txt):
+        """ echo raw text. """
         if "v" in cfg.opts:
             print(txt)
 
 
-"utilities"
-
-
 def banner():
+    """ show banner. """
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{Config.name.upper()} since {tme}")
     print(",".join(keys(Commands.cmds)))
 
 
 def consume(evts):
+    """ consume events. """
     done = []
     for evt in sorted(evts, key=lambda x: x.ctime):
         evt.wait()
@@ -106,6 +96,7 @@ def consume(evts):
 
 
 def payload(clt):
+    """ run payload. """
     nmr = 0
     for cmdd in sorted(Commands.cmds):
         for ex in getattr(param, cmdd, [""]):
@@ -118,17 +109,16 @@ def payload(clt):
     return nmr
 
 
-"runtime"
-
-
 def wrap(function):
+    """ restore console. """
     old3 = None
+    res  = None
     try:
         old3 = termios.tcgetattr(sys.stdin.fileno())
     except termios.error:
         pass
     try:
-        function()
+        res =  function()
     except (KeyboardInterrupt, EOFError):
         pass
     except exceptions as ex:
@@ -136,15 +126,16 @@ def wrap(function):
     finally:
         if old3:
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old3)
+    return res
 
 
 def dbg(evt):
+    """ raise debug exception. """
     raise MyException("yooo!")
 
 
 def main():
-    global nrs
-    global nrcommand
+    """ main. """
     #Commands.add(dbg)
     parse(cfg, " ".join(sys.argv[1:]))
     MODS.rss.DEBUG = True
@@ -168,19 +159,20 @@ def main():
     consume(events)
     clt.stop()
     #clt.wait()
-
+    endtime = time.time()
+    lap     = elapsed(endtime-STARTTIME)
+    percall = (endtime-STARTTIME)/(nrs*nrcommand)
+    if "v" in cfg.opts:
+        for line in errors():
+            print(line)
+    return lap, nrs, nrcommand, percall
 
 if __name__ == "__main__":
-    wrap(main)
-    endtime = time.time()
-    lap = elapsed(endtime-starttime)
-    percall = (endtime-starttime)/(nrs*nrcommand)
-    for line in errors():
-        print(line)
+    LAP, NRS, NRCOMMAND, PERCALL = wrap(main)
     if "v" in cfg.opts:
         if not list(errors()):
             print("no errors")
         if events:
             print(f"{len(events)} events")
-        print(f"{lap} {nrs} {nrcommand} {percall}")
+        print(f"{LAP} {NRS} {NRCOMMAND} {PERCALL}")
     sys.stdout.flush()

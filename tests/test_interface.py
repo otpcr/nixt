@@ -1,9 +1,7 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C,R,W0401,W0614,W0622
-# ruff: noqa: F403,F405
 
 
-"interface"
+""" interface """
 
 
 import logging
@@ -14,9 +12,6 @@ import unittest
 import nixt
 
 
-from nixt.objects import *
-
-
 import nixt.clients
 import nixt.command
 import nixt.methods
@@ -24,6 +19,9 @@ import nixt.modules
 import nixt.objects
 import nixt.persist
 import nixt.runtime
+
+
+from nixt.objects import Object
 
 
 PACKAGE = [
@@ -68,7 +66,10 @@ METHODS = [
 
 class TestInterface(unittest.TestCase):
 
+    """ TestInterface """
+
     def test_package(self):
+        """ package test. """
         okd = True
         for mod in PACKAGE:
             mod1 = getattr(nixt, mod, None)
@@ -79,6 +80,7 @@ class TestInterface(unittest.TestCase):
         self.assertTrue(okd)
 
     def test_objects(self):
+        """ objects test. """
         okd = True
         obj = Object()
         dirr = dir(obj)

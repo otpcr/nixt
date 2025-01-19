@@ -5,6 +5,7 @@
 
 
 import inspect
+import hashlib
 import types
 
 
@@ -80,6 +81,11 @@ def command(evt):
         func(evt)
         evt.display()
     evt.ready()
+
+
+def md5sum(txt):
+    """ create md5 sum of text. """
+    return hashlib.md5(txt.encode("utf-8")).hexdigest()
 
 
 def modloop(*pkgs, disable=""):
@@ -191,6 +197,7 @@ def __dir__():
         'Default',
         'Event',
         'command',
+        'md5sum',
         'parse',
         'scan',
         'spl'
