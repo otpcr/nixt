@@ -9,8 +9,8 @@ import threading
 import time
 
 
+from ..locator import elapsed
 from ..objects import Object, update
-from ..persist import elapsed
 
 
 STARTTIME = time.time()

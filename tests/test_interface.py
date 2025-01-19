@@ -14,7 +14,7 @@ import nixt
 
 import nixt.clients
 import nixt.command
-import nixt.methods
+import nixt.locater
 import nixt.modules
 import nixt.objects
 import nixt.persist
@@ -27,7 +27,7 @@ from nixt.objects import Object
 PACKAGE = [
     'clients',
     'command',
-    'methods',
+    'locater',
     'modules',
     'objects',
     'persist',

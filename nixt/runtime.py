@@ -227,6 +227,18 @@ def later(exc):
         Errors.errors.append(fmt)
 
 
+"utilities"
+
+
+def forever():
+    """ run forever. """
+    while True:
+        try:
+            time.sleep(0.2)
+        except (KeyboardInterrupt, EOFError):
+            _thread.interrupt_main()
+
+
 "exceptions"
 
 
@@ -258,6 +270,7 @@ def __dir__():
         'Thread',
         'Timer',
         'errors',
+        'forever',
         'later',
         'launch',
         'name'

@@ -7,6 +7,7 @@
 
 import inspect
 import hashlib
+import time
 import types
 
 
@@ -93,6 +94,12 @@ def command(evt):
 
 
 "utilities"
+
+
+def banner():
+    """ show banner. """
+    tme = time.ctime(time.time()).replace("  ", " ")
+    print(f"{Config.name.upper()} since {tme}")
 
 
 def md5sum(txt):
@@ -214,6 +221,7 @@ def __dir__():
         'Config',
         'Default',
         'Event',
+        'banner',
         'command',
         'md5sum',
         'parse',

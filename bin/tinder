@@ -15,8 +15,9 @@ import _thread
 
 from nixt.clients import Client, Event
 from nixt.command import Commands, Config, parse, scan
+from nixt.locater import elapsed
 from nixt.objects import Object, keys
-from nixt.persist import Workdir, elapsed, skel
+from nixt.persist import Workdir, skel
 from nixt.runtime import exceptions, launch, errors, later
 
 

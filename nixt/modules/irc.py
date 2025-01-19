@@ -19,9 +19,9 @@ import _thread
 
 from ..clients import Client, Default, Event, Fleet
 from ..command import command
-from ..methods import edit, fmt
-from ..objects import Object, keys
-from ..persist import ident, last, store, write
+from ..locator import last
+from ..objects import Object, edit, fmt, keys
+from ..persist import ident, store, write
 from ..runtime import exceptions, later, launch
 
 

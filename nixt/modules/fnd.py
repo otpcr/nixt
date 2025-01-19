@@ -8,8 +8,9 @@
 import time
 
 
-from ..methods import fmt
-from ..persist import elapsed, find, fntime, long, skel, types
+from ..locator import elapsed, find, fntime
+from ..objects import fmt
+from ..persist import long, skel, types
 
 
 def fnd(event):

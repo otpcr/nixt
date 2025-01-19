@@ -10,7 +10,7 @@ import sys
 import time
 
 
-IGNORE = []
+IGNORES = []
 NAME   = 'nixt'
 
 
@@ -20,9 +20,9 @@ def banner():
     print(f"{NAME.upper()} since {tme}")
 
 
-def ignore(txt):
+def ignoring(txt):
     """ check for ignore """
-    for ign in IGNORE:
+    for ign in IGNORES:
         if ign in txt:
             return True
     return False
@@ -31,7 +31,7 @@ def ignore(txt):
 def popen(txt):
     """ run command in popen """
     for line in os.popen(txt).readlines():
-        if ignore(line):
+        if ignoring(line):
             continue
         print(line.rstrip())
         sys.stdout.flush()
