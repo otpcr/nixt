@@ -13,7 +13,7 @@ N I X T
 
 |
 | ``nixt <cmd> [key=val] [key==val]``
-| ``nixt -cviw
+| ``nixt -cviw``
 | ``nixt -d`` 
 | ``nixt -s``
 |

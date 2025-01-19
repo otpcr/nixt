@@ -16,6 +16,9 @@ import time
 import _thread
 
 
+sys.path.insert(0, os.getcwd())
+
+
 from nixt.clients import Client, Event
 from nixt.command import Commands, Config, command, md5sum, parse, scan
 from nixt.objects import dumps

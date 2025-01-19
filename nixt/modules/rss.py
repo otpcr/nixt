@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
+# pylint: disable=W0105,E0402
 
 
 "rich site syndicate"
@@ -20,12 +20,12 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from nixt.clients import Fleet
-from nixt.command import spl
-from nixt.methods import fmt
-from nixt.persist import elapsed, find, fntime, ident, last, store, write
-from nixt.objects import Object, update
-from nixt.runtime import Repeater, launch
+from ..clients import Fleet
+from ..command import spl
+from ..methods import fmt
+from ..persist import elapsed, find, fntime, ident, last, store, write
+from ..objects import Object, update
+from ..runtime import Repeater, launch
 
 
 "defines"

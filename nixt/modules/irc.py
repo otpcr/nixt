@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
+# pylint: disable=W0105,E0402
 
 
 "internet relay chat"
@@ -17,12 +17,12 @@ import time
 import _thread
 
 
-from nixt.clients import Client, Default, Event, Fleet
-from nixt.command import command
-from nixt.methods import edit, fmt
-from nixt.objects import Object, keys
-from nixt.persist import ident, last, store, write
-from nixt.runtime import exceptions, later, launch
+from ..clients import Client, Default, Event, Fleet
+from ..command import command
+from ..methods import edit, fmt
+from ..objects import Object, keys
+from ..persist import ident, last, store, write
+from ..runtime import exceptions, later, launch
 
 
 "defines"
@@ -85,6 +85,12 @@ class Config(Default):
         self.realname = Config.realname
         self.server = Config.server
         self.username = Config.username
+
+    def __len__(self):
+        return len(self.__dict__)
+
+    def __str__(self):
+        return str(self.__dict__)
 
 
 "wrapper"

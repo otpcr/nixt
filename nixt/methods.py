@@ -1,11 +1,11 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
+# pylint: disable=W0105,E0402
 
 
 "a function with the object as the first argument."
 
 
-from nixt.objects import items, keys
+from .objects import items, keys
 
 
 "methods"

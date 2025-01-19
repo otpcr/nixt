@@ -44,6 +44,7 @@ def main():
     popen("rm -fR .pytest_cache .test __pycache__ .ruff_cache")
     popen("rm -fR .*~ *~")
     popen("rm -fR store .venv uv.lock")
+    popen("rm -fR env")
     loop(".", "rm -fR *~")
     loop(".", "rm -fR __pycache__")
 

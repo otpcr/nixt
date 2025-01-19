@@ -6,21 +6,54 @@
 
 
 import os
+import subprocess
 import sys
+import time
 
 
+IGNORE = ["---", "Your code", ""]
 NAME = "nixt"
 
 
-def popen(txt):
-    "run text in popen."
+def banner():
+    """ show banner. """
+    tme = time.ctime(time.time()).replace("  ", " ")
+    print(f"{NAME.upper()} since {tme}")
+
+
+def ignore(txt):
+    """ check for ignore """
+    for ign in IGNORE:
+        if ign in txt:
+            return True
+    return False
+
+
+def popen(text):
+    """ run command in a subprocess. """
+    with subprocess.Popen(
+                            text,
+                            stdin=sys.stdin,
+                            stderr=sys.stderr,
+                            stdout=sys.stdout,
+                            close_fds=False,
+                            shell=True,
+                            text=True
+                           ) as proc2:
+        proc2.communicate()
+        proc2.wait()
+
+
+def popen2(txt):
+    """ run command in popen """
+    goth = False
     for line in os.popen(txt).readlines():
+        if ignore(line):
+            continue
+        if line:
+            goth = True
         print(line.rstrip())
-        sys.stdout.flush()
+    return goth
 
 
-if os.path.exists("bin/clean"):
-    popen("bin/clean")
-
-
-popen(f"pylint {NAME} tests/*.py bin/*")
+popen2(f"pylint {NAME} tests/*.py bin/*")

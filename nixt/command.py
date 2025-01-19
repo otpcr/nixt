@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
+# pylint: disable=W0105,E0402
 
 
 "commands"
@@ -10,8 +10,8 @@ import hashlib
 import types
 
 
-from nixt.objects import Object
-from nixt.runtime import launch
+from .objects import Object
+from .runtime import launch
 
 
 "default"

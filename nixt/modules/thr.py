@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint:: disable=E0402
 
 
 "running threads"
@@ -8,8 +9,8 @@ import threading
 import time
 
 
-from nixt.objects import Object, update
-from nixt.persist import elapsed
+from ..objects import Object, update
+from ..persist import elapsed
 
 
 STARTTIME = time.time()

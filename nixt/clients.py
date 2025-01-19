@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
+# pylint: disable=W0105,E0402
 
 
 """ clients """
@@ -10,8 +10,8 @@ import threading
 import time
 
 
-from nixt.command import Default, command
-from nixt.runtime import Reactor, launch
+from .command import Default, command
+from .runtime import Reactor, launch
 
 
 "client"

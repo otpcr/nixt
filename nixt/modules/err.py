@@ -1,10 +1,11 @@
 # This file is placed in the Public Domain.
+# pylint: disable=E0402
 
 
 "errors"
 
 
-from nixt.runtime import Errors
+from ..runtime import Errors
 
 
 def err(event):

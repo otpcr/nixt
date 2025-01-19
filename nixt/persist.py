@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
+# pylint: disable=W0105,E0402
 
 
 "persistence"
@@ -13,8 +13,8 @@ import time
 import _thread
 
 
-from nixt.methods import fqn, search
-from nixt.objects import Object, dumps, loads, update
+from .methods import fqn, search
+from .objects import Object, dumps, loads, update
 
 
 "locks"
