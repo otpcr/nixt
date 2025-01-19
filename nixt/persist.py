@@ -33,11 +33,6 @@ class DecodeError(Exception):
     """ DecoderError """
 
 
-class EncodeError(Exception):
-
-    """ EncoderError """
-
-
 "cache"
 
 
