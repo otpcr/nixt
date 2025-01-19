@@ -2,7 +2,7 @@
 # pylint: disable=W0105
 
 
-""" a clean namespace """
+"a clean namespace"
 
 
 import json
@@ -20,9 +20,6 @@ class Object:
 
     def __str__(self):
         return str(self.__dict__)
-
-
-"methods"
 
 
 def construct(obj, *args, **kwargs):
@@ -123,6 +120,7 @@ class ObjectEncoder(json.JSONEncoder):
             return json.JSONEncoder.default(self, o)
         except TypeError:
             return vars(o)
+
 
 def loads(string, *args, **kw):
     """ load object from string. """

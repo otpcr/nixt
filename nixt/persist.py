@@ -150,6 +150,7 @@ def find(clz, selector=None, deleted=False, matching=False):
             res.append((fnm, obj))
         return res
 
+
 "utilities"
 
 
@@ -262,7 +263,6 @@ def write(obj, pth):
         with open(pth, 'w', encoding='utf-8') as ofile:
             ofile.write(txt)
     return pth
-
 
 
 "interface"

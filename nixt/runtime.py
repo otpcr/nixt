@@ -2,7 +2,7 @@
 # pylint: disable=W0105
 
 
-""" runtime """
+"runtime"
 
 
 import queue
@@ -10,6 +10,46 @@ import threading
 import time
 import traceback
 import _thread
+
+
+"errors"
+
+
+class Errors:
+
+    """ Errors """
+
+    errors = []
+
+    def __len__(self):
+        return len(self.__dict__)
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    @staticmethod
+    def format(exc):
+        """ format exception. """
+        return traceback.format_exception(
+            type(exc),
+            exc,
+            exc.__traceback__
+        )
+
+
+def errors():
+    """ yield printable error lines. """
+    for err in Errors.errors:
+        for line in err:
+            yield line
+
+
+def later(exc):
+    """ defer exception. """
+    excp = exc.with_traceback(exc.__traceback__)
+    fmt = Errors.format(excp)
+    if fmt not in Errors.errors:
+        Errors.errors.append(fmt)
 
 
 "reactor"
@@ -138,7 +178,7 @@ def name(obj):
     return None
 
 
-"timer"
+"timers"
 
 
 class Timer:
@@ -177,9 +217,6 @@ class Timer:
             self.timer.cancel()
 
 
-"repeater"
-
-
 class Repeater(Timer):
 
     """ Repeater """
@@ -189,45 +226,6 @@ class Repeater(Timer):
         launch(self.start)
         super().run()
 
-
-"errors"
-
-
-class Errors:
-
-    """ Errors """
-
-    errors = []
-
-    def __len__(self):
-        return len(self.__dict__)
-
-    def __str__(self):
-        return str(self.__dict__)
-
-    @staticmethod
-    def format(exc):
-        """ format exception. """
-        return traceback.format_exception(
-            type(exc),
-            exc,
-            exc.__traceback__
-        )
-
-
-def errors():
-    """ yield printable error lines. """
-    for err in Errors.errors:
-        for line in err:
-            yield line
-
-
-def later(exc):
-    """ defer exception. """
-    excp = exc.with_traceback(exc.__traceback__)
-    fmt = Errors.format(excp)
-    if fmt not in Errors.errors:
-        Errors.errors.append(fmt)
 
 
 "exceptions"

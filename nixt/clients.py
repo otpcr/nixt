@@ -2,7 +2,7 @@
 # pylint: disable=W0105,E0402
 
 
-""" clients """
+"clients"
 
 
 import queue
