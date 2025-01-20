@@ -2,7 +2,7 @@
 # This file is placed in the Public Domain.
 
 
-"create environment."
+"environment"
 
 
 import os

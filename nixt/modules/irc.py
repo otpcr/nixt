@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105,E0402
+# pylint: disable=W0105
 
 
 "internet relay chat"
@@ -17,12 +17,12 @@ import time
 import _thread
 
 
-from ..clients import Client, Default, Event, Fleet
-from ..command import command
-from ..locator import last
-from ..objects import Object, edit, fmt, keys
-from ..persist import ident, store, write
-from ..runtime import exceptions, later, launch
+from nixt.clients import Client, Default, Event, Fleet
+from nixt.command import command
+from nixt.locater import last
+from nixt.objects import Object, edit, fmt, keys
+from nixt.persist import ident, store, write
+from nixt.runtime import exceptions, later, launch
 
 
 "defines"

@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=E0402
 
 
 "log text"
@@ -8,9 +7,9 @@
 import time
 
 
-from ..locator import elapsed, find, fntime
-from ..objects import Object
-from ..persist import ident, store, write
+from nixt.locater import elapsed, find, fntime
+from nixt.objects import Object
+from nixt.persist import ident, store, write
 
 
 class Log(Object):

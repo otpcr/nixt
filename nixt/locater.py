@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105,E0402
 
 
 "locator"
@@ -11,18 +10,12 @@ import threading
 import time
 
 
-from .object  import Object, fqn, search, update
-from .persist import long, skel, read, store
-
-
-"defines"
+from nixt.objects import Object, fqn, search, update
+from nixt.persist import long, skel, read, store
 
 
 lock = threading.RLock()
 p    = os.path.join
-
-
-"cache"
 
 
 class Cache:
@@ -48,9 +41,6 @@ class Cache:
             if matcher not in key:
                 continue
             yield Cache.objs.get(key)
-
-
-"find"
 
 
 def fns(clz):
@@ -84,9 +74,6 @@ def find(clz, selector=None, deleted=False, matching=False):
                 continue
             res.append((fnm, obj))
         return res
-
-
-"utilities"
 
 
 def elapsed(seconds, short=True):
@@ -148,9 +135,6 @@ def strip(pth, nmr=3):
     return os.sep.join(pth.split(os.sep)[-nmr:])
 
 
-"methods"
-
-
 def ident(obj):
     """ create an id. """
     return p(fqn(obj),*str(datetime.datetime.now()).split())
@@ -170,9 +154,6 @@ def last(obj, selector=None):
         update(obj, inp[-1])
         res = inp[0]
     return res
-
-
-"interface"
 
 
 def __dir__():

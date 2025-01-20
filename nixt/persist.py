@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105,E0402
 
 
 "persistence"
@@ -12,7 +11,7 @@ import pathlib
 import _thread
 
 
-from .objects import dumps, fqn, loads, update
+from nixt.objects import dumps, fqn, loads, update
 
 
 lock   = _thread.allocate_lock()
@@ -22,9 +21,6 @@ p      = os.path.join
 class DecodeError(Exception):
 
     """ DecoderError """
-
-
-"workdir"
 
 
 class Workdir:
@@ -73,9 +69,6 @@ def types():
     return os.listdir(store())
 
 
-"utilities"
-
-
 def cdir(pth):
     """ create directory. """
     path = pathlib.Path(pth)
@@ -85,9 +78,6 @@ def cdir(pth):
 def strip(pth, nmr=3):
     """ strip from end of path. """
     return os.sep.join(pth.split(os.sep)[-nmr:])
-
-
-"methods"
 
 
 def ident(obj):
@@ -115,9 +105,6 @@ def write(obj, pth):
         with open(pth, 'w', encoding='utf-8') as ofile:
             ofile.write(txt)
     return pth
-
-
-"interface"
 
 
 def __dir__():

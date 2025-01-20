@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105,E0402
+# pylint: disable=W0105
 
 
 "clients"
@@ -10,11 +10,8 @@ import threading
 import time
 
 
-from .command import Default, command
-from .runtime import Reactor, launch
-
-
-"client"
+from nixt.command import Default, command
+from nixt.runtime import Reactor, launch
 
 
 class Client(Reactor):
@@ -33,9 +30,6 @@ class Client(Reactor):
     def say(self, _channel, txt):
         """ relay to raw. """
         self.raw(txt)
-
-
-"event"
 
 
 class Event(Default):
@@ -75,9 +69,6 @@ class Event(Default):
             thr.join()
 
 
-"fleet"
-
-
 class Fleet:
 
     """ Fleet. """
@@ -106,9 +97,6 @@ class Fleet:
         bot = Fleet.bots.get(orig, None)
         if bot:
             bot.say(channel, txt)
-
-
-"output"
 
 
 class Output:
@@ -152,9 +140,6 @@ class Output:
     def wait(self):
         """ wait for stop."""
         self.dostop.wait()
-
-
-"interface"
 
 
 def __dir__():

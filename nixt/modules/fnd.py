@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=E0402
 
 
 "find"
@@ -8,9 +7,9 @@
 import time
 
 
-from ..locator import elapsed, find, fntime
-from ..objects import fmt
-from ..persist import long, skel, types
+from nixt.locater import elapsed, find, fntime
+from nixt.objects import fmt
+from nixt.persist import long, skel, types
 
 
 def fnd(event):

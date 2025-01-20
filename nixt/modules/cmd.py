@@ -1,10 +1,10 @@
 # This file is placed in the Public Domain.
-# pylint: disable=E0402
+
 
 "list of commands"
 
 
-from ..command import Commands
+from nixt.command import Commands
 
 
 def cmd(event):

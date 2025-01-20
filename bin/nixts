@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 "service"
@@ -20,17 +19,11 @@ from nixt.runtime import errors, exceptions, forever, later
 from nixt import modules as MODS
 
 
-"defines"
-
-
 cfg     = Config()
 cfg.dis = "upt"
 
 
 Workdir.wdr = os.path.expanduser(f"~/.{Config.name}")
-
-
-"utilities"
 
 
 def privileges():
@@ -68,9 +61,6 @@ def wrap(func):
         later(ex)
     for line in errors():
         print(line)
-
-
-"runtime"
 
 
 def main():

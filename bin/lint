@@ -33,4 +33,4 @@ def popen(txt):
 
 
 popen("bin/clean -f")
-popen(f"pylint {NAME} tests/*.py bin/*")
+popen(f"pylint {NAME}/*.py {NAME}/modules/*.py  tests/*.py bin/*")

@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=E0402
 
 
 "uptime"
@@ -8,7 +7,7 @@
 import time
 
 
-from ..locator import elapsed
+from nixt.locater import elapsed
 
 
 STARTTIME = time.time()

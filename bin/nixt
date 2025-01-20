@@ -29,18 +29,12 @@ from nixt.runtime import errors, exceptions, forever, later
 from nixt import modules as MODS
 
 
-"defines"
-
-
 cfg     = Config()
 cfg.dis = "upt"
 p       = os.path.join
 
 
 Workdir.wdr = os.path.expanduser(f"~/.{Config.name}")
-
-
-"cli"
 
 
 class CLI(Client):
@@ -76,9 +70,6 @@ class Console(CLI):
         evt.txt = input("> ")
         evt.type = "command"
         return evt
-
-
-"utilities"
 
 
 def banner():
@@ -137,9 +128,6 @@ def privileges():
     os.setuid(pwnam.pw_uid)
 
 
-"scripts"
-
-
 def background():
     """ run in the background. """
     daemon(True)
@@ -192,9 +180,6 @@ def service():
     forever()
 
 
-"commands"
-
-
 def md5(event):
     """ command to create md5 sum dictionary. """
     if not event.args:
@@ -217,26 +202,6 @@ def srv(event):
     """ command to create service file. """
     name = getpass.getuser()
     event.reply(TXT % (Config.name.upper(), name, name, name, Config.name))
-
-
-"data"
-
-
-TXT = """[Unit]
-Description=%s
-After=network-online.target
-
-[Service]
-Type=simple
-User=%s
-Group=%s
-ExecStart=/home/%s/.local/bin/%s -s
-
-[Install]
-WantedBy=multi-user.target"""
-
-
-"runtime"
 
 
 def wrap(func):
@@ -280,6 +245,20 @@ def main():
         wrap(service)
     else:
         control()
+
+
+TXT = """[Unit]
+Description=%s
+After=network-online.target
+
+[Service]
+Type=simple
+User=%s
+Group=%s
+ExecStart=/home/%s/.local/bin/%ss
+
+[Install]
+WantedBy=multi-user.target"""
 
 
 if __name__ == "__main__":

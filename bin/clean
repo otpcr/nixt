@@ -2,7 +2,7 @@
 # This file is placed in the Public Domain.
 
 
-""" clean directories """
+"clean"
 
 
 import os

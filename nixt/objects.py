@@ -1,14 +1,10 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 "a clean namespace"
 
 
 import json
-
-
-"object"
 
 
 class Object:
@@ -63,9 +59,6 @@ def values(obj):
     return obj.__dict__.values()
 
 
-"decoder"
-
-
 class ObjectDecoder(json.JSONDecoder):
 
     """ ObjectDecoder """
@@ -98,9 +91,6 @@ def hook(objdict):
     return obj
 
 
-"encoder"
-
-
 class ObjectEncoder(json.JSONEncoder):
 
     """ ObjectEncoder """
@@ -127,9 +117,6 @@ def loads(string, *args, **kw):
     kw["cls"] = ObjectDecoder
     kw["object_hook"] = hook
     return json.loads(string, *args, **kw)
-
-
-"methods"
 
 
 def edit(obj, setter, skip=False):
@@ -211,9 +198,6 @@ def search(obj, selector, matching=None):
             res = False
             break
     return res
-
-
-"interface"
 
 
 def __dir__():
