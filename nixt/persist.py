@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=W0105
 
 
 "persistence"
@@ -14,13 +15,19 @@ import _thread
 from nixt.objects import dumps, fqn, loads, update
 
 
-lock   = _thread.allocate_lock()
-p      = os.path.join
+lock = _thread.allocate_lock()
+p    = os.path.join
+
+
+"exceptions"
 
 
 class DecodeError(Exception):
 
-    """ DecoderError """
+    """ DecodeError """
+
+
+"workdir"
 
 
 class Workdir:
@@ -34,6 +41,9 @@ class Workdir:
 
     def __str__(self):
         return str(self.__dict__)
+
+
+"path"
 
 
 def long(name):
@@ -69,15 +79,16 @@ def types():
     return os.listdir(store())
 
 
+"utilities"
+
+
 def cdir(pth):
     """ create directory. """
     path = pathlib.Path(pth)
     path.parent.mkdir(parents=True, exist_ok=True)
 
 
-def strip(pth, nmr=3):
-    """ strip from end of path. """
-    return os.sep.join(pth.split(os.sep)[-nmr:])
+"methods"
 
 
 def ident(obj):
@@ -105,6 +116,9 @@ def write(obj, pth):
         with open(pth, 'w', encoding='utf-8') as ofile:
             ofile.write(txt)
     return pth
+
+
+"interface"
 
 
 def __dir__():

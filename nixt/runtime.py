@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=W0105
 
 
 "runtime"
@@ -9,6 +10,9 @@ import threading
 import time
 import traceback
 import _thread
+
+
+"reactor"
 
 
 class Reactor:
@@ -60,6 +64,9 @@ class Reactor:
         """ wait for stop. """
         self.queue.join()
         self.stopped.wait()
+
+
+"threads"
 
 
 class Thread(threading.Thread):
@@ -131,6 +138,9 @@ def name(obj):
     return None
 
 
+"timers"
+
+
 class Timer:
 
     """ Timer """
@@ -177,6 +187,9 @@ class Repeater(Timer):
         super().run()
 
 
+"errors"
+
+
 class Errors:
 
     """ Errors """
@@ -214,6 +227,9 @@ def later(exc):
         Errors.errors.append(fmt)
 
 
+"utilities"
+
+
 def forever():
     """ run forever. """
     while True:
@@ -221,6 +237,9 @@ def forever():
             time.sleep(0.2)
         except (KeyboardInterrupt, EOFError):
             _thread.interrupt_main()
+
+
+"data"
 
 
 exceptions = (
@@ -238,6 +257,9 @@ exceptions = (
     SyntaxError,
     SystemError
 )
+
+
+"interface"
 
 
 def __dir__():

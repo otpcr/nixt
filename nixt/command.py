@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=W0105
 
 
 "commands"
@@ -12,6 +13,9 @@ import types
 
 from nixt.objects import Object
 from nixt.runtime import launch
+
+
+"default"
 
 
 class Default(Object):
@@ -43,6 +47,9 @@ class Default(Object):
         Default.default = default
 
 
+"config"
+
+
 class Config(Default):
 
     """ Config. """
@@ -50,6 +57,9 @@ class Config(Default):
     dis  = ""
     mods = ""
     name = Default.__module__.split(".", maxsplit=1)[0]
+
+
+"commands"
 
 
 class Commands:
@@ -81,6 +91,9 @@ def command(evt):
         func(evt)
         evt.display()
     evt.ready()
+
+
+"utilities"
 
 
 def banner():
@@ -180,6 +193,9 @@ def spl(txt):
     return [x for x in result if x]
 
 
+"data"
+
+
 MD5 = {
     "cmd": "e78043b056cf96aaf89f1c7120c1cd2d",
     "err": "5be6a5e9979ce54ee6732042e2f94ca0",
@@ -193,6 +209,9 @@ MD5 = {
     "thr": "e7c0a98c0eec0d2c8186ea23651ae7e2",
     "upt": "22016f78b86dd0a4f4fa25b2de2ff76b"
 }
+
+
+"interface"
 
 
 def __dir__():
