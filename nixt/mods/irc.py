@@ -16,13 +16,12 @@ import time
 import _thread
 
 
-from ..clients import Client
-from ..command import command
-from ..locater import last
-from ..methods import edit, fmt
-from ..objects import Object, keys
-from ..persist import ident, store, write
-from ..runtime import Default, Event, Fleet, exceptions, later, launch
+from ..cmnd import command
+from ..find import last
+from ..method import edit, fmt
+from ..object import Object, keys
+from ..disk import ident, store, write
+from ..run import Client, Default, Event, Fleet, exceptions, later, launch
 
 
 "defines"
@@ -43,6 +42,7 @@ def debug(txt):
     for ign in IGNORE:
         if ign in txt:
             return
+    # print(txt)
 
 
 def init():

@@ -7,7 +7,7 @@
 import time
 
 
-from ..locater import elapsed
+from ..find import elapsed
 
 
 STARTTIME = time.time()

@@ -20,13 +20,12 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from ..clients import Fleet
-from ..command import spl
-from ..locater import elapsed, find, fntime, last
-from ..methods import fmt
-from ..persist import ident, store, write
-from ..objects import Object, update
-from ..runtime import Repeater, launch
+from ..cmnd   import spl
+from ..find   import elapsed, find, fntime, last
+from ..method import fmt
+from ..disk   import ident, store, write
+from ..object import Object, update
+from ..run    import Fleet, Repeater, launch
 
 
 "defines"

@@ -11,8 +11,8 @@ import pathlib
 import _thread
 
 
-from .methods import fqn
-from .objects import dumps, loads, update
+from .method import fqn
+from .object import dumps, loads, update
 
 
 lock = _thread.allocate_lock()

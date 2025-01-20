@@ -44,7 +44,7 @@ class Config(Default):
     """ Config """
 
     dis      = "upt"
-    md5      = True
+    md5      = False
     mods     = ""
     name     = Default.__module__.split(".", maxsplit=1)[0]
     threaded = False
@@ -132,6 +132,23 @@ class Reactor:
         """ wait for stop. """
         self.queue.join()
         self.stopped.wait()
+
+
+class Client(Reactor):
+
+    """ Client """
+
+    def __init__(self):
+        Reactor.__init__(self)
+        Fleet.add(self)
+
+    def raw(self, txt):
+        """ echo text. """
+        raise NotImplementedError("raw")
+
+    def say(self, _channel, txt):
+        """ relay to raw. """
+        self.raw(txt)
 
 
 class Event: # pylint: disable=R0902
@@ -352,6 +369,7 @@ exceptions = (
 
 def __dir__():
     return (
+        'Client',
         'Config',
         'Default',
         'Errors',
