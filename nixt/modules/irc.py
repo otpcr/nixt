@@ -43,7 +43,6 @@ def debug(txt):
     for ign in IGNORE:
         if ign in txt:
             return
-    # print(txt)
 
 
 def init():

@@ -17,7 +17,6 @@ import time
 
 from .clients import Client
 from .command import Commands, command, md5sum, parse, scan
-from .loggers import level
 from .objects import dumps
 from .persist import Workdir, pidname
 from .runtime import Config, Event, errors, exceptions, forever, later
@@ -147,7 +146,6 @@ def console():
     Config.mods = cfg.sets.mods or Config.mods
     if "v" in cfg.opts:
         banner()
-        level(Config.level)
     from . import modules as MODS
     for _mod, thr in scan(MODS, init="i" in cfg.opts, disable=Config.dis):
         #if "v" in cfg.opts and "output" in dir(mod):
@@ -168,8 +166,6 @@ def control():
     parse(cfg, " ".join(sys.argv[1:]))
     cfg.dis = cfg.sets.dis or cfg.dis
     csl = CLI()
-    if "v" in cfg.opts:
-        level(Config.level)
     from . import modules as MODS
     scan(MODS, disable=cfg.dis)
     evt = Event()

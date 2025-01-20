@@ -43,12 +43,11 @@ class Config(Default):
 
     """ Config """
 
-    defer = False
-    dis   = "upt"
-    level = "debug"
-    md5   = True
-    mods  = ""
-    name  = Default.__module__.split(".", maxsplit=1)[0]
+    dis      = "upt"
+    md5      = True
+    mods     = ""
+    name     = Default.__module__.split(".", maxsplit=1)[0]
+    threaded = False
 
 
 class Fleet:
@@ -95,7 +94,7 @@ class Reactor:
         func = self.cbs.get(evt.type, None)
         if func:
             evt.orig = repr(self)
-            if Config.defer:
+            if Config.threaded:
                 evt.thrs.append(launch(func, evt))
             else:
                 func(evt)

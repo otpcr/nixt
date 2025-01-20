@@ -44,6 +44,7 @@ def cdir(pth):
 
 
 def logdir():
+    """ return log directory. """
     return p(Workdir.wdr, "logs")
 
 
