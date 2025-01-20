@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
+# pylint: disable=C0415,W0105
 
 
 "main"
@@ -20,7 +20,7 @@ from .command import Commands, command, md5sum, parse, scan
 from .loggers import loglevel
 from .objects import dumps
 from .persist import Workdir, pidname
-from .runtime import Config, Default, Event, errors, exceptions, forever, later
+from .runtime import Config, Event, errors, exceptions, forever, later
 
 
 cfg = Config()
@@ -149,7 +149,7 @@ def console():
         banner()
         loglevel(Config.level)
     from . import modules as MODS
-    for mod, thr in scan(MODS, init="i" in cfg.opts, disable=Config.dis):
+    for _mod, thr in scan(MODS, init="i" in cfg.opts, disable=Config.dis):
         #if "v" in cfg.opts and "output" in dir(mod):
         #    mod.output = print
         if thr and "w" in cfg.opts:
@@ -207,6 +207,10 @@ def md5(event):
         with open(f"{path}/{fnm}", "r", encoding="utf-8") as file:
             data = file.read()
             res[fnm[:-3]] = md5sum(data)
+    event.reply("# This file is placed in the Public Domain.")
+    event.reply("")
+    event.reply('"md5sums"')
+    event.reply("")
     event.reply(f"MD5 = {dumps(res, indent=4, sort_keys=True)}")
 
 

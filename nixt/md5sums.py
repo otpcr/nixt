@@ -1,3 +1,7 @@
+# This file is placed in the Public Domain.
+
+"md5sums"
+
 MD5 = {
     "cmd": "a8bf5c9c5019c6e90b557e07f7d7f186",
     "err": "6929af2979007bfbeb8007492360317e",

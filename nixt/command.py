@@ -108,7 +108,7 @@ def parse(obj, txt=None):
     return obj
 
 
-def scan(*pkgs, init=False, disable="",md5=True):
+def scan(*pkgs, init=False, disable=""):
     """ scan package for command and init scripts. """
     result = []
     for mod in modloop(*pkgs, disable=disable):

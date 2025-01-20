@@ -5,7 +5,6 @@
 
 
 import queue
-import sys
 import threading
 import time
 import traceback
@@ -40,7 +39,7 @@ class Default:
         """ set default. """
 
 
-class Config:
+class Config(Default):
 
     """ Config """
 
@@ -50,7 +49,7 @@ class Config:
     md5   = True
     mods  = ""
     name  = Default.__module__.split(".", maxsplit=1)[0]
-    
+
 
 class Fleet:
 
