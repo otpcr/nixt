@@ -43,6 +43,9 @@ def cdir(pth):
     path.parent.mkdir(parents=True, exist_ok=True)
 
 
+def logdir():
+    return p(Workdir.wdr, "logs")
+
 
 def long(name):
     """ extrapolate single name to full qualified name. """

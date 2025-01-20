@@ -1,4 +1,5 @@
 # This file is placed in the Public Domain.
+# pylint: disable=W0105
 
 
 "main"
@@ -16,12 +17,10 @@ import time
 
 from .clients import Client
 from .command import Commands, command, md5sum, parse, scan
+from .loggers import loglevel
 from .objects import dumps
 from .persist import Workdir, pidname
 from .runtime import Config, Default, Event, errors, exceptions, forever, later
-
-
-from . import modules as MODS
 
 
 cfg = Config()
@@ -29,6 +28,9 @@ p   = os.path.join
 
 
 Workdir.wdr = os.path.expanduser(f"~/.{Config.name}")
+
+
+"cli"
 
 
 class CLI(Client):
@@ -64,6 +66,9 @@ class Console(CLI):
         evt.txt = input("> ")
         evt.type = "command"
         return evt
+
+
+"utilities"
 
 
 def banner():
@@ -122,11 +127,15 @@ def privileges():
     os.setuid(pwnam.pw_uid)
 
 
+"scripts"
+
+
 def background():
     """ run in the background. """
     daemon(True)
     privileges()
     pidfile(pidname(Config.name))
+    from . import modules as MODS
     scan(MODS, init=True)
     forever()
 
@@ -138,9 +147,11 @@ def console():
     Config.mods = cfg.sets.mods or Config.mods
     if "v" in cfg.opts:
         banner()
+        loglevel(cfg.sets.level or Config.level)
+    from . import modules as MODS
     for mod, thr in scan(MODS, init="i" in cfg.opts, disable=Config.dis):
-        if "v" in cfg.opts and "output" in dir(mod):
-            mod.output = print
+        #if "v" in cfg.opts and "output" in dir(mod):
+        #    mod.output = print
         if thr and "w" in cfg.opts:
             thr.join()
     csl = Console()
@@ -157,6 +168,7 @@ def control():
     parse(cfg, " ".join(sys.argv[1:]))
     cfg.dis = cfg.sets.dis or cfg.dis
     csl = CLI()
+    from . import modules as MODS
     scan(MODS, disable=cfg.dis)
     evt = Event()
     evt.orig = repr(csl)
@@ -170,8 +182,12 @@ def service():
     """ run as service. """
     privileges()
     pidfile(pidname(Config.name))
+    from . import modules as MODS
     scan(MODS, init=True)
     forever()
+
+
+"commands"
 
 
 def md5(event):
@@ -196,6 +212,9 @@ def srv(event):
     """ command to create service file. """
     name = getpass.getuser()
     event.reply(TXT % (Config.name.upper(), name, name, name, Config.name))
+
+
+"runtime"
 
 
 def wrap(func):

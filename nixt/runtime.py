@@ -5,6 +5,7 @@
 
 
 import queue
+import sys
 import threading
 import time
 import traceback
@@ -38,14 +39,18 @@ class Default:
     def setdefault(default):
         """ set default. """
 
+
 class Config:
 
     """ Config """
 
-    dis  = "upt"
-    mods = ""
-    name = Default.__module__.split(".", maxsplit=1)[0]
-
+    defer = False
+    dis   = "upt"
+    level = "debug"
+    md5   = True
+    mods  = ""
+    name  = Default.__module__.split(".", maxsplit=1)[0]
+    
 
 class Fleet:
 
@@ -91,7 +96,10 @@ class Reactor:
         func = self.cbs.get(evt.type, None)
         if func:
             evt.orig = repr(self)
-            evt.thrs.append(launch(func, evt))
+            if Config.defer:
+                evt.thrs.append(launch(func, evt))
+            else:
+                func(evt)
 
     def loop(self):
         """ reactor loop. """

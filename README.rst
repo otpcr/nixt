@@ -160,13 +160,8 @@ opml
 **PROGRAMMING**
 
 
-``nixt`` runs it's modules in the package, so you have to clone from git
-
-|
-| ``$ git clone ssh://git@github.com/otpcr/nixt``
-|
-
-edit a file in nixt/modules/<name>.py and add the following for ``hello world``
+``nixt`` runs it's modules in the package edit a file in nixt/modules/<name>.py
+and add the following for ``hello world``
 
 ::
 
@@ -174,10 +169,9 @@ edit a file in nixt/modules/<name>.py and add the following for ``hello world``
         event.reply("hello world !!")
 
 
-save this and edit ``nixt/modules/face.py`` and import your filename in there.
-install that with ``pipx install . --force``, your program can execute the
-``hello`` command now.
-
+save this and mport your filename in there, run bin/nixt md5 and copy/paste
+this in ``nixt/md5.py``, install that with ``pipx install . --force``, your
+program can execute the ``hello`` command now.
 
 |
 | ``$ nixt hello``
@@ -187,12 +181,6 @@ install that with ``pipx install . --force``, your program can execute the
 commands run in their own thread, errors are deferred to not have loops
 blocking/breaking on exception and can contain your own written python3
 code, see the obz/modules directory for examples.
-
-
-**SOURCE**
-
-
-source is at `https://github.com/otpcr/nixt  <https://github.com/otpcr/nixt>`_
 
 
 **FILES**
