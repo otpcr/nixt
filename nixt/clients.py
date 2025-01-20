@@ -4,9 +4,8 @@
 "clients"
 
 
-from .caching import Fleet
 from .command import command
-from .runtime import Reactor
+from .runtime import Fleet, Reactor
 
 
 class Client(Reactor):

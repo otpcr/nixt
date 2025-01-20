@@ -9,7 +9,6 @@ import threading
 import time
 
 
-from .caching import Cache
 from .methods import fqn, search
 from .objects import Object, update
 from .persist import long, skel, read, store
@@ -17,6 +16,31 @@ from .persist import long, skel, read, store
 
 lock = threading.RLock()
 p    = os.path.join
+
+
+class Cache:
+
+    """ Cache """
+
+    objs = {}
+
+    @staticmethod
+    def add(path, obj):
+        """ add object to cache. """
+        Cache.objs[path] = obj
+
+    @staticmethod
+    def get(path):
+        """ get object from cache. """
+        return Cache.objs.get(path, None)
+
+    @staticmethod
+    def typed(matcher):
+        """ match typed objects. """
+        for key in Cache.objs:
+            if matcher not in key:
+                continue
+            yield Cache.objs.get(key)
 
 
 def fns(clz):

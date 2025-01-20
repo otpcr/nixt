@@ -18,10 +18,9 @@ import time
 from nixt.clients import Client
 from nixt.command import Commands, command, md5sum, parse, scan
 from nixt.default import Config
-from nixt.message import Message
 from nixt.objects import dumps
 from nixt.persist import Workdir, pidname
-from nixt.runtime import errors, exceptions, forever, later
+from nixt.runtime import Event, errors, exceptions, forever, later
 
 
 from nixt import modules as MODS
@@ -62,7 +61,7 @@ class Console(CLI):
 
     def poll(self):
         """ poll for event. """
-        evt = Message()
+        evt = Event()
         evt.orig = repr(self)
         evt.txt = input("> ")
         evt.type = "command"
@@ -161,7 +160,7 @@ def control():
     cfg.dis = cfg.sets.dis or cfg.dis
     csl = CLI()
     scan(MODS, disable=cfg.dis)
-    evt = Message()
+    evt = Event()
     evt.orig = repr(csl)
     evt.type = "command"
     evt.txt = cfg.otxt
