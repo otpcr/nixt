@@ -9,8 +9,7 @@ import hashlib
 import types
 
 
-from .default import Config, Default
-from .runtime import launch
+from .runtime import Config, Default, launch
 
 
 class Commands:
@@ -136,16 +135,16 @@ def spl(txt):
 
 
 MD5 = {
-    "cmd": "ce5f48c564d09e79df52ee1130e6c3a2",
-    "err": "e66295ed4a34bbcca7547be6cbfe4c21",
-    "fnd": "ae1697c84c733c6190f69ebf7c1448d0",
-    "irc": "bc6e38c421c7f0362acf1706f5400937",
-    "log": "3e798f036d3fcaa19329486fca33fc20",
+    "cmd": "a8bf5c9c5019c6e90b557e07f7d7f186",
+    "err": "6929af2979007bfbeb8007492360317e",
+    "fnd": "768f01a0ca8d94fdb50d94a9b1133f45",
+    "irc": "f261d13c597c99e45c3a43d07e317ff4",
+    "log": "1ef7b4cd8268401bff6a5500e2d0ca8f",
     "mod": "905102ea6cd9a3a6e2a0f0bd3d73ebe5",
     "req": "464fb82d2ec152bfcffbab99fb6de3af",
-    "rss": "c9e2aa7c72ee1177e4f24907beffc93d",
-    "thr": "deb19e3c6238e80844e29bf9c0cc7d74",
-    "upt": "3d1605d335814d738393d29acc073ec1"
+    "rss": "dbf3724b8a2f043ad89e4dc8adee5e49",
+    "thr": "73d28b9bb90152b5ab234ef73a7d0676",
+    "upt": "563823b2bd6ba4b68c79a9ca687c513d"
 }
 
 

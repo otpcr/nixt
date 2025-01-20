@@ -19,12 +19,11 @@ import _thread
 
 from ..clients import Client
 from ..command import command
-from ..default import Default
 from ..locater import last
 from ..methods import edit, fmt
 from ..objects import Object, keys
 from ..persist import ident, store, write
-from ..runtime import Fleet, Event, exceptions, later, launch
+from ..runtime import Default, Event, Fleet, exceptions, later, launch
 
 
 "defines"
@@ -412,7 +411,7 @@ class IRC(Client, Output):
         rawstr = rawstr.replace('\u0001', '')
         rawstr = rawstr.replace('\001', '')
         debug(txt)
-        obj = Message()
+        obj = Event()
         obj.args = []
         obj.rawstr = rawstr
         obj.command = ''

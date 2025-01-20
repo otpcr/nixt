@@ -11,6 +11,42 @@ import traceback
 import _thread
 
 
+class Default:
+
+    """ Default """
+
+    def __contains__(self, key):
+        return key in dir(self)
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
+
+    def __iter__(self):
+        return iter(self.__dict__)
+
+    def __len__(self):
+        return len(self.__dict__)
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    @staticmethod
+    def getdefault():
+        """ return default. """
+
+    @staticmethod
+    def setdefault(default):
+        """ set default. """
+
+class Config:
+
+    """ Config """
+
+    dis  = "upt"
+    mods = ""
+    name = Default.__module__.split(".", maxsplit=1)[0]
+
+
 class Fleet:
 
     """ Fleet. """
@@ -310,6 +346,8 @@ exceptions = (
 
 def __dir__():
     return (
+        'Config',
+        'Default',
         'Errors',
         'Reactor',
         'Repeater',

@@ -16,10 +16,9 @@ import time
 
 from .clients import Client
 from .command import Commands, command, md5sum, parse, scan
-from .default import Config
 from .objects import dumps
 from .persist import Workdir, pidname
-from .runtime import Event, errors, exceptions, forever, later
+from .runtime import Config, Default, Event, errors, exceptions, forever, later
 
 
 from . import modules as MODS
