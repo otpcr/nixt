@@ -20,16 +20,16 @@ sys.path.insert(0, os.getcwd())
 from nixt.clients import Client
 from nixt.command import Commands, Config, parse, scan
 from nixt.locater import elapsed
-from nixt.message import Message
 from nixt.objects import Object, keys
 from nixt.persist import Workdir, skel
-from nixt.runtime import exceptions, launch, errors, later
+from nixt.runtime import Event, exceptions, launch, errors, later
 
 
 from nixt import modules as MODS
 
 
 "exceptions"
+
 
 class MyException(Exception):
 
@@ -114,7 +114,7 @@ def payload(clt):
     nmr = 0
     for cmdd in sorted(Commands.cmds):
         for ex in getattr(param, cmdd, [""]):
-            evt = Message()
+            evt = Event()
             evt.txt = cmdd + " " + ex
             evt.type = "command"
             events.append(evt)
