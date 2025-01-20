@@ -17,12 +17,15 @@ import time
 import _thread
 
 
-from nixt.clients import Client, Default, Event, Fleet
-from nixt.command import command
-from nixt.locater import last
-from nixt.objects import Object, edit, fmt, keys
-from nixt.persist import ident, store, write
-from nixt.runtime import exceptions, later, launch
+from ..clients import Client, Fleet
+from ..command import command
+from ..default import Default
+from ..locater import last
+from ..message import Message
+from ..methods import edit, fmt
+from ..objects import Object, keys
+from ..persist import ident, store, write
+from ..runtime import exceptions, later, launch
 
 
 "defines"
@@ -410,7 +413,7 @@ class IRC(Client, Output):
         rawstr = rawstr.replace('\u0001', '')
         rawstr = rawstr.replace('\001', '')
         debug(txt)
-        obj = Event()
+        obj = Message()
         obj.args = []
         obj.rawstr = rawstr
         obj.command = ''

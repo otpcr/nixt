@@ -7,56 +7,11 @@
 
 import inspect
 import hashlib
-import time
 import types
 
 
-from nixt.objects import Object
-from nixt.runtime import launch
-
-
-"default"
-
-
-class Default(Object):
-
-    """ Default """
-
-    default = ""
-
-    def __contains__(self, key):
-        return key in dir(self)
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, self.default)
-
-    def __iter__(self):
-        return iter(self.__dict__)
-
-    def __len__(self):
-        return len(self.__dict__)
-
-    @staticmethod
-    def getdefault():
-        """ return default. """
-        return Default.default
-
-    @staticmethod
-    def setdefault(default):
-        """ set default. """
-        Default.default = default
-
-
-"config"
-
-
-class Config(Default):
-
-    """ Config. """
-
-    dis  = ""
-    mods = ""
-    name = Default.__module__.split(".", maxsplit=1)[0]
+from .default import Config, Default
+from .runtime import launch
 
 
 "commands"
@@ -94,12 +49,6 @@ def command(evt):
 
 
 "utilities"
-
-
-def banner():
-    """ show banner. """
-    tme = time.ctime(time.time()).replace("  ", " ")
-    print(f"{Config.name.upper()} since {tme}")
 
 
 def md5sum(txt):
@@ -172,7 +121,7 @@ def scan(*pkgs, init=False, disable=""):
     result = []
     for mod in modloop(*pkgs, disable=disable):
         modname = mod.__name__.split(".")[-1]
-        if Config.mods and modname not in spl(Config.mods):
+        if modname and modname in spl(Config.dis):
             continue
         if not isinstance(mod, types.ModuleType):
             continue
@@ -217,10 +166,6 @@ def __dir__():
     return (
         'MD%',
         'Commands',
-        'Config',
-        'Default',
-        'Event',
-        'banner',
         'command',
         'md5sum',
         'parse',

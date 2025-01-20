@@ -12,7 +12,8 @@ import pathlib
 import _thread
 
 
-from nixt.objects import dumps, fqn, loads, update
+from .methods import fqn
+from .objects import dumps, loads, update
 
 
 lock = _thread.allocate_lock()

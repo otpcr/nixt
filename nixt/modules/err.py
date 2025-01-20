@@ -4,7 +4,7 @@
 "errors"
 
 
-from nixt.runtime import Errors
+from ..runtime import Errors
 
 
 def err(event):
