@@ -11,7 +11,7 @@ import time
 from .caching import Fleet
 
 
-class Message:
+class Message: # pylint: disable=R0902
 
     """ Message """
 

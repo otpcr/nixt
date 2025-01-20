@@ -7,9 +7,6 @@
 import json
 
 
-"object"
-
-
 class Object: # pylint: disable=R0902
 
 

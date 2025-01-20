@@ -7,9 +7,9 @@
 import time
 
 
-from nixt.locater import elapsed, find, fntime
-from nixt.objects import Object
-from nixt.persist import ident, store, write
+from ..locater import elapsed, find, fntime
+from ..objects import Object
+from ..persist import ident, store, write
 
 
 class Log(Object):
