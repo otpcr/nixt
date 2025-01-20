@@ -58,6 +58,9 @@ def loglevel(loglevel="error", disk=True):
     return logger
 
 
+loglevel("critical")
+
+
 def __dir__():
     return (
         'loglevel',

@@ -147,7 +147,7 @@ def console():
     Config.mods = cfg.sets.mods or Config.mods
     if "v" in cfg.opts:
         banner()
-        loglevel(cfg.sets.level or Config.level)
+        loglevel(Config.level)
     from . import modules as MODS
     for mod, thr in scan(MODS, init="i" in cfg.opts, disable=Config.dis):
         #if "v" in cfg.opts and "output" in dir(mod):
@@ -168,6 +168,8 @@ def control():
     parse(cfg, " ".join(sys.argv[1:]))
     cfg.dis = cfg.sets.dis or cfg.dis
     csl = CLI()
+    if "v" in cfg.opts:
+        loglevel(Config.level)
     from . import modules as MODS
     scan(MODS, disable=cfg.dis)
     evt = Event()
