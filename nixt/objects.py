@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R0902,W0105
+# pylint: disable=W0105,R0902
 
 
 "a clean namespace"
@@ -14,6 +14,7 @@ import json
 class Object:
 
     """ Object """
+
 
     def __len__(self):
         return len(self.__dict__)
