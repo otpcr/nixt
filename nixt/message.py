@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
+# pylint: disable=R0902,W0105
 
 
 "message"
