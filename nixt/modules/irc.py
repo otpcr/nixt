@@ -6,7 +6,6 @@
 
 
 import base64
-import logging
 import os
 import queue
 import socket
@@ -33,7 +32,6 @@ IGNORE = ["PING", "PONG", "PRIVMSG"]
 NAME   = Object.__module__.rsplit(".", maxsplit=2)[-2]
 
 
-output  = logging.debug
 saylock = _thread.allocate_lock()
 
 
@@ -45,7 +43,7 @@ def debug(txt):
     for ign in IGNORE:
         if ign in txt:
             return
-    output(txt)
+    # print(txt)
 
 
 def init():

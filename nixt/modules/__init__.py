@@ -43,7 +43,6 @@ def importdir(pth, check=Config.md5):
                 continue
         importer(f"{NAME}.{modname}", f"{NAME}")
         MODS.append(modname)
-    logging.warning(f"loaded {','.join(sorted(MODS))}")
 
 
 importdir(DIR)
