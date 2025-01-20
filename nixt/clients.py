@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 "clients"
@@ -8,9 +7,6 @@
 from .caching import Fleet
 from .command import command
 from .runtime import Reactor
-
-
-"client"
 
 
 class Client(Reactor):
@@ -29,9 +25,6 @@ class Client(Reactor):
     def say(self, _channel, txt):
         """ relay to raw. """
         self.raw(txt)
-
-
-"interface"
 
 
 def __dir__():

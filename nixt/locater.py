@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 "locater"
@@ -18,9 +17,6 @@ from .persist import long, skel, read, store
 
 lock = threading.RLock()
 p    = os.path.join
-
-
-"find"
 
 
 def fns(clz):
@@ -54,9 +50,6 @@ def find(clz, selector=None, deleted=False, matching=False):
                 continue
             res.append((fnm, obj))
         return res
-
-
-"utilities"
 
 
 def elapsed(seconds, short=True):
@@ -113,9 +106,6 @@ def fntime(daystr):
     return timed
 
 
-"methods"
-
-
 def last(obj, selector=None):
     """ return last object of a type. """
     if selector is None:
@@ -130,9 +120,6 @@ def last(obj, selector=None):
         update(obj, inp[-1])
         res = inp[0]
     return res
-
-
-"interface"
 
 
 def __dir__():

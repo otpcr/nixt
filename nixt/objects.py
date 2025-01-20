@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105,R0902
 
 
 "a clean namespace"
@@ -11,7 +10,8 @@ import json
 "object"
 
 
-class Object:
+class Object: # pylint: disable=R0902
+
 
     """ Object """
 
@@ -64,8 +64,6 @@ def values(obj):
     return obj.__dict__.values()
 
 
-"decoder"
-
 
 class ObjectDecoder(json.JSONDecoder):
 
@@ -99,9 +97,6 @@ def hook(objdict):
     return obj
 
 
-"encoder"
-
-
 class ObjectEncoder(json.JSONEncoder):
 
     """ ObjectEncoder """
@@ -128,9 +123,6 @@ def loads(string, *args, **kw):
     kw["cls"] = ObjectDecoder
     kw["object_hook"] = hook
     return json.loads(string, *args, **kw)
-
-
-"interface"
 
 
 def __dir__():

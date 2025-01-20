@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 "runtime"
@@ -10,9 +9,6 @@ import threading
 import time
 import traceback
 import _thread
-
-
-"reactor"
 
 
 class Reactor:
@@ -64,9 +60,6 @@ class Reactor:
         """ wait for stop. """
         self.queue.join()
         self.stopped.wait()
-
-
-"threads"
 
 
 class Thread(threading.Thread):
@@ -138,7 +131,40 @@ def name(obj):
     return None
 
 
-"timers"
+class Errors:
+
+    """ Errors """
+
+    errors = []
+
+    def __len__(self):
+        return len(self.__dict__)
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    @staticmethod
+    def format(exc):
+        """ format exception. """
+        return traceback.format_exception(
+            type(exc),
+            exc,
+            exc.__traceback__
+        )
+
+
+def errors():
+    """ yield printable error lines. """
+    for err in Errors.errors:
+        yield from err
+
+
+def later(exc):
+    """ defer exception. """
+    excp = exc.with_traceback(exc.__traceback__)
+    fmt = Errors.format(excp)
+    if fmt not in Errors.errors:
+        Errors.errors.append(fmt)
 
 
 class Timer:
@@ -187,48 +213,6 @@ class Repeater(Timer):
         super().run()
 
 
-"errors"
-
-
-class Errors:
-
-    """ Errors """
-
-    errors = []
-
-    def __len__(self):
-        return len(self.__dict__)
-
-    def __str__(self):
-        return str(self.__dict__)
-
-    @staticmethod
-    def format(exc):
-        """ format exception. """
-        return traceback.format_exception(
-            type(exc),
-            exc,
-            exc.__traceback__
-        )
-
-
-def errors():
-    """ yield printable error lines. """
-    for err in Errors.errors:
-        yield from err
-
-
-def later(exc):
-    """ defer exception. """
-    excp = exc.with_traceback(exc.__traceback__)
-    fmt = Errors.format(excp)
-    if fmt not in Errors.errors:
-        Errors.errors.append(fmt)
-
-
-"utilities"
-
-
 def forever():
     """ run forever. """
     while True:
@@ -236,9 +220,6 @@ def forever():
             time.sleep(0.2)
         except (KeyboardInterrupt, EOFError):
             _thread.interrupt_main()
-
-
-"exceptions"
 
 
 exceptions = (
@@ -256,9 +237,6 @@ exceptions = (
     SyntaxError,
     SystemError
 )
-
-
-"interface"
 
 
 def __dir__():

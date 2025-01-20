@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 "commands"
@@ -12,9 +11,6 @@ import types
 
 from .default import Config, Default
 from .runtime import launch
-
-
-"commands"
 
 
 class Commands:
@@ -46,9 +42,6 @@ def command(evt):
         func(evt)
         evt.display()
     evt.ready()
-
-
-"utilities"
 
 
 def md5sum(txt):
@@ -142,9 +135,6 @@ def spl(txt):
     return [x for x in result if x]
 
 
-"data"
-
-
 MD5 = {
     "cmd": "ce5f48c564d09e79df52ee1130e6c3a2",
     "err": "e66295ed4a34bbcca7547be6cbfe4c21",
@@ -157,9 +147,6 @@ MD5 = {
     "thr": "deb19e3c6238e80844e29bf9c0cc7d74",
     "upt": "3d1605d335814d738393d29acc073ec1"
 }
-
-
-"interface"
 
 
 def __dir__():

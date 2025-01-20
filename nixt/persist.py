@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 "persistence"
@@ -20,15 +19,9 @@ lock = _thread.allocate_lock()
 p    = os.path.join
 
 
-"exceptions"
-
-
 class DecodeError(Exception):
 
     """ DecodeError """
-
-
-"workdir"
 
 
 class Workdir:
@@ -44,7 +37,11 @@ class Workdir:
         return str(self.__dict__)
 
 
-"path"
+def cdir(pth):
+    """ create directory. """
+    path = pathlib.Path(pth)
+    path.parent.mkdir(parents=True, exist_ok=True)
+
 
 
 def long(name):
@@ -80,17 +77,6 @@ def types():
     return os.listdir(store())
 
 
-"utilities"
-
-
-def cdir(pth):
-    """ create directory. """
-    path = pathlib.Path(pth)
-    path.parent.mkdir(parents=True, exist_ok=True)
-
-
-"methods"
-
 
 def ident(obj):
     """ create an id. """
@@ -117,9 +103,6 @@ def write(obj, pth):
         with open(pth, 'w', encoding='utf-8') as ofile:
             ofile.write(txt)
     return pth
-
-
-"interface"
 
 
 def __dir__():

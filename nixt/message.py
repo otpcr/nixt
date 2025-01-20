@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R0902,W0105
 
 
 "message"
@@ -49,9 +48,6 @@ class Message:
         self._ready.wait()
         for thr in  self.thrs:
             thr.join()
-
-
-"interface"
 
 
 def __dir__():

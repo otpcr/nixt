@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 "cache"
@@ -30,9 +29,6 @@ class Cache:
             yield Cache.objs.get(key)
 
 
-"fleet"
-
-
 class Fleet:
 
     """ Fleet. """
@@ -61,9 +57,6 @@ class Fleet:
         bot = Fleet.bots.get(orig, None)
         if bot:
             bot.say(channel, txt)
-
-
-"interface"
 
 
 def __dir__():

@@ -9,7 +9,6 @@ import os
 
 
 IGNORES = ["---", "Your code"]
-IGNORES = []
 NAME = "nixt"
 
 
@@ -34,4 +33,4 @@ def popen(txt):
 
 
 popen("bin/clean -f")
-popen(f"pylint {NAME}")
+popen(f"pylint {NAME} bin tests")

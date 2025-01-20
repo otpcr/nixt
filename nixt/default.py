@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=W0105
 
 
 "default"
@@ -39,10 +38,8 @@ class Config(Default):
     """ Config """
 
     dis  = "upt"
+    mods = ""
     name = Default.__module__.split(".", maxsplit=1)[0]
-
-
-"interface"
 
 
 def __dir__():
