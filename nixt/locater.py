@@ -14,9 +14,6 @@ from nixt.objects import Object, fqn, search, update
 from nixt.persist import long, skel, read, store
 
 
-"defines"
-
-
 lock = threading.RLock()
 p    = os.path.join
 

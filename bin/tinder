@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
+# pylint: disable=C0413,W0105
 
 
 "tinder"
@@ -13,6 +14,9 @@ import time
 import _thread
 
 
+sys.path.insert(0, os.getcwd())
+
+
 from nixt.clients import Client, Event
 from nixt.command import Commands, Config, parse, scan
 from nixt.locater import elapsed
@@ -24,9 +28,14 @@ from nixt.runtime import exceptions, launch, errors, later
 from nixt import modules as MODS
 
 
+"exceptions"
+
 class MyException(Exception):
 
     """ My Exception. """
+
+
+"defines"
 
 
 Workdir.wdr  = ".test"
@@ -65,6 +74,9 @@ param.thr = [""]
 param.ver = [""]
 
 
+"cli"
+
+
 class CLI(Client):
 
     """ CLI """
@@ -73,6 +85,9 @@ class CLI(Client):
         """ echo raw text. """
         if "v" in cfg.opts:
             print(txt)
+
+
+"utility"
 
 
 def banner():
@@ -107,6 +122,17 @@ def payload(clt):
     return nmr
 
 
+"commands"
+
+
+def dbg(evt):
+    """ raise debug exception. """
+    raise MyException("yooo!")
+
+
+"runtime"
+
+
 def wrap(function):
     """ restore console. """
     old3 = None
@@ -125,11 +151,6 @@ def wrap(function):
         if old3:
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old3)
     return res
-
-
-def dbg(evt):
-    """ raise debug exception. """
-    raise MyException("yooo!")
 
 
 def main():

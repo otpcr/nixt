@@ -215,8 +215,7 @@ class Errors:
 def errors():
     """ yield printable error lines. """
     for err in Errors.errors:
-        for line in err:
-            yield line
+        yield from err
 
 
 def later(exc):
