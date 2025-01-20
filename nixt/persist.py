@@ -15,6 +15,9 @@ import _thread
 from nixt.objects import dumps, fqn, loads, update
 
 
+"defines"
+
+
 lock = _thread.allocate_lock()
 p    = os.path.join
 

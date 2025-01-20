@@ -239,7 +239,7 @@ def forever():
             _thread.interrupt_main()
 
 
-"data"
+"exceptions"
 
 
 exceptions = (
@@ -270,6 +270,7 @@ def __dir__():
         'Thread',
         'Timer',
         'errors',
+        'exceptions',
         'forever',
         'later',
         'launch',
