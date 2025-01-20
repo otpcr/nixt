@@ -17,9 +17,10 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.clients import Client, Event
+from nixt.clients import Client
 from nixt.command import Commands, Config, parse, scan
 from nixt.locater import elapsed
+from nixt.message import Message
 from nixt.objects import Object, keys
 from nixt.persist import Workdir, skel
 from nixt.runtime import exceptions, launch, errors, later
@@ -113,7 +114,7 @@ def payload(clt):
     nmr = 0
     for cmdd in sorted(Commands.cmds):
         for ex in getattr(param, cmdd, [""]):
-            evt = Event()
+            evt = Message()
             evt.txt = cmdd + " " + ex
             evt.type = "command"
             events.append(evt)
@@ -142,7 +143,7 @@ def wrap(function):
     except termios.error:
         pass
     try:
-        res =  function()
+        res = function()
     except (KeyboardInterrupt, EOFError):
         pass
     except exceptions as ex:

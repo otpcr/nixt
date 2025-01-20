@@ -11,7 +11,8 @@ import pathlib
 import pwd
 
 
-from nixt.command import Config, scan
+from nixt.command import scan
+from nixt.default import Config
 from nixt.persist import Workdir, pidname
 from nixt.runtime import errors, exceptions, forever, later
 
