@@ -33,28 +33,29 @@ def importdir(pth, check=Config.md5):
         if check:
             skip = True
             fnm = f"{pth}/{fnm}"
+            print(fnm)
             with open(fnm, "r", encoding="utf-8") as file:
                 data = file.read()
                 if MD5.get(modname) == md5sum(data):
                     skip = False
             if skip:
+                print(f"skipped {fnm}")
                 continue
         importer(f"{NAME}.{modname}", f"{NAME}")
         MODS.append(modname)
 
-"md5sums"
 
 MD5 = {
     "cmd": "a8bf5c9c5019c6e90b557e07f7d7f186",
     "err": "6929af2979007bfbeb8007492360317e",
-    "fnd": "a078262c5bccf0cc96e269ee3cdfb904",
-    "irc": "50974365f7ca588dd309b7aa730132ab",
-    "log": "db6fa3608e4c9664af163edda07cdca6",
+    "fnd": "2595f54340dab9e37cdaa9e19f30863c",
+    "irc": "c7d2bf0885b1a092431d66c17d6ece74",
+    "log": "180f8a4cd6e85200764b5459d1131aea",
     "mod": "905102ea6cd9a3a6e2a0f0bd3d73ebe5",
     "req": "464fb82d2ec152bfcffbab99fb6de3af",
-    "rss": "6aefa61277016449f099ee0b61cf72fe",
-    "thr": "475be28c992348f2faaccb4a5b01724a",
-    "upt": "9cacb986f2e83a8b772fe639a4fa5c80"
+    "rss": "6988be7b7c826fcf21e136360c9bf2e4",
+    "thr": "3e6798073a40e18fb48f5a7fc326ee25",
+    "upt": "3dd0694099265f5850ac7720d9631df9"
 }
 
 

@@ -22,7 +22,7 @@ from urllib.parse import quote_plus, urlencode
 
 from ..objects import Object, fmt, update
 from ..command import spl
-from ..persist import elapsed, find, fntime, last
+from ..locate  import elapsed, find, fntime, last
 from ..persist import ident, store, write
 from ..runtime import Fleet, Repeater, launch
 

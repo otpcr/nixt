@@ -174,7 +174,6 @@ def control():
     Commands.add(md5)
     Commands.add(srv)
     parse(cfg, " ".join(sys.argv[1:]))
-    cfg.dis = cfg.sets.dis or cfg.dis
     csl = CLI()
     scan(mods, disable=cfg.dis)
     evt = Event()
@@ -213,7 +212,7 @@ def md5(event):
             res[fnm[:-3]] = md5sum(data)
     event.reply("# This file is placed in the Public Domain.")
     event.reply("")
-    event.reply('"md5sums"')
+    event.reply('"md5"')
     event.reply("")
     event.reply(f"MD5 = {dumps(res, indent=4, sort_keys=True)}")
 
