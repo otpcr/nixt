@@ -9,9 +9,8 @@ import threading
 import time
 
 
-from .disk   import long, skel, read, store
-from .method import fqn, search
-from .object import Object, update
+from .base import Object, fqn, search, update
+from .disk import long, skel, read, store
 
 
 lock = threading.RLock()

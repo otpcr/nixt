@@ -17,15 +17,15 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.clients import Client
-from nixt.command import Commands, Config, parse, scan
-from nixt.locater import elapsed
-from nixt.objects import Object, keys
-from nixt.persist import Workdir, skel
-from nixt.runtime import Event, exceptions, launch, errors, later
+from nixt.cmnd   import Commands, command, parse, scan
+from nixt.find   import elapsed
+from nixt.object import Object, keys
+from nixt.disk   import Workdir, skel
+from nixt.run    import Client, Config, Event, exceptions, launch
+from nixt.run    import errors, later
 
 
-from nixt import modules as MODS
+from nixt import mods
 
 
 "exceptions"
@@ -81,6 +81,10 @@ param.ver = [""]
 class CLI(Client):
 
     """ CLI """
+
+    def __init__(self):
+        Client.__init__(self)
+        self.register("command", command)
 
     def raw(self, txt):
         """ echo raw text. """
@@ -156,11 +160,13 @@ def wrap(function):
 
 def main():
     """ main. """
-    #Commands.add(dbg)
+    Config.threaded = True
     parse(cfg, " ".join(sys.argv[1:]))
-    MODS.rss.DEBUG = True
-    scan(MODS)
+    mods.rss.DEBUG = True
+    scan(mods)
     nrcommand = len(Commands.cmds) or 1
+    if "d" in cfg.opts:
+        Commands.add(dbg)
     if "v" in cfg.opts:
         banner()
         print("verbose is on")
@@ -185,14 +191,13 @@ def main():
     if "v" in cfg.opts:
         for line in errors():
             print(line)
-    return lap, nrs, nrcommand, percall
+    print(f"{lap} {nrs} {nrcommand} {percall}")
 
 if __name__ == "__main__":
-    LAP, NRS, NRCOMMAND, PERCALL = wrap(main)
+    wrap(main)
     if "v" in cfg.opts:
         if not list(errors()):
             print("no errors")
         if events:
             print(f"{len(events)} events")
-        print(f"{LAP} {NRS} {NRCOMMAND} {PERCALL}")
     sys.stdout.flush()

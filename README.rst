@@ -169,8 +169,13 @@ and add the following for ``hello world``
         event.reply("hello world !!")
 
 
-save this and mport your filename in there, run bin/nixt md5 and copy/paste
-this in ``nixt/md5.py``, install that with ``pipx install . --force``, your
+save this and mport your filename in there and run
+
+|
+| ``$ bin/nixt md5 > nixt/md5.py``
+| ``$ pipx install . --force``
+|
+
 program can execute the ``hello`` command now.
 
 |

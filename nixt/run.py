@@ -97,7 +97,12 @@ class Reactor:
             if Config.threaded:
                 evt.thrs.append(launch(func, evt))
             else:
-                func(evt)
+                try:
+                    func(evt)
+                except exceptions as ex:
+                    later(ex)
+                evt.ready()
+
 
     def loop(self):
         """ reactor loop. """

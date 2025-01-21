@@ -19,11 +19,11 @@ import time
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.cmnd   import Commands, command, md5sum, parse, scan
-from nixt.object import dumps
-from nixt.disk   import Workdir, pidname
-from nixt.run    import Client, Config, Event, errors, exceptions, forever
-from nixt.run    import later
+from nixt.base import dumps
+from nixt.cmnd import Commands, command, md5sum, parse, scan
+from nixt.disk import Workdir, pidname
+from nixt.run  import Client, Config, Event, errors, exceptions, forever
+from nixt.run  import later
 
 
 cfg = Config()

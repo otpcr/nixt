@@ -16,12 +16,11 @@ import time
 import _thread
 
 
+from ..base import Object, edit, fmt, keys
 from ..cmnd import command
 from ..find import last
-from ..method import edit, fmt
-from ..object import Object, keys
 from ..disk import ident, store, write
-from ..run import Client, Default, Event, Fleet, exceptions, later, launch
+from ..run  import Client, Default, Event, Fleet, exceptions, later, launch
 
 
 "defines"

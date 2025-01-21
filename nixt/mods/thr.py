@@ -8,8 +8,8 @@ import threading
 import time
 
 
-from ..find   import elapsed
-from ..object import Object, update
+from ..base import Object, update
+from ..find import elapsed
 
 
 STARTTIME = time.time()
