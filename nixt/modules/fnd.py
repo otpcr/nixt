@@ -7,9 +7,9 @@
 import time
 
 
-from ..base import fmt
-from ..disk import long, skel, types
-from ..find import elapsed, find, fntime
+from ..objects  import fmt
+from ..persist import long, skel, types
+from ..persist import elapsed, find, fntime
 
 
 def fnd(event):

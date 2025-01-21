@@ -8,9 +8,9 @@ import importlib
 import os
 
 
-from ..cmnd import md5sum
-from ..md5  import MD5
-from ..run  import Config
+from ..command import md5sum
+from ..md5sum  import MD5
+from ..runtime import Config
 
 
 DIR  = os.path.dirname(__file__)

@@ -19,11 +19,11 @@ import time
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.base import dumps
-from nixt.cmnd import Commands, command, md5sum, parse, scan
-from nixt.disk import Workdir, pidname
-from nixt.run  import Client, Config, Event, errors, exceptions, forever
-from nixt.run  import later
+from nixt.command import Commands, command, md5sum, parse, scan
+from nixt.objects import dumps
+from nixt.persist import Workdir, pidname
+from nixt.runtime import Client, Config, Event, errors, exceptions, forever
+from nixt.runtime import later
 
 
 cfg = Config()
@@ -33,7 +33,7 @@ p   = os.path.join
 Workdir.wdr = os.path.expanduser(f"~/.{Config.name}")
 
 
-from nixt import mods
+from nixt import modules as mods
 
 
 "cli"

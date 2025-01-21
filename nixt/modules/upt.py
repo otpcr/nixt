@@ -7,7 +7,7 @@
 import time
 
 
-from ..find import elapsed
+from ..persist import elapsed
 
 
 STARTTIME = time.time()
