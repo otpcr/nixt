@@ -44,7 +44,7 @@ class Config(Default):
     """ Config """
 
     dis      = "upt"
-    md5      = False
+    md5      = True
     mods     = ""
     name     = Default.__module__.split(".", maxsplit=1)[0]
     threaded = False

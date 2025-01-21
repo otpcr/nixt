@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 
 
-""" modules """
+"modules"
 
 
 import importlib
@@ -9,7 +9,6 @@ import os
 
 
 from ..command import md5sum
-from ..md5sum  import MD5
 from ..runtime import Config
 
 
@@ -42,6 +41,21 @@ def importdir(pth, check=Config.md5):
                 continue
         importer(f"{NAME}.{modname}", f"{NAME}")
         MODS.append(modname)
+
+"md5sums"
+
+MD5 = {
+    "cmd": "a8bf5c9c5019c6e90b557e07f7d7f186",
+    "err": "6929af2979007bfbeb8007492360317e",
+    "fnd": "a078262c5bccf0cc96e269ee3cdfb904",
+    "irc": "50974365f7ca588dd309b7aa730132ab",
+    "log": "db6fa3608e4c9664af163edda07cdca6",
+    "mod": "905102ea6cd9a3a6e2a0f0bd3d73ebe5",
+    "req": "464fb82d2ec152bfcffbab99fb6de3af",
+    "rss": "6aefa61277016449f099ee0b61cf72fe",
+    "thr": "475be28c992348f2faaccb4a5b01724a",
+    "upt": "9cacb986f2e83a8b772fe639a4fa5c80"
+}
 
 
 importdir(DIR)
