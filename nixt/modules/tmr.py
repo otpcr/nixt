@@ -11,7 +11,7 @@ import time as ttime
 
 from nixt.clients import Fleet
 from nixt.objects import update
-from nixt.persist import find, elapsed, store, ident, write
+from nixt.persist import find, elapsed, write
 from nixt.runtime import Event, Timer, launch
 
 

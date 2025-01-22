@@ -17,7 +17,7 @@ import threading
 from nixt.objects import Object, dumps, fqn, items, loads, update
 
 
-"defines"
+"locks"
 
 
 p      = os.path.join
@@ -93,6 +93,7 @@ def types():
 
 
 "disk"
+
 
 def cdir(pth):
     path = pathlib.Path(pth)

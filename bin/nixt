@@ -18,7 +18,7 @@ sys.path.insert(0, os.getcwd())
 
 from nixt.clients import Client, Config
 from nixt.command import Commands, command, parse, scan
-from nixt.modules import face as MODS
+from nixt.modules import face
 from nixt.persist import Workdir, pidname
 from nixt.runtime import Event, errors, later
 
@@ -134,7 +134,7 @@ def background():
     daemon(True)
     privileges()
     pidfile(pidname(Config.name))
-    scan(MODS, mods, init=True)
+    scan(face, mods, init=True)
     forever()
 
 
@@ -143,7 +143,7 @@ def console():
     parse(cfg, " ".join(sys.argv[1:]))
     if "v" in cfg.opts:
         banner()
-    for mod, thr in scan(MODS, mods, init="i" in cfg.opts, disable=cfg.sets.dis):
+    for mod, thr in scan(face, mods, init="i" in cfg.opts, disable=cfg.sets.dis):
         if "v" in cfg.opts and "output" in dir(mod):
             mod.output = print
         if thr and "w" in cfg.opts:
@@ -159,7 +159,7 @@ def control():
     Commands.add(srv)
     parse(cfg, " ".join(sys.argv[1:]))
     csl = CLI()
-    scan(MODS, mods)
+    scan(face, mods)
     evt = Event()
     evt.orig = repr(csl)
     evt.type = "command"

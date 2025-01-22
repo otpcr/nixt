@@ -13,6 +13,7 @@ from nixt.command import command
 from nixt.objects import Default
 from nixt.runtime import Reactor, launch
 
+
 "config"
 
 
@@ -109,8 +110,8 @@ class Output:
         self.dostop.wait()
 
 
-
 "interface"
+
 
 def __dir__():
     return (

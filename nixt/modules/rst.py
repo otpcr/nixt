@@ -23,8 +23,9 @@ def init():
         rest = REST((Config.hostname, int(Config.port)), RESTHandler)
     except OSError as ex:
         later(ex)
-        return
-    rest.start()
+        rest = None
+    if rest is not None:
+        rest.start()
     return rest
 
 

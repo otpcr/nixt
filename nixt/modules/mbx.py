@@ -10,8 +10,8 @@ import os
 import time
 
 
-from nixt.objects import Object, update
-from nixt.persist import elapsed, find, fntime, fmt, store, ident, write
+from nixt.objects import Object, fmt, update
+from nixt.persist import elapsed, find, fntime, write
 
 
 "email"

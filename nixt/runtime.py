@@ -43,7 +43,7 @@ def later(exc):
         Errors.errors.append(fmt)
 
 
-"thrad"
+"thread"
 
 
 class Thread(threading.Thread):
