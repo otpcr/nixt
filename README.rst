@@ -185,7 +185,7 @@ program can execute the ``hello`` command now.
 
 commands run in their own thread, errors are deferred to not have loops
 blocking/breaking on exception and can contain your own written python3
-code, see the obz/modules directory for examples.
+code, see the nixt/modules directory for examples.
 
 
 **FILES**
