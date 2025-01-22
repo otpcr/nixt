@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C0413,W0105
+# pylint: disable=C,R0903,W0105,W0201,W0212,W0603,W0613,W0718,E0401
 
 
 "tinder"
@@ -17,23 +17,12 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.cmnd   import Commands, command, parse, scan
-from nixt.find   import elapsed
-from nixt.object import Object, keys
-from nixt.disk   import Workdir, skel
-from nixt.run    import Client, Config, Event, exceptions, launch
-from nixt.run    import errors, later
-
-
-from nixt import mods
-
-
-"exceptions"
-
-
-class MyException(Exception):
-
-    """ My Exception. """
+from nixt.clients import Client, Config
+from nixt.command import Commands, parse, scan
+from nixt.modules import face
+from nixt.objects import Object, keys
+from nixt.persist import Workdir, elapsed, skel
+from nixt.runtime import Event, launch, errors, later
 
 
 "defines"
@@ -46,7 +35,18 @@ cfg = Config()
 cfg.index = 0
 
 
-STARTTIME = time.time()
+
+if os.path.exists("mods"):
+    import mods
+else:
+    mods = None
+
+
+lap = 1
+nrs = 1
+nrcommand = 1
+percall   = 1
+starttime = time.time()
 
 
 events = []
@@ -75,35 +75,26 @@ param.thr = [""]
 param.ver = [""]
 
 
-"cli"
+"console"
 
 
 class CLI(Client):
 
-    """ CLI """
-
-    def __init__(self):
-        Client.__init__(self)
-        self.register("command", command)
-
     def raw(self, txt):
-        """ echo raw text. """
         if "v" in cfg.opts:
             print(txt)
 
 
-"utility"
+"utilities"
 
 
 def banner():
-    """ show banner. """
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{Config.name.upper()} since {tme}")
     print(",".join(keys(Commands.cmds)))
 
 
 def consume(evts):
-    """ consume events. """
     done = []
     for evt in sorted(evts, key=lambda x: x.ctime):
         evt.wait()
@@ -114,7 +105,6 @@ def consume(evts):
 
 
 def payload(clt):
-    """ run payload. """
     nmr = 0
     for cmdd in sorted(Commands.cmds):
         for ex in getattr(param, cmdd, [""]):
@@ -127,46 +117,33 @@ def payload(clt):
     return nmr
 
 
-"commands"
-
-
-def dbg(evt):
-    """ raise debug exception. """
-    raise MyException("yooo!")
-
-
 "runtime"
 
 
 def wrap(function):
-    """ restore console. """
     old3 = None
-    res  = None
     try:
         old3 = termios.tcgetattr(sys.stdin.fileno())
     except termios.error:
         pass
     try:
-        res = function()
+        function()
     except (KeyboardInterrupt, EOFError):
         pass
-    except exceptions as ex:
+    except Exception as ex:
         later(ex)
     finally:
         if old3:
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old3)
-    return res
 
 
 def main():
-    """ main. """
-    Config.threaded = True
+    global nrs
+    global nrcommand
     parse(cfg, " ".join(sys.argv[1:]))
-    mods.rss.DEBUG = True
-    scan(mods)
+    face.rss.DEBUG = True
+    scan(face, mods)
     nrcommand = len(Commands.cmds) or 1
-    if "d" in cfg.opts:
-        Commands.add(dbg)
     if "v" in cfg.opts:
         banner()
         print("verbose is on")
@@ -185,19 +162,19 @@ def main():
     consume(events)
     clt.stop()
     #clt.wait()
-    endtime = time.time()
-    lap     = elapsed(endtime-STARTTIME)
-    percall = (endtime-STARTTIME)/(nrs*nrcommand)
-    if "v" in cfg.opts:
-        for line in errors():
-            print(line)
-    print(f"{lap} {nrs} {nrcommand} {percall}")
+
 
 if __name__ == "__main__":
     wrap(main)
+    endtime = time.time()
+    lap = elapsed(endtime-starttime)
+    percall = (endtime-starttime)/(nrs*nrcommand)
+    for line in errors():
+        print(line)
     if "v" in cfg.opts:
         if not list(errors()):
             print("no errors")
         if events:
             print(f"{len(events)} events")
+        print(f"{lap} {nrs} {nrcommand} {percall}")
     sys.stdout.flush()
