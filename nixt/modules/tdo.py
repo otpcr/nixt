@@ -29,7 +29,7 @@ def dne(event):
         nmr += 1
         obj.__deleted__ = True
         write(obj, fnm)
-        event.ok()
+        event.done()
         break
     if not nmr:
         event.reply("nothing todo")
@@ -48,4 +48,4 @@ def tdo(event):
     obj = Todo()
     obj.txt = event.rest
     write(obj)
-    event.ok()
+    event.done()

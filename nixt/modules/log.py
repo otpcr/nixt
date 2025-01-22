@@ -32,4 +32,4 @@ def log(event):
     obj = Log()
     obj.txt = event.rest
     write(obj)
-    event.ok()
+    event.done()
