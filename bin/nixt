@@ -217,7 +217,7 @@ def tbl(event):
     event.reply("# This file is placed in the Public Domain.")
     event.reply("")
     event.reply("")
-    event.reply('"static tables"')
+    event.reply('"lookup tables"')
     event.reply("")
     event.reply("")
     event.reply(f"NAMES = {dumps(Commands.names, indent=4)}")

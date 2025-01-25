@@ -9,7 +9,6 @@ NAMES = {
     "err": "nixt.modules.err",
     "flt": "nixt.modules.flt",
     "fnd": "nixt.modules.fnd",
-    "hello": "nixt.modules.hello",
     "cfg": "nixt.modules.irc",
     "mre": "nixt.modules.irc",
     "pwd": "nixt.modules.irc",
