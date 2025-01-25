@@ -75,7 +75,7 @@ class Event(Default):
 
     def display(self):
         for txt in self.result:
-            Output.say(self.orig, self.channel, txt)
+            Fleet.say(self.orig, self.channel, txt)
 
     def done(self):
         self.reply("ok")
@@ -109,6 +109,11 @@ class Fleet:
             bot.announce(txt)
 
     @staticmethod
+    def display(evt):
+        for text in evt.result:
+            Fleet.say(evt.orig, evt.channel, text)
+
+    @staticmethod
     def first():
         bots =  list(Fleet.bots.values())
         res = None
@@ -123,7 +128,8 @@ class Fleet:
     @staticmethod
     def say(orig, channel, txt):
         bot = Fleet.get(orig)
-        bot.say(channel, txt)
+        if bot:
+            bot.say(channel, txt)
 
 
 "output"
@@ -135,31 +141,19 @@ class Output:
     running = threading.Event()
 
     @staticmethod
-    def display(evt):
-        bot = Fleet.get(evt.orig)
-        for txt in evt.result:
-            bot.say(evt.channel, txt)
-
-    @staticmethod
     def loop():
         Output.running.set()
         while Output.running.is_set():
             evt = Output.queue.get()
             if evt is None:
                 break
-            Output.display(evt)
+            Fleet.display(evt)
 
     @staticmethod
     def put(evt):
         if not Output.running.is_set():
-            Output.display(evt)
+            Fleet.display(evt)
         Output.queue.put_nowait(evt)
-
-    @staticmethod
-    def say(orig, channel, txt):
-        bot = Fleet.get(orig)
-        if bot:
-            bot.say(channel, txt)
 
     @staticmethod
     def start():
