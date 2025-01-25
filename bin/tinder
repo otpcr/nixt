@@ -17,12 +17,12 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.clients import Client, Config
-from nixt.command import Commands, parse, scan
+from nixt.clients import Buffered, Event
+from nixt.command import Commands, Config, Table, command, parse, scan
 from nixt.modules import face
 from nixt.objects import Object, keys
 from nixt.persist import Workdir, elapsed, skel
-from nixt.runtime import Event, launch, errors, later
+from nixt.runtime import launch, errors, later
 
 
 "defines"
@@ -33,13 +33,6 @@ Workdir.wdr  = ".test"
 
 cfg = Config()
 cfg.index = 0
-
-
-
-if os.path.exists("mods"):
-    import mods
-else:
-    mods = None
 
 
 lap = 1
@@ -78,7 +71,11 @@ param.ver = [""]
 "console"
 
 
-class CLI(Client):
+class CLI(Buffered):
+
+    def __init__(self):
+        Buffered.__init__(self)
+        self.register("command", command)
 
     def raw(self, txt):
         if "v" in cfg.opts:
@@ -140,9 +137,10 @@ def wrap(function):
 def main():
     global nrs
     global nrcommand
+    Table.load("nixt.modules.rss")
+    Table.mods["nixt.modules.rss"].DEBUG = True
     parse(cfg, " ".join(sys.argv[1:]))
-    face.rss.DEBUG = True
-    scan(face, mods)
+    scan(face)
     nrcommand = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()
