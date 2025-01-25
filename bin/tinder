@@ -18,7 +18,7 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.clients import Buffered, Event
-from nixt.command import Commands, Config, Table, command, parse, scan
+from nixt.command import Commands, Config, Table, command, parse
 from nixt.modules import face
 from nixt.objects import Object, keys
 from nixt.persist import Workdir, elapsed, skel
@@ -140,7 +140,7 @@ def main():
     Table.load("nixt.modules.rss")
     Table.mods["nixt.modules.rss"].DEBUG = True
     parse(cfg, " ".join(sys.argv[1:]))
-    scan(face)
+    Table.scan(face)
     nrcommand = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()
