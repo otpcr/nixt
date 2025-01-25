@@ -120,7 +120,10 @@ def command(evt):
     func = Commands.get(evt.cmd)
     if not func:
         mname = Commands.getname(evt.cmd)
-        if mname and mname.split(".")[-1] in spl(Config.dis):
+        if not mname:
+            evt.ready()
+            return
+        if mname.split(".")[-1] in spl(Config.dis):
             evt.ready()
             return
         debug(f"autoload {mname}")

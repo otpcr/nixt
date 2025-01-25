@@ -172,7 +172,7 @@ and add the following for ``hello world``
 save this and mport your filename in there and run
 
 |
-| ``$ bin/nixt md5 > nixt/md5.py``
+| ``$ bin/nixt tbl > nixt/lookups.py``
 | ``$ pipx install . --force``
 |
 

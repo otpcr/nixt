@@ -6,27 +6,13 @@
 "interface"
 
 
-MODS = (
-    'cmd',
-    'err',
-    'flt',
-    'fnd',
-    'irc',
-    'log',
-    'mbx',
-    'mdl',
-    'mod',
-    'req',
-    'rss',
-    'rst',
-    'slg',
-    'tdo',
-    'thr',
-    'tmr',
-    'udp',
-    'upt',
-    'wsd'
-)
+import os
+
+
+MODS = sorted([
+               x[:-3] for x in os.listdir(os.path.dirname(__file__))
+               if x.endswith(".py") and not x.startswith("__")
+              ])
 
 
 def __dir__():
