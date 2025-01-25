@@ -13,6 +13,9 @@ import time
 import _thread
 
 
+sys.path.insert(0, os.getcwd())
+
+
 from nixt.clients import Client, Event, Fleet
 from nixt.command import Commands, Config, NAMES, Table, command, parse, spl
 from nixt.modules import face
@@ -184,7 +187,7 @@ def service():
 
 
 def cmd(event):
-    event.reply(",".join(sorted(Commands.cmds)))
+    event.reply(",".join(sorted(NAMES)))
 
 
 def srv(event):
