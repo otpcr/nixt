@@ -59,6 +59,7 @@ class Buffered(Client):
     def raw(self, txt):
         raise NotImplementedError("raw")
 
+
 "event"
 
 

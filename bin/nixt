@@ -151,7 +151,10 @@ def background():
 
 def console():
     import readline # noqa: F401
+    Commands.add(cmd)
     parse(cfg, " ".join(sys.argv[1:]))
+    Config.init = cfg.sets.init or Config.init
+    Config.opts = cfg.opts
     if "v" in cfg.opts:
         banner()
     Table.inits("w" in cfg.opts)

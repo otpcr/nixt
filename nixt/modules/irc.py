@@ -17,6 +17,7 @@ import _thread
 
 
 from ..clients import Default, Event, Fleet
+from ..command import Config as Main
 from ..command import command
 from ..objects import Object, edit, fmt, keys
 from ..persist import ident, last, write
@@ -35,7 +36,8 @@ saylock = _thread.allocate_lock()
 
 def output(txt):
     # output here
-    pass
+    if "v" in Main.opts:
+        print(txt)
 
 
 "init"

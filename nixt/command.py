@@ -7,8 +7,6 @@
 
 import importlib
 import inspect
-import os
-import types
 
 
 from .clients import Default, Output
@@ -40,7 +38,6 @@ def output(txt):
 
 class Config(Default):
 
-    dis  = "mbx,mdl,rst,slg,tmr,udp,wsd"
     init = "irc,rss"
     name = Default.__module__.rsplit(".", maxsplit=2)[-2]
     opts = Default()
@@ -75,7 +72,6 @@ class Commands:
                 continue
             if 'event' in cmdz.__code__.co_varnames:
                 Commands.add(cmdz, mod)
-        return
 
 
 "table"
@@ -90,15 +86,6 @@ class Table:
         Table.mods[mod.__name__] = mod
 
     @staticmethod
-    def all(*pkgs, disable=""):
-        for pkg in pkgs:
-            if type(pkg) is not types.ModuleType:
-                continue
-            for name in [x[:-3] for x in os.listdir(os.path.dirname(pkg.__file__))
-                          if x.startswith(".py") and not x.startswith("__")]:
-                yield Table.load(f"nixt.modules.{name}")
-          
-    @staticmethod
     def get(name):
         return Table.mods.get(name, None)
 
@@ -106,7 +93,7 @@ class Table:
     def inits(wait=False):
         mods = []
         for name in spl(Config.init):
-            mname = f"nixt.modules.{name}"      
+            mname = f"nixt.modules.{name}"
             mod = Table.load(mname)
             thr = launch(mod.init)
             mods.append((mod, thr))
@@ -118,41 +105,35 @@ class Table:
         return mod
 
     @staticmethod
-    def scan(pkg, pname=None):
+    def scan(pkg, mods="", pname=None):
         if pname is None:
             pname = "nixt.modules"
         for name in dir(pkg):
-            if name in spl(Config.dis):
+            if mods and name not in spl(mods):
                 continue
             mod = Table.load(f'{pname}.{name}')
             Commands.scan(mod)
         if not Table.mods:
-            scan(pkg)
+            Table.scan(pkg)
 
 
 "callbacks"
 
 
 def command(evt):
-    if not evt.txt:
-        eet.ready()
-        return
     parse(evt)
     func = Commands.get(evt.cmd)
     if not func:
         mname = NAMES.get(evt.cmd)
-        if not mname:
-            evt.ready()
-            return
-        debug(f"autoload {mname}")
-        mod = Table.load(mname)
-        Commands.scan(mod)
-        func = Commands.get(evt.cmd)
+        if mname:
+            debug(f"autoload {mname}")
+            mod = Table.load(mname)
+            Commands.scan(mod)
+            func = Commands.get(evt.cmd)
     if func:
         func(evt)
         Output.put(evt)
     evt.ready()
-    return
 
 
 "utilities"
