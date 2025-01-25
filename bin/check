@@ -9,7 +9,7 @@ import os
 import sys
 
 
-IGNORE = ["udp.py", "rst.py", "command.py"]
+IGNORE = ["udp.py", "rst.py"]
 NAME = "nixt"
 
 

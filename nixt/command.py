@@ -41,6 +41,7 @@ def output(txt):
 class Config(Default):
 
     dis  = "mbx,mdl,rst,slg,tmr,udp,wsd"
+    init = "irc,rss"
     name = Default.__module__.rsplit(".", maxsplit=2)[-2]
     opts = Default()
 
@@ -69,8 +70,6 @@ class Commands:
 
     @staticmethod
     def scan(mod):
-        if mod.__name__.split(".")[-1] in spl(Config.dis):
-            return
         for key, cmdz in inspect.getmembers(mod, inspect.isfunction):
             if key.startswith("cb"):
                 continue
@@ -91,13 +90,31 @@ class Table:
         Table.mods[mod.__name__] = mod
 
     @staticmethod
+    def all(*pkgs, disable=""):
+        for pkg in pkgs:
+            if type(pkg) is not types.ModuleType:
+                continue
+            for name in [x[:-3] for x in os.listdir(os.path.dirname(pkg.__file__))
+                          if x.startswith(".py") and not x.startswith("__")]:
+                yield Table.load(f"nixt.modules.{name}")
+          
+    @staticmethod
     def get(name):
         return Table.mods.get(name, None)
 
     @staticmethod
+    def inits(wait=False):
+        mods = []
+        for name in spl(Config.init):
+            mname = f"nixt.modules.{name}"      
+            mod = Table.load(mname)
+            thr = launch(mod.init)
+            mods.append((mod, thr))
+        return mods
+
+    @staticmethod
     def load(name):
         Table.mods[name] = mod = importlib.import_module(name, 'nixt.modules')
-        Commands.scan(mod)
         return mod
 
     @staticmethod
@@ -107,7 +124,8 @@ class Table:
         for name in dir(pkg):
             if name in spl(Config.dis):
                 continue
-            mod = Table.load(f"nixt.modules.{name}")
+            mod = Table.load(f'{pname}.{name}')
+            Commands.scan(mod)
         if not Table.mods:
             scan(pkg)
 
@@ -116,48 +134,25 @@ class Table:
 
 
 def command(evt):
+    if not evt.txt:
+        eet.ready()
+        return
     parse(evt)
     func = Commands.get(evt.cmd)
     if not func:
-        mname = Commands.getname(evt.cmd)
+        mname = NAMES.get(evt.cmd)
         if not mname:
             evt.ready()
             return
-        if mname.split(".")[-1] in spl(Config.dis):
-            evt.ready()
-            return
         debug(f"autoload {mname}")
-        Table.load(mname)
+        mod = Table.load(mname)
+        Commands.scan(mod)
         func = Commands.get(evt.cmd)
     if func:
         func(evt)
         Output.put(evt)
     evt.ready()
-
-
-"Scanner"
-
-
-def modloop(*pkgs, disable=""):
-    for pkg in pkgs:
-        if pkg is None:
-            continue
-        for name in  [x[:-3] for x in os.listdir(os.path.dirname(pkg.__file__))
-                      if not x.startswith("__")]:
-            yield Table.load(f"nixt.modules.{name}")
-
-
-def scan(*pkgs, init=False, disable=""):
-    result = []
-    for mod in modloop(*pkgs, disable=disable):
-        if not isinstance(mod, types.ModuleType):
-            continue
-        Commands.scan(mod)
-        thr = None
-        if init and "init" in dir(mod):
-            thr = launch(mod.init)
-        result.append((mod, thr))
-    return result
+    return
 
 
 "utilities"

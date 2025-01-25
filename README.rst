@@ -63,9 +63,14 @@ installation is done with pipx
 | joins ``#nixt`` on localhost
 |
 
+if you run nixt locally from source you might need to add your
+current directory to sys.path
+
+|
+| ``export PYTHONPATH="."``
+|
 
 **USAGE**
-
 
 use ``nixt`` to control the program, default it does nothing
 

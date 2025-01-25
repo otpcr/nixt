@@ -15,7 +15,6 @@ import _thread
 
 from nixt.clients import Client, Event, Fleet
 from nixt.command import Commands, Config, NAMES, Table, command, parse, spl
-from nixt.command import scan
 from nixt.modules import face
 from nixt.objects import dumps
 from nixt.persist import Workdir, pidname
@@ -119,16 +118,6 @@ def forever():
             _thread.interrupt_main()
 
 
-def init(*pkgs, disable=""):
-    result = []
-    for mod in Table.mods:
-        if init and "init" in dir(mod):
-            thr = launch(mod.init)
-        result.append((mod, thr))
-    return result
-
-
-
 def pidfile(filename):
     if os.path.exists(filename):
         os.unlink(filename)
@@ -153,7 +142,7 @@ def background():
     daemon(True)
     privileges()
     pidfile(pidname(Config.name))
-    init(face)
+    Table.inits()
     forever()
 
 
@@ -162,11 +151,7 @@ def console():
     parse(cfg, " ".join(sys.argv[1:]))
     if "v" in cfg.opts:
         banner()
-    for mod, thr in init(face, disable=cfg.sets.dis):
-        if "v" in cfg.opts and "output" in dir(mod):
-            mod.output = print
-        if thr and "w" in cfg.opts:
-            thr.join()
+    Table.inits("w" in cfg.opts)
     csl = Console()
     csl.start()
     forever()
@@ -191,7 +176,7 @@ def control():
 def service():
     privileges()
     pidfile(pidname(Config.name))
-    init(face)
+    Table.inits()
     forever()
 
 
@@ -199,11 +184,7 @@ def service():
 
 
 def cmd(event):
-    event.reply(",".join(sorted([
-                                 x for x in NAMES.keys()
-                                 if Commands.names.get(x).split(".")[-1] not in spl(Config.dis)
-                                ]
-                               )))
+    event.reply(",".join(sorted(Commands.cmds)))
 
 
 def srv(event):
