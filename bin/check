@@ -32,6 +32,7 @@ def popen(txt):
 
 def main():
     """ main """
+    popen("bin/clean")
     popen(f'grep -R "print(" {NAME}')
     popen(f'grep -R __import__ {NAME}')
     popen(f'grep -R "import sys" {NAME}')
