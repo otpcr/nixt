@@ -160,8 +160,8 @@ opml
 **PROGRAMMING**
 
 
-``nixt`` runs it's modules in the package edit a file in nixt/modules/<name>.py
-and add the following for ``hello world``
+``nixt`` runs it's modules in the package, to add your own command  edit
+a file in nixt/modules/hello.py and add the following for ``hello world``
 
 ::
 
@@ -169,7 +169,7 @@ and add the following for ``hello world``
         event.reply("hello world !!")
 
 
-save this and mport your filename in there and run
+save this and run
 
 |
 | ``$ bin/nixt tbl > nixt/lookups.py``
