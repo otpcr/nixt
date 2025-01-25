@@ -145,6 +145,7 @@ def background():
     daemon(True)
     privileges()
     pidfile(pidname(Config.name))
+    Commands.add(cmd)
     Table.inits()
     forever()
 
@@ -157,7 +158,8 @@ def console():
     Config.opts = cfg.opts
     if "v" in cfg.opts:
         banner()
-    Table.inits("w" in cfg.opts)
+    if "i" in cfg.opts:
+        Table.inits("w" in cfg.opts)
     csl = Console()
     csl.start()
     forever()
@@ -182,6 +184,7 @@ def control():
 def service():
     privileges()
     pidfile(pidname(Config.name))
+    Commands.add(cmd)
     Table.inits()
     forever()
 

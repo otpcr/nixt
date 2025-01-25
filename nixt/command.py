@@ -7,6 +7,7 @@
 
 import importlib
 import inspect
+import os
 
 
 from .clients import Default, Output
@@ -31,6 +32,10 @@ def debug(txt):
 def output(txt):
     # output here
     print(txt)
+
+
+
+p = os.path.join
 
 
 "config"
@@ -101,13 +106,17 @@ class Table:
 
     @staticmethod
     def load(name):
-        Table.mods[name] = mod = importlib.import_module(name, 'nixt.modules')
+        pname = p(Config.name, 'modules')
+        mname  = p(pname, name)
+        mod = Table.mods.get(mname)
+        if not mod:
+            Table.mods[name] = mod = importlib.import_module(name, pname)
         return mod
 
     @staticmethod
     def scan(pkg, mods="", pname=None):
         if pname is None:
-            pname = "nixt.modules"
+            pname = p(Config.name, 'modules')
         for name in dir(pkg):
             if mods and name not in spl(mods):
                 continue

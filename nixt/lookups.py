@@ -5,7 +5,6 @@
 
 
 NAMES = {
-    "all": "nixt.modules.all",
     "err": "nixt.modules.err",
     "flt": "nixt.modules.flt",
     "fnd": "nixt.modules.fnd",
