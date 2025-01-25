@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,R0912,W0105,E0402
+# pylint: disable=C0115,C0116,R0903,R0912,W0105,W0612,W0613,W0718,E0402
 
 
 "user commands"
@@ -103,10 +103,10 @@ class Table:
     @staticmethod
     def scan(pkg, pname=None):
         if pname is None:
-            pname = "nixt.modules" 
+            pname = "nixt.modules"
         for name in dir(pkg):
             if name in spl(Config.dis):
-                 continue
+                continue
             mod = Table.load(f"nixt.modules.{name}")
         if not Table.mods:
             scan(pkg)
@@ -140,7 +140,6 @@ def command(evt):
 
 def modloop(*pkgs, disable=""):
     for pkg in pkgs:
-        print(pkg)
         if pkg is None:
             continue
         for name in  [x[:-3] for x in os.listdir(os.path.dirname(pkg.__file__))

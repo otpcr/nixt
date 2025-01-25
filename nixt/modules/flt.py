@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=E0402
+# pylint: disable=C0116,E0402
 
 
 "fleet"

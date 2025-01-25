@@ -56,6 +56,8 @@ class Buffered(Client):
         Client.__init__(self)
         Output.start()
 
+    def raw(self, txt):
+        raise NotImplementedError("raw")
 
 "event"
 
@@ -152,6 +154,12 @@ class Output:
         if not Output.running.is_set():
             Output.display(evt)
         Output.queue.put_nowait(evt)
+
+    @staticmethod
+    def say(orig, channel, txt):
+        bot = Fleet.get(orig)
+        if bot:
+            bot.say(channel, txt)
 
     @staticmethod
     def start():
