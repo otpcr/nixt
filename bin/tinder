@@ -17,8 +17,8 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.clients import Buffered, Event
-from nixt.command import Commands, Config, Table, command, parse
+from nixt.clients import Buffered, Config, Event
+from nixt.command import Commands, Table, command, parse
 from nixt.modules import face
 from nixt.objects import Object, keys
 from nixt.persist import Workdir, elapsed, skel
