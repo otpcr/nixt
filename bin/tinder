@@ -18,11 +18,11 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.clients import Buffered, Event
-from nixt.command import Commands, Config, command, parse
+from nixt.command import Commands, Config, Table, command, parse
 from nixt.modules import face
 from nixt.objects import Object, keys
 from nixt.persist import Workdir, elapsed, skel
-from nixt.runtime import Table, launch, errors, later
+from nixt.runtime import launch, errors, later
 
 
 "defines"
@@ -137,10 +137,10 @@ def wrap(function):
 def main():
     global nrs
     global nrcommand
-    Table.load("nixt.modules.rss")
-    Table.mods["nixt.modules.rss"].DEBUG = True
     parse(cfg, " ".join(sys.argv[1:]))
     Table.scan(face)
+    Table.load("nixt.modules.rss")
+    Table.mods["nixt.modules.rss"].DEBUG = True
     nrcommand = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()

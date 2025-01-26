@@ -19,6 +19,34 @@ import _thread
 STARTTIME = time.time()
 
 
+"errors"
+
+
+class Errors:
+
+    errors = []
+
+    @staticmethod
+    def format(exc):
+        return traceback.format_exception(
+            type(exc),
+            exc,
+            exc.__traceback__
+        )
+
+
+def errors():
+    for err in Errors.errors:
+        yield from err
+
+
+def later(exc):
+    excp = exc.with_traceback(exc.__traceback__)
+    fmt = Errors.format(excp)
+    if fmt not in Errors.errors:
+        Errors.errors.append(fmt)
+
+
 "reactor"
 
 
@@ -163,110 +191,6 @@ class Repeater(Timer):
         super().run()
 
 
-"errors"
-
-
-class Errors:
-
-    errors = []
-
-    @staticmethod
-    def format(exc):
-        return traceback.format_exception(
-            type(exc),
-            exc,
-            exc.__traceback__
-        )
-
-
-def errors():
-    for err in Errors.errors:
-        yield from err
-
-
-def later(exc):
-    excp = exc.with_traceback(exc.__traceback__)
-    fmt = Errors.format(excp)
-    if fmt not in Errors.errors:
-        Errors.errors.append(fmt)
-
-
-"table"
-
-
-class Table:
-
-    mods = {}
-
-    @staticmethod
-    def add(mod):
-        Table.mods[mod.__name__] = mod
-
-    @staticmethod
-    def get(name):
-        return Table.mods.get(name, None)
-
-    @staticmethod
-    def inits(names, wait=False):
-        name = Errors.__module__.split(".", maxsplit=1)[0]
-        pname = f"{name}.modules"
-        mods = []
-        for name in spl(names):
-            mname = f"{pname}.{name}"
-            mod = Table.load(mname)
-            thr = launch(mod.init)
-            mods.append((mod, thr))
-        if wait:
-            for _, thr in mods:
-                thr.join()
-        return mods
-
-    @staticmethod
-    def load(name, pname=None):
-        if pname is None:
-            pname = ".".join(name.split("."))[:-1]
-        mod = Table.mods.get(name)
-        if not mod:
-            Table.mods[name] = mod = importlib.import_module(name, pname)
-        return mod
-
-    @staticmethod
-    def scan(pkg, mods=""):
-        pname = f"nixt.modules"
-        for nme in dir(pkg):
-            if "__" in nme:
-                continue
-            if nme == name:
-                continue                 
-            if mods and name not in spl(mods):
-                continue
-            mod = Table.load(f'{pname}.{nme}', pname)
-            Commands.scan(mod)
-
-
-"cache"
-
-
-class Cache:
-
-    objs = {}
-
-    @staticmethod
-    def add(path, obj):
-        Cache.objs[path] = obj
-
-    @staticmethod
-    def get(path):
-        return Cache.objs.get(path, None)
-
-    @staticmethod
-    def typed(matcher):
-        for key in Cache.objs:
-            if matcher not in key:
-                continue
-            yield Cache.objs.get(key)
-
-
 "utilities"
 
 
@@ -276,7 +200,6 @@ def spl(txt):
     except (TypeError, ValueError):
         result = txt
     return [x for x in result if x]
-
 
 
 "interface"

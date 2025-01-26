@@ -11,7 +11,7 @@ import os
 
 
 from .clients import Default, Output
-from .runtime import Table, later, launch
+from .runtime import Errors, later, launch
 
 
 try:
@@ -77,6 +77,54 @@ class Commands:
                 continue
             if 'event' in cmdz.__code__.co_varnames:
                 Commands.add(cmdz, mod)
+
+
+class Table:
+
+    mods = {}
+
+    @staticmethod
+    def add(mod):
+        Table.mods[mod.__name__] = mod
+
+    @staticmethod
+    def get(name):
+        return Table.mods.get(name, None)
+
+    @staticmethod
+    def inits(names, wait=False):
+        name = Errors.__module__.split(".", maxsplit=1)[0]
+        pname = f"{name}.modules"
+        mods = []
+        for name in spl(names):
+            mname = f"{pname}.{name}"
+            mod = Table.load(mname)
+            thr = launch(mod.init)
+            mods.append((mod, thr))
+        if wait:
+            for _, thr in mods:
+                thr.join()
+        return mods
+
+    @staticmethod
+    def load(name, pname=None):
+        if pname is None:
+            pname = ".".join(name.split("."))[:-1]
+        mod = Table.mods.get(name)
+        if not mod:
+            Table.mods[name] = mod = importlib.import_module(name, pname)
+        return mod
+
+    @staticmethod
+    def scan(pkg, mods=""):
+        pname = f"nixt.modules"
+        for nme in dir(pkg):
+            if "__" in nme:
+                continue
+            if mods and nme not in spl(mods):
+                continue
+            mod = Table.load(f'{pname}.{nme}', pname)
+            Commands.scan(mod)
 
 
 "callbacks"
@@ -168,6 +216,7 @@ def spl(txt):
 
 def __dir__():
     return (
+        'Table',
         'Commands',
         'command',
         'cmd',
