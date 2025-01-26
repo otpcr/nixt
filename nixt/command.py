@@ -2,7 +2,7 @@
 # pylint: disable=C0115,C0116,R0903,R0912,W0105,W0612,W0613,W0718,E0402
 
 
-"commands"
+"command"
 
 
 import importlib
@@ -49,6 +49,9 @@ class Commands:
                 continue
             if 'event' in cmdz.__code__.co_varnames:
                 Commands.add(cmdz, mod)
+
+
+"table"
 
 
 class Table:
