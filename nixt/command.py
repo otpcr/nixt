@@ -7,10 +7,9 @@
 
 import importlib
 import inspect
-import os
 
 
-from .clients import Default, Output
+from .clients import Default, Output, debug
 from .runtime import Errors, later, launch
 
 
@@ -19,33 +18,6 @@ try:
 except Exception as ex:
     later(ex)
     NAMES = {}
-
-
-"defines"
-
-
-def debug(txt):
-    if "v" in Config.opts:
-        output(txt)
-
-
-def output(txt):
-    # output here
-    print(txt)
-
-
-
-p = os.path.join
-
-
-"config"
-
-
-class Config(Default):
-
-    init = "irc,rss"
-    name = Default.__module__.rsplit(".", maxsplit=2)[-2]
-    opts = Default()
 
 
 "commands"
@@ -221,5 +193,6 @@ def __dir__():
         'command',
         'cmd',
         'parse',
-        'scan'
+        'scan',
+        'spl'
     )

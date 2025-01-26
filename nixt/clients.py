@@ -13,6 +13,19 @@ import time
 from .runtime import Reactor, launch
 
 
+"output"
+
+
+def debug(txt):
+    if "v" in Config.opts:
+        output(txt)
+
+
+def output(txt):
+    # output here
+    print(txt)
+
+
 "default"
 
 
@@ -32,6 +45,16 @@ class Default:
 
     def __str__(self):
         return str(self.__dict__)
+
+
+"config"
+
+
+class Config(Default):
+
+    init = "irc,rss"
+    name = Default.__module__.rsplit(".", maxsplit=2)[-2]
+    opts = Default()
 
 
 "clients"
@@ -175,6 +198,6 @@ def __dir__():
     return (
         'Default',
         'Client',
-        'EVent',
+        'Event',
         'Fleet'
     )
