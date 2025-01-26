@@ -14,6 +14,9 @@ from ..persist import elapsed
 from ..runtime import STARTTIME
 
 
+"commands"
+
+
 def thr(event):
     result = []
     for thread in sorted(threading.enumerate(), key=lambda x: x.name):

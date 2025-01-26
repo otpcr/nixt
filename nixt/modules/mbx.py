@@ -24,6 +24,9 @@ class Email(Object):
         self.text = ""
 
 
+"utility"
+
+
 def todate(date):
     date = date.replace("_", ":")
     res = date.split()

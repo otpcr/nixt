@@ -141,6 +141,10 @@ def main():
     Table.scan(face)
     Table.load("nixt.modules.rss")
     Table.mods["nixt.modules.rss"].DEBUG = True
+    Table.load("nixt.modules.udp")
+    Table.mods["nixt.modules.udp"].DEBUG = True
+    Table.load("nixt.modules.rst")
+    Table.mods["nixt.modules.rst"].DEBUG = True
     nrcommand = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()

@@ -48,7 +48,6 @@ FORMATS = [
 
 
 def init():
-    "start timers."
     bot = Fleet.first()
     if not bot:
         return
@@ -69,14 +68,13 @@ def init():
 
 class NoDate(Exception):
 
-    "NoDate"
+    pass
 
 
 "utilities"
 
 
 def extract_date(daystr):
-    "extract date from string."
     res = None
     for fmt in FORMATS:
         try:
@@ -88,7 +86,6 @@ def extract_date(daystr):
 
 
 def get_day(daystr):
-    "return day from string."
     day = None
     month = None
     yea = None
@@ -114,7 +111,6 @@ def get_day(daystr):
 
 
 def get_hour(daystr):
-    "return hour from string."
     try:
         hmsre = re.search(r'(\d+):(\d+):(\d+)', str(daystr))
         hours = 60 * 60 * (int(hmsre.group(1)))
@@ -136,7 +132,6 @@ def get_hour(daystr):
 
 
 def get_time(txt):
-    "parse full time string."
     try:
         target = get_day(txt)
     except NoDate:
@@ -148,7 +143,6 @@ def get_time(txt):
 
 
 def parse_time(txt):
-    "parse time from string."
     seconds = 0
     target = 0
     txt = str(txt)
@@ -171,7 +165,6 @@ def parse_time(txt):
 
 
 def to_day(daystr):
-    "parse day from string."
     previous = ""
     line = ""
     daystr = str(daystr)
@@ -189,7 +182,6 @@ def to_day(daystr):
 
 
 def today():
-    "return date."
     return str(datetime.datetime.today()).split()[0]
 
 

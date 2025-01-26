@@ -19,6 +19,9 @@ from ..persist import Workdir, types
 from ..runtime import later, launch
 
 
+DEBUG = False
+
+
 "init"
 
 
@@ -94,6 +97,8 @@ class RESTHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
+        if DEBUG:
+            return
         if "favicon" in self.path:
             return
         if self.path == "/":
