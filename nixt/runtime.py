@@ -5,6 +5,7 @@
 "runtime"
 
 
+import importlib
 import queue
 import threading
 import time
@@ -190,15 +191,102 @@ def later(exc):
         Errors.errors.append(fmt)
 
 
+"table"
+
+
+class Table:
+
+    mods = {}
+
+    @staticmethod
+    def add(mod):
+        Table.mods[mod.__name__] = mod
+
+    @staticmethod
+    def get(name):
+        return Table.mods.get(name, None)
+
+    @staticmethod
+    def inits(names, wait=False):
+        name = Errors.__module__.split(".", maxsplit=1)[0]
+        mods = []
+        pname = f"{name}.modules"
+        for name in spl(names):
+            mname = f"{pname}.{name}"
+            mod = Table.load(mname)
+            thr = launch(mod.init)
+            mods.append((mod, thr))
+        if wait:
+            for _, thr in mods:
+                thr.join()
+        return mods
+
+    @staticmethod
+    def load(name):
+        pname = Errors.__module__
+        mname  = f"{pname}/{name}"
+        mod = Table.mods.get(mname)
+        if not mod:
+            Table.mods[name] = mod = importlib.import_module(name, name)
+        return mod
+
+    @staticmethod
+    def scan(pkg, mods=""):
+        for name in dir(pkg):
+            if mods and name not in spl(mods):
+                continue
+            mod = Table.load(f'{pname}.{name}')
+            Commands.scan(mod)
+        if not Table.mods:
+            Table.scan(pkg)
+
+
+"cache"
+
+
+class Cache:
+
+    objs = {}
+
+    @staticmethod
+    def add(path, obj):
+        Cache.objs[path] = obj
+
+    @staticmethod
+    def get(path):
+        return Cache.objs.get(path, None)
+
+    @staticmethod
+    def typed(matcher):
+        for key in Cache.objs:
+            if matcher not in key:
+                continue
+            yield Cache.objs.get(key)
+
+
+"utilities"
+
+
+def spl(txt):
+    try:
+        result = txt.split(',')
+    except (TypeError, ValueError):
+        result = txt
+    return [x for x in result if x]
+
+
+
 "interface"
 
 
 def __dir__():
     return (
         'STARTTIME',
+        'Cache',
         'Errors',
         'Reactor',
         'Repeater',
+        'Table',
         'Thread',
         'Timer',
         'errors',

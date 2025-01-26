@@ -2,7 +2,7 @@
 # pylint: disable=C0115,C0116,R0903,R0912,W0105,W0612,W0613,W0718,E0402
 
 
-"user commands"
+"commands"
 
 
 import importlib
@@ -11,7 +11,7 @@ import os
 
 
 from .clients import Default, Output
-from .runtime import later, launch
+from .runtime import Table, later, launch
 
 
 try:
@@ -77,53 +77,6 @@ class Commands:
                 continue
             if 'event' in cmdz.__code__.co_varnames:
                 Commands.add(cmdz, mod)
-
-
-"table"
-
-
-class Table:
-
-    mods = {}
-
-    @staticmethod
-    def add(mod):
-        Table.mods[mod.__name__] = mod
-
-    @staticmethod
-    def get(name):
-        return Table.mods.get(name, None)
-
-    @staticmethod
-    def inits(wait=False):
-        mods = []
-        for name in spl(Config.init):
-            mname = f"nixt.modules.{name}"
-            mod = Table.load(mname)
-            thr = launch(mod.init)
-            mods.append((mod, thr))
-        return mods
-
-    @staticmethod
-    def load(name):
-        pname = p(Config.name, 'modules')
-        mname  = p(pname, name)
-        mod = Table.mods.get(mname)
-        if not mod:
-            Table.mods[name] = mod = importlib.import_module(name, pname)
-        return mod
-
-    @staticmethod
-    def scan(pkg, mods="", pname=None):
-        if pname is None:
-            pname = p(Config.name, 'modules')
-        for name in dir(pkg):
-            if mods and name not in spl(mods):
-                continue
-            mod = Table.load(f'{pname}.{name}')
-            Commands.scan(mod)
-        if not Table.mods:
-            Table.scan(pkg)
 
 
 "callbacks"

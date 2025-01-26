@@ -2,7 +2,7 @@
 # pylint: disable=C0115,C0116,R0903,W0105,E0402
 
 
-"locate objects"
+"persistence"
 
 
 import datetime
@@ -31,29 +31,6 @@ lock   = threading.RLock()
 class DecodeError(Exception):
 
     pass
-
-
-"cache"
-
-
-class Cache:
-
-    objs = {}
-
-    @staticmethod
-    def add(path, obj):
-        Cache.objs[path] = obj
-
-    @staticmethod
-    def get(path):
-        return Cache.objs.get(path, None)
-
-    @staticmethod
-    def typed(matcher):
-        for key in Cache.objs:
-            if matcher not in key:
-                continue
-            yield Cache.objs.get(key)
 
 
 "workdir"
@@ -120,6 +97,29 @@ def write(obj, pth=None):
         with open(pth, 'w', encoding='utf-8') as ofile:
             ofile.write(txt)
     return pth
+
+
+"cache"
+
+
+class Cache:
+
+    objs = {}
+
+    @staticmethod
+    def add(path, obj):
+        Cache.objs[path] = obj
+
+    @staticmethod
+    def get(path):
+        return Cache.objs.get(path, None)
+
+    @staticmethod
+    def typed(matcher):
+        for key in Cache.objs:
+            if matcher not in key:
+                continue
+            yield Cache.objs.get(key)
 
 
 "find"
