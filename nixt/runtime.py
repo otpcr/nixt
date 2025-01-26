@@ -5,7 +5,6 @@
 "runtime"
 
 
-import importlib
 import queue
 import threading
 import time
@@ -17,34 +16,6 @@ import _thread
 
 
 STARTTIME = time.time()
-
-
-"errors"
-
-
-class Errors:
-
-    errors = []
-
-    @staticmethod
-    def format(exc):
-        return traceback.format_exception(
-            type(exc),
-            exc,
-            exc.__traceback__
-        )
-
-
-def errors():
-    for err in Errors.errors:
-        yield from err
-
-
-def later(exc):
-    excp = exc.with_traceback(exc.__traceback__)
-    fmt = Errors.format(excp)
-    if fmt not in Errors.errors:
-        Errors.errors.append(fmt)
 
 
 "reactor"
@@ -191,15 +162,32 @@ class Repeater(Timer):
         super().run()
 
 
-"utilities"
+"errors"
 
 
-def spl(txt):
-    try:
-        result = txt.split(',')
-    except (TypeError, ValueError):
-        result = txt
-    return [x for x in result if x]
+class Errors:
+
+    errors = []
+
+    @staticmethod
+    def format(exc):
+        return traceback.format_exception(
+            type(exc),
+            exc,
+            exc.__traceback__
+        )
+
+
+def errors():
+    for err in Errors.errors:
+        yield from err
+
+
+def later(exc):
+    excp = exc.with_traceback(exc.__traceback__)
+    fmt = Errors.format(excp)
+    if fmt not in Errors.errors:
+        Errors.errors.append(fmt)
 
 
 "interface"

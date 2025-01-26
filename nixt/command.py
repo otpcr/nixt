@@ -117,7 +117,7 @@ class Table:
 
     @staticmethod
     def scan(pkg, mods=""):
-        pname = f"nixt.modules"
+        pname = "nixt.modules"
         for nme in dir(pkg):
             if "__" in nme:
                 continue
