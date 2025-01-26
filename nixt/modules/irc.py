@@ -17,7 +17,6 @@ import _thread
 
 
 from ..clients import Default, Event, Fleet, debug
-from ..clients import Config as Main
 from ..command import command
 from ..objects import Object, edit, fmt, keys
 from ..persist import ident, last, write

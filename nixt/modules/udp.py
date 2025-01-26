@@ -111,7 +111,6 @@ def udp(event):
                         )[0]:
         event.reply("udp <text>")
         return
-        return
     size = 0
     while 1:
         try:
