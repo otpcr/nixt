@@ -92,10 +92,13 @@ def eml(event):
         for fnm, o in result:
             nrs += 1
             event.reply(f'{nrs} {format(o, ["From", "Subject"])} {elapsed(time.time() - fntime(fnm))}')
+    if nrs == -1:
+        event.reply("no emails found.")
 
 
 def mbx(event):
     if not event.args:
+        event.reply("mbx <path>")
         return
     fn = os.path.expanduser(event.args[0])
     event.reply("reading from %s" % fn)

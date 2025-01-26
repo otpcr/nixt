@@ -198,6 +198,8 @@ def tmr(event):
             if lap > 0:
                 event.reply(f'{nmr} {obj.txt} {elapsed(lap)}')
                 nmr += 1
+        if not nmr:
+            event.reply("no timers.")
         return result
     bot = Fleet.get(event.orig)
     seconds = 0
