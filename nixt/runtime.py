@@ -209,8 +209,8 @@ class Table:
     @staticmethod
     def inits(names, wait=False):
         name = Errors.__module__.split(".", maxsplit=1)[0]
-        mods = []
         pname = f"{name}.modules"
+        mods = []
         for name in spl(names):
             mname = f"{pname}.{name}"
             mod = Table.load(mname)
@@ -222,23 +222,26 @@ class Table:
         return mods
 
     @staticmethod
-    def load(name):
-        pname = Errors.__module__
-        mname  = f"{pname}/{name}"
-        mod = Table.mods.get(mname)
+    def load(name, pname=None):
+        if pname is None:
+            pname = ".".join(name.split("."))[:-1]
+        mod = Table.mods.get(name)
         if not mod:
-            Table.mods[name] = mod = importlib.import_module(name, name)
+            Table.mods[name] = mod = importlib.import_module(name, pname)
         return mod
 
     @staticmethod
     def scan(pkg, mods=""):
-        for name in dir(pkg):
+        pname = f"nixt.modules"
+        for nme in dir(pkg):
+            if "__" in nme:
+                continue
+            if nme == name:
+                continue                 
             if mods and name not in spl(mods):
                 continue
-            mod = Table.load(f'{pname}.{name}')
+            mod = Table.load(f'{pname}.{nme}', pname)
             Commands.scan(mod)
-        if not Table.mods:
-            Table.scan(pkg)
 
 
 "cache"
