@@ -6,14 +6,11 @@
 
 
 import os
-import re
 import sys
 import time
 
 
 from http.server  import HTTPServer, BaseHTTPRequestHandler
-from shlex        import quote, join
-from urllib.parse import quote_plus, unquote
 
 
 from ..clients import Default

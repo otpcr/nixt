@@ -197,7 +197,6 @@ def tmr(event):
         if not nmr:
             event.reply("no timers.")
         return result
-    bot = Fleet.get(event.orig)
     seconds = 0
     line = ""
     for word in event.args:
