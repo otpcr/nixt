@@ -18,7 +18,7 @@ from .runtime import Reactor, launch
 
 def debug(txt):
     if "v" in Config.opts:
-        output(txt)
+        output("# " + txt)
 
 
 def output(txt):
@@ -52,7 +52,7 @@ class Default:
 
 class Config(Default):
 
-    init = "rst"
+    init = ""
     name = Default.__module__.rsplit(".", maxsplit=2)[-2]
     opts = Default()
 
@@ -130,6 +130,7 @@ class Fleet:
     @staticmethod
     def announce(txt):
         for bot in Fleet.bots.values():
+            bot.announce("")
             bot.announce(txt)
 
     @staticmethod

@@ -111,7 +111,6 @@ def command(evt):
     if not func:
         mname = NAMES.get(evt.cmd)
         if mname:
-            debug(f"autoload {mname}")
             mod = Table.load(mname)
             Commands.scan(mod)
             func = Commands.get(evt.cmd)

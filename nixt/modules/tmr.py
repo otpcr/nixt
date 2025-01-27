@@ -48,9 +48,6 @@ FORMATS = [
 
 
 def init():
-    bot = Fleet.first()
-    if not bot:
-        return
     for _fn, obj in find("timer"):
         if "time" not in dir(obj):
             continue
@@ -58,9 +55,8 @@ def init():
         if diff > 0:
             evt = Event()
             update(evt, obj)
-            evt.orig = object.__repr__(bot)
-            timer = Timer(diff, evt.show)
-            launch(timer.start)
+            timer = Timer(diff, Fleet.announce, evt.rest)
+            timer.start()
 
 
 "exceptions"
@@ -229,9 +225,10 @@ def tmr(event):
     event.time = target
     diff = target - ttime.time()
     event.reply("ok " +  elapsed(diff))
+    del event.args
     event.result = []
     event.result.append(event.rest)
-    timer = Timer(diff, bot.display, event, thrname=event.cmd)
+    timer = Timer(diff, event.display)
     update(timer, event)
     write(timer)
     launch(timer.start)

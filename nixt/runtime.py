@@ -38,6 +38,7 @@ class Reactor:
                 evt.ready()
 
     def loop(self):
+        evt = None
         while not self.stopped.is_set():
             try:
                 evt = self.poll()
