@@ -52,7 +52,7 @@ class Default:
 
 class Config(Default):
 
-    init = ""
+    init = "irc,mdl,rss"
     name = Default.__module__.rsplit(".", maxsplit=2)[-2]
     opts = Default()
 

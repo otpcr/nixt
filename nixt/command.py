@@ -195,6 +195,5 @@ def __dir__():
         'command',
         'cmd',
         'parse',
-        'scan',
         'spl'
     )
