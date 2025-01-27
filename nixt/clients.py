@@ -18,7 +18,7 @@ from .runtime import Reactor, launch
 
 def debug(txt):
     if "v" in Config.opts:
-        output("# " + txt)
+        output(txt)
 
 
 def output(txt):
