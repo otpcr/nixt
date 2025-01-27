@@ -6,11 +6,14 @@
 
 
 import os
+import re
 import sys
 import time
 
 
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server  import HTTPServer, BaseHTTPRequestHandler
+from shlex        import quote, join
+from urllib.parse import quote_plus, unquote
 
 
 from ..clients import Default
@@ -108,19 +111,21 @@ class RESTHandler(BaseHTTPRequestHandler):
                 txt += f'<a href="http://{Config.hostname}:{Config.port}/{fnm}">{fnm}</a><br>\n'
             self.send(html(txt.strip()))
             return
-        fnm = Workdir.wdr + os.sep + "store" + os.sep + self.path
+        fnm = Workdir.wdr + os.sep + "store" + self.path
+        fnm = os.path.abspath(fnm)
         if os.path.isdir(fnm):
+            self.write_header("text/html")
             txt = ""
             for fnn in os.listdir(fnm):
                 filename = self.path  + os.sep + fnn
                 txt += f'<a href="http://{Config.hostname}:{Config.port}/{filename}">{filename}</a><br>\n'
-            self.send(html(txt.strip()))
+            self.send(txt.strip())
             return
         try:
             with open(fnm, "r", encoding="utf-8") as file:
                 txt = file.read()
                 file.close()
-            self.write_header("txt/plain")
+            self.write_header("text/html")
             self.send(html(txt))
         except (TypeError, FileNotFoundError, IsADirectoryError) as ex:
             self.send_response(404)
