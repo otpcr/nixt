@@ -226,7 +226,6 @@ def tmr(event):
     diff = target - ttime.time()
     event.reply("ok " +  elapsed(diff))
     del event.args
-    event.result = []
     event.result.append(event.rest)
     timer = Timer(diff, event.display)
     update(timer, event)
