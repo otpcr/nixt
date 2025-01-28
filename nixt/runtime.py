@@ -58,7 +58,7 @@ class Reactor:
             func = self.cbs.get(evt.type, None)
             if func:
                 try:
-                    evt._thr = launch(func, evt)
+                    evt._thr = launch(func, evt, name=evt.cmd or evt.txt)
                 except Exception as ex:
                     later(ex)
                     evt.ready()
@@ -126,8 +126,8 @@ class Thread(threading.Thread):
             if isinstance(evt, Event):
                 evt.ready()
 
-    def join(self):
-        super().join()
+    def join(self, timeout=None):
+        super().join(timeout)
         return self.result
 
 
@@ -249,7 +249,7 @@ class Fleet:
                 text = evt.result[tme]
                 Fleet.say(evt.orig, evt.channel, text)
             evt.ready()
-       
+
     @staticmethod
     def first():
         bots =  list(Fleet.bots.values())

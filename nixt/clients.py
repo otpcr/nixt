@@ -7,10 +7,9 @@
 
 import queue
 import threading
-import time
 
 
-from .runtime import Default, Event, Fleet, Reactor, launch
+from .runtime import Default, Fleet, Reactor, launch
 
 
 "locks"
@@ -58,7 +57,47 @@ class Client(Reactor):
         self.raw(txt)
 
 
-class Buffered(Client):
+"output"
+
+
+class Output:
+
+    def __init__(self):
+        self.oqueue   = queue.Queue()
+        self.running = threading.Event()
+
+    def loop(self):
+        self.running.set()
+        while self.running.is_set():
+            evt = self.oqueue.get()
+            if evt is None:
+                self.oqueue.task_done()
+                break
+            Fleet.display(evt)
+            self.oqueue.task_done()
+
+    def oput(self,evt):
+        if not self.running.is_set():
+            Fleet.display(evt)
+        self.oqueue.put(evt)
+
+    def start(self):
+        if not self.running.is_set():
+            self.running.set()
+            launch(self.loop)
+
+    def stop(self):
+        self.running.clear()
+        self.oqueue.put(None)
+
+    def wait(self):
+        self.oqueue.join()
+
+
+"buffered"
+
+
+class Buffered(Client, Output):
 
     def __init__(self):
         Client.__init__(self)
@@ -79,47 +118,6 @@ class Buffered(Client):
         Client.wait(self)
         Output.wait(self)
 
-
-"output"
-
-
-class Output:
-
-    def __init__(self):
-        self.oqueue   = queue.Queue()
-        self.running = threading.Event()
-
-    @staticmethod
-    def loop():
-        self.running.set()
-        while self.running.is_set():
-            evt = self.oqueue.get()
-            if evt is None:
-                self.oqueue.task_done()
-                break
-            Fleet.display(evt)
-            self.oqueue.task_done()
-
-    @staticmethod
-    def oput(self,evt):
-        if not Output.running.is_set():
-            Fleet.display(evt)
-        self.oqueue.put(evt)
-
-    @staticmethod
-    def start(self):
-        if not self.running.is_set():
-            self.running.set()
-            launch(self.loop)
-
-    @staticmethod
-    def stop(self):
-        self.running.clear()
-        self.oqueue.put(None)
-
-    @staticmethod
-    def wait(self):
-        self.oqueue.join()
 
 
 "interface"

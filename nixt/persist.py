@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,R0903,W0105,W0613,E0402
+# pylint: disable=C0115,C0116,R0903,W0105,W0612,W0613,W0622,E0402
 
 
 "persistence"
@@ -29,6 +29,7 @@ lock     = threading.RLock()
 def locked(func, *args, **kwargs):
 
     def locker(*args, **kwargs):
+        __doc__ = func.__doc__
         with findlock:
             return func(*args, **kwargs)
 
