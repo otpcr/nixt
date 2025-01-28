@@ -16,7 +16,7 @@ import time
 import _thread
 
 
-from ..clients import Default, Event, Fleet, debug
+from ..clients import Default, Event, Fleet, output
 from ..command import command
 from ..objects import Object, edit, fmt, keys
 from ..persist import ident, last, write
@@ -31,6 +31,13 @@ NAME   = Object.__module__.rsplit(".", maxsplit=2)[-2]
 
 
 saylock = _thread.allocate_lock()
+
+
+def debug(txt):
+    for ign in IGNORE:
+        if ign in txt:
+            return
+    output(txt)
 
 
 "init"

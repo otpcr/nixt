@@ -11,6 +11,7 @@ import threading
 import time
 
 
+from .objects import Default
 from .runtime import Reactor, launch
 
 
@@ -24,28 +25,7 @@ def debug(txt):
 
 def output(txt):
     # output here
-    print(txt)
-
-
-"default"
-
-
-class Default:
-
-    def __contains__(self, key):
-        return key in dir(self)
-
-    def __getattr__(self, key):
-        return self.__dict__.get(key, "")
-
-    def __iter__(self):
-        return iter(self.__dict__)
-
-    def __len__(self):
-        return len(self.__dict__)
-
-    def __str__(self):
-        return str(self.__dict__)
+    pass
 
 
 "config"
@@ -53,9 +33,8 @@ class Default:
 
 class Config(Default):
 
-    init = "irc,mdl,rss"
+    init = "irc,rss"
     name = Default.__module__.rsplit(".", maxsplit=2)[-2]
-    pname = name + ".modules"
     opts = Default()
 
 
@@ -83,6 +62,10 @@ class Buffered(Client):
 
     def raw(self, txt):
         raise NotImplementedError("raw")
+
+    def stop(self):
+        Client.stop(self)
+        Output.stop()
 
 
 "event"
@@ -163,23 +146,25 @@ class Fleet:
 
 class Output:
 
-    queue   = queue.Queue()
+    oqueue   = queue.Queue()
     running = threading.Event()
 
     @staticmethod
     def loop():
         Output.running.set()
         while Output.running.is_set():
-            evt = Output.queue.get()
+            evt = Output.oqueue.get()
             if evt is None:
+                Output.oqueue.task_done()
                 break
             Fleet.display(evt)
+            Output.oqueue.task_done()
 
     @staticmethod
     def put(evt):
         if not Output.running.is_set():
             Fleet.display(evt)
-        Output.queue.put_nowait(evt)
+        Output.oqueue.put(evt)
 
     @staticmethod
     def start():
@@ -189,8 +174,10 @@ class Output:
 
     @staticmethod
     def stop():
+        Output.oqueue.join()
         Output.running.clear()
-        Output.queue.put(None)
+        Output.oqueue.put(None)
+        print(Output.oqueue.qsize())
 
 
 "interface"

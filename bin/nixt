@@ -16,7 +16,7 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.clients import Client, Config, Event, Fleet
+from nixt.clients import Client, Config, Event, Fleet, output
 from nixt.command import NAMES, Commands, Table, command, parse, spl
 from nixt.modules import face
 from nixt.objects import dumps
@@ -24,11 +24,15 @@ from nixt.persist import Workdir, pidname
 from nixt.runtime import errors, later, launch
 
 
+import nixt.clients
+
+
 "defines"
 
 
-cfg = Config()
-p   = os.path.join
+cfg   = Config()
+p     = os.path.join
+pname = f"{Config.name}.modules"
 
 
 Workdir.wdr = os.path.expanduser(f"~/.{Config.name}")
@@ -158,8 +162,11 @@ def console():
     Config.opts = cfg.opts
     if "v" in cfg.opts:
         banner()
+        nixt.clients.output = print
     if "i" in cfg.opts:
-        Table.inits(Config.init, "w" in cfg.opts)
+        for mod, thr in Table.inits(Config.init, pname):
+            if "w" in cfg.opts:
+                thr.join()
     csl = Console()
     csl.start()
     forever()

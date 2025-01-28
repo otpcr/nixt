@@ -40,8 +40,7 @@ class Commands:
 
     @staticmethod
     def getname(cmd):
-        name =  Commands.names.get(cmd)
-        return f"{Config.pname}.{name}"
+        return Commands.names.get(cmd)
 
     @staticmethod
     def scan(mod):
@@ -68,16 +67,15 @@ class Table:
         return Table.mods.get(name, None)
 
     @staticmethod
-    def inits(names, wait=False):
+    def inits(names, pname):
         mods = []
         for name in spl(names):
-            mname = Commands.names.get(name)
+            mname = pname + "." + name
+            if not mname:
+                continue
             mod = Table.load(mname)
             thr = launch(mod.init)
             mods.append((mod, thr))
-        if wait:
-            for _, thr in mods:
-                thr.join()
         return mods
 
     @staticmethod
@@ -96,7 +94,7 @@ class Table:
                 continue
             if mods and nme not in spl(mods):
                 continue
-            name = Commands.get(nme)
+            name = Commands.names.get(nme)
             if not name:
                 continue
             mod = Table.load(name)

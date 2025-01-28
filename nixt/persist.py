@@ -15,6 +15,7 @@ import threading
 
 
 from .objects import Object, dumps, fqn, items, loads, update
+from .runtime import locked
 
 
 "locks"
@@ -23,6 +24,15 @@ from .objects import Object, dumps, fqn, items, loads, update
 p      = os.path.join
 rwlock = threading.RLock()
 lock   = threading.RLock()
+
+
+def locked(func, *args, **kwargs):
+
+    def locker(*args, **kwargs):
+        with lock:
+            return func(*args, **kwargs)
+        
+    return locker
 
 
 "exceptions"
@@ -128,6 +138,7 @@ class Cache:
 def fns(clz):
     dname = ''
     pth = store(clz)
+    res = []
     for rootdir, dirs, _files in os.walk(pth, topdown=False):
         if dirs:
             for dname in sorted(dirs):
@@ -137,23 +148,23 @@ def fns(clz):
                         yield p(ddd, fll)
 
 
+@locked
 def find(clz, selector=None, deleted=False, matching=False):
     skel()
-    with lock:
-        pth = long(clz)
-        res = []
-        for fnm in fns(pth):
-            obj = Cache.get(fnm)
-            if not obj:
-                obj = Object()
-                read(obj, fnm)
-                Cache.add(fnm, obj)
-            if not deleted and '__deleted__' in dir(obj) and obj.__deleted__:
-                continue
-            if selector and not search(obj, selector, matching):
-                continue
-            res.append((fnm, obj))
-        return res
+    pth = long(clz)
+    res = []
+    for fnm in fns(pth):
+        obj = Cache.get(fnm)
+        if not obj:
+            obj = Object()
+            read(obj, fnm)
+            Cache.add(fnm, obj)
+        if not deleted and '__deleted__' in dir(obj) and obj.__deleted__:
+            continue
+        if selector and not search(obj, selector, matching):
+            continue
+        res.append((fnm, obj))
+    return res
 
 
 "methods"
@@ -161,6 +172,7 @@ def find(clz, selector=None, deleted=False, matching=False):
 
 def ident(obj):
     return p(fqn(obj),*str(datetime.datetime.now()).split())
+
 
 
 def last(obj, selector=None):
