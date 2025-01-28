@@ -71,20 +71,6 @@ class Console(CLI):
         CLI.callback(self, evt)
         evt.wait()
 
-    def loop(self):
-        evt = None
-        while not self.stopped.is_set():
-            try:
-                evt = self.poll()
-                evt.orig = repr(self)
-                self.callback(evt)
-            except (KeyboardInterrupt, EOFError):
-                if evt:
-                    evt.ready()
-                _thread.interrupt_main()
-        self.ready.set()
-
-
     def poll(self):
         evt = Event()
         evt.txt = input("> ")

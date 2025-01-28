@@ -28,7 +28,7 @@ def debug(txt):
 
 def output(txt):
     # output here
-    pass
+    print(txt)
 
 
 "config"

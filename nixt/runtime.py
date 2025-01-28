@@ -67,7 +67,7 @@ class Reactor:
         evt = None
         while not self.stopped.is_set():
             try:
-                evt = self.queue.get()
+                evt = self.poll()
                 evt.orig = repr(self)
                 self.callback(evt)
             except (KeyboardInterrupt, EOFError):

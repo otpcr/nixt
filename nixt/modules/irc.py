@@ -44,10 +44,10 @@ def debug(txt):
 
 
 def init():
+    debug(f'{fmt(Config, skip="edited,password")}')
     irc = IRC()
     irc.start()
     irc.events.ready.wait()
-    debug(f'{fmt(Config, skip="edited,password")}')
     return irc
 
 
