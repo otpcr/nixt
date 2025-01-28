@@ -143,7 +143,7 @@ def fns(clz):
                 if dname.count('-') == 2:
                     ddd = p(rootdir, dname)
                     for fll in os.listdir(ddd):
-                        yield (p(ddd, fll))
+                        yield p(ddd, fll)
 
 
 def find(clz, selector=None, deleted=False, matching=False):
