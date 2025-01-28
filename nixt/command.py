@@ -9,7 +9,7 @@ import importlib
 import inspect
 
 
-from .clients import Default, Output
+from .clients import Config, Default, Output
 from .runtime import Errors, later, launch
 
 
@@ -40,7 +40,8 @@ class Commands:
 
     @staticmethod
     def getname(cmd):
-        return Commands.names.get(cmd, None)
+        name =  Commands.names.get(cmd)
+        return f"{Config.pname}.{name}"
 
     @staticmethod
     def scan(mod):
@@ -68,11 +69,9 @@ class Table:
 
     @staticmethod
     def inits(names, wait=False):
-        name = Errors.__module__.split(".", maxsplit=1)[0]
-        pname = f"{name}.modules"
         mods = []
         for name in spl(names):
-            mname = f"{pname}.{name}"
+            mname = f"{Config.pname}.{name}"
             mod = Table.load(mname)
             thr = launch(mod.init)
             mods.append((mod, thr))
@@ -82,9 +81,8 @@ class Table:
         return mods
 
     @staticmethod
-    def load(name, pname=None):
-        if pname is None:
-            pname = ".".join(name.split("."))[:-1]
+    def load(name):
+        pname = ".".join(name.split(".")[:-1])
         mod = Table.mods.get(name)
         if not mod:
             Table.mods[name] = mod = importlib.import_module(name, pname)
@@ -92,14 +90,16 @@ class Table:
 
     @staticmethod
     def scan(pkg, mods=""):
-        pname = "nixt.modules"
+        res = []
         for nme in dir(pkg):
             if "__" in nme:
                 continue
             if mods and nme not in spl(mods):
                 continue
-            mod = Table.load(f'{pname}.{nme}', pname)
+            mod = Table.load(f'{Config.pname}.{nme}')
             Commands.scan(mod)
+            res.append(mod)
+        return res
 
 
 "callbacks"

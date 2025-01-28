@@ -5,6 +5,7 @@
 "clients"
 
 
+import os
 import queue
 import threading
 import time
@@ -54,6 +55,7 @@ class Config(Default):
 
     init = "irc,mdl,rss"
     name = Default.__module__.rsplit(".", maxsplit=2)[-2]
+    pname = name + ".modules"
     opts = Default()
 
 
