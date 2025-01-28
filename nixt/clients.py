@@ -13,6 +13,12 @@ import time
 from .runtime import Default, Event, Fleet, Reactor, launch
 
 
+"locks"
+
+
+lock = threading.RLock()
+
+
 "output"
 
 
@@ -62,12 +68,16 @@ class Buffered(Client):
         raise NotImplementedError("raw")
 
     def start(self):
-        Client.start(self)
         Output.start(self)
+        Client.start(self)
 
     def stop(self):
         Client.stop(self)
         Output.stop(self)
+
+    def wait(self):
+        Client.wait(self)
+        Output.wait(self)
 
 
 "output"
@@ -91,7 +101,7 @@ class Output:
             self.oqueue.task_done()
 
     @staticmethod
-    def put(self,evt):
+    def oput(self,evt):
         if not Output.running.is_set():
             Fleet.display(evt)
         self.oqueue.put(evt)

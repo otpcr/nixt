@@ -20,15 +20,16 @@ from .objects import Object, dumps, fqn, items, loads, update
 "locks"
 
 
-p      = os.path.join
-rwlock = threading.RLock()
-lock   = threading.RLock()
+p        = os.path.join
+rwlock   = threading.RLock()
+findlock = threading.RLock()
+lock     = threading.RLock()
 
 
 def locked(func, *args, **kwargs):
 
     def locker(*args, **kwargs):
-        with lock:
+        with findlock:
             return func(*args, **kwargs)
 
     return locker
@@ -146,6 +147,7 @@ def fns(clz):
                         yield p(ddd, fll)
 
 
+#@locked
 def find(clz, selector=None, deleted=False, matching=False):
     skel()
     pth = long(clz)

@@ -18,6 +18,9 @@ import _thread
 STARTTIME = time.time()
 
 
+lock = threading.RLock()
+
+
 "default"
 
 
@@ -47,30 +50,31 @@ class Reactor:
     def __init__(self):
         self.cbs = {}
         self.queue = queue.Queue()
+        self.ready   = threading.Event()
         self.stopped = threading.Event()
 
     def callback(self, evt):
-        func = self.cbs.get(evt.type, None)
-        if func:
-            try:
-                evt._thr = launch(func, evt)
-            except Exception as ex:
-                later(ex)
-                evt.ready()
+        with lock:
+            func = self.cbs.get(evt.type, None)
+            if func:
+                try:
+                    evt._thr = launch(func, evt)
+                except Exception as ex:
+                    later(ex)
+                    evt.ready()
 
     def loop(self):
         evt = None
         while not self.stopped.is_set():
             try:
-                evt = self.poll()
-                if evt is None:
-                    break
+                evt = self.queue.get()
                 evt.orig = repr(self)
                 self.callback(evt)
             except (KeyboardInterrupt, EOFError):
-                if "ready" in dir(evt):
+                if evt:
                     evt.ready()
                 _thread.interrupt_main()
+        self.ready.set()
 
     def poll(self):
         return self.queue.get()
@@ -85,15 +89,15 @@ class Reactor:
         self.cbs[typ] = cbs
 
     def start(self):
+        self.stopped.clear()
+        self.ready.clear()
         launch(self.loop)
 
     def stop(self):
         self.stopped.set()
-        self.queue.put(None)
 
     def wait(self):
-        self.queue.join()
-        self.stopped.wait()
+        self.ready.wait()
 
 
 "thread"
@@ -105,6 +109,7 @@ class Thread(threading.Thread):
         super().__init__(None, self.run, name, (), {}, daemon=daemon)
         self.name = thrname
         self.queue = queue.Queue()
+        self.result = None
         self.starttime = time.time()
         self.stopped = threading.Event()
         self.queue.put((func, args))
@@ -112,13 +117,18 @@ class Thread(threading.Thread):
     def run(self):
         func, args = self.queue.get()
         try:
-            func(*args)
+            self.result = func(*args)
         except Exception as ex:
             later(ex)
-            try:
-                args[0].ready()
-            except (IndexError, AttributeError):
-                pass
+            if not args:
+                return
+            evt = args[0]
+            if isinstance(evt, Event):
+                evt.ready()
+
+    def join(self):
+        super().join()
+        return self.result
 
 
 def launch(func, *args, **kwargs):
@@ -199,10 +209,7 @@ class Event(Default):
         self.txt    = ""
 
     def display(self):
-        for tme in sorted(self.result):
-            txt = self.result[tme]
-            Fleet.say(self.orig, self.channel, txt)
-        self.ready()
+        Fleet.display(self)
 
     def done(self):
         self.reply("ok")
@@ -214,9 +221,9 @@ class Event(Default):
         self.result[time.time()] = txt
 
     def wait(self):
+        self._ready.wait()
         if self._thr:
             self._thr.join()
-        self._ready.wait()
 
 
 "fleet"
@@ -237,11 +244,12 @@ class Fleet:
 
     @staticmethod
     def display(evt):
-        for tme in sorted(evt.result):
-            text = evt.result[tme]
-            Fleet.say(evt.orig, evt.channel, text)
-        evt.ready()
-
+        with lock:
+            for tme in sorted(evt.result):
+                text = evt.result[tme]
+                Fleet.say(evt.orig, evt.channel, text)
+            evt.ready()
+       
     @staticmethod
     def first():
         bots =  list(Fleet.bots.values())
