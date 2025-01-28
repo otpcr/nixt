@@ -195,20 +195,6 @@ def later(exc):
         Errors.errors.append(fmt)
 
 
-def locked(func, *args, **kwargs):
-
-
-    lock = threading.Rlock()
-
-
-    def locker(*args, **kwargs):
-        with lock:
-            func(*args, **kwargs)
-        
-
-    return locker
-
-
 "interface"
 
 

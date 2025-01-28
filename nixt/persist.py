@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,R0903,W0105,E0402
+# pylint: disable=C0115,C0116,R0903,W0105,W0613,E0402
 
 
 "persistence"
@@ -15,7 +15,6 @@ import threading
 
 
 from .objects import Object, dumps, fqn, items, loads, update
-from .runtime import locked
 
 
 "locks"
@@ -31,7 +30,7 @@ def locked(func, *args, **kwargs):
     def locker(*args, **kwargs):
         with lock:
             return func(*args, **kwargs)
-        
+
     return locker
 
 
@@ -138,7 +137,6 @@ class Cache:
 def fns(clz):
     dname = ''
     pth = store(clz)
-    res = []
     for rootdir, dirs, _files in os.walk(pth, topdown=False):
         if dirs:
             for dname in sorted(dirs):

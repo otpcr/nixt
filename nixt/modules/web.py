@@ -1,11 +1,10 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0103,C0115,C0116,C0209,C0301,R0903,W0105,E0402
+# pylint: disable=C0103,C0115,C0116,C0209,C0301,R0903,W0105,W0201,W0613,E0402
 
 
 "rest"
 
 
-import base64
 import os
 import sys
 import time
@@ -16,7 +15,6 @@ from http.server  import HTTPServer, BaseHTTPRequestHandler
 
 from ..clients import Default
 from ..objects import Object
-from ..persist import Workdir, types
 from ..runtime import later, launch
 
 
@@ -30,11 +28,19 @@ def init():
     try:
         rest = HTTP((Config.hostname, int(Config.port)), HTTPHandler)
     except OSError as ex:
-        later(ex)
         rest = None
+        later(ex)
     if rest is not None:
         rest.start()
     return rest
+
+
+def html2(txt):
+    return """<!doctype html>
+<html>
+   %s
+</html>
+""" % txt
 
 
 "exceptions"
@@ -51,7 +57,7 @@ class WebError(Exception):
 class Config(Default):
 
     hostname = "localhost"
-    port     = 10102
+    port     = 8000
 
 
 "rest"
@@ -59,25 +65,25 @@ class Config(Default):
 
 class HTTP(HTTPServer, Object):
 
-    allow_reuse_address = True
     daemon_thread = True
+    allow_reuse_address = True
 
     def __init__(self, *args, **kwargs):
         HTTPServer.__init__(self, *args, **kwargs)
         Object.__init__(self)
         self.host = args[0]
-        self._last = time.time()
         self._starttime = time.time()
+        self._last = time.time()
         self._status = "start"
 
     def exit(self):
-        self._status = ""
         time.sleep(0.2)
+        self._status = ""
         self.shutdown()
 
     def start(self):
-        self._status = "ok"
         launch(self.serve_forever)
+        self._status = "ok"
 
     def request(self):
         self._last = time.time()
@@ -92,8 +98,8 @@ class HTTPHandler(BaseHTTPRequestHandler):
 
     def setup(self):
         BaseHTTPRequestHandler.setup(self)
-        self._ip = self.client_address[0]
         self._size = 0
+        self._ip = self.client_address[0]
 
     def raw(self, data):
         self.wfile.write(data)
@@ -111,13 +117,16 @@ class HTTPHandler(BaseHTTPRequestHandler):
         self.send_header('Server', "1")
         self.end_headers()
 
+    def log(self, code):
+        pass
+
     def do_GET(self):
-        if DEBUG:
-            return
         if "favicon" in self.path:
             return
+        if DEBUG:
+            return
         if self.path == "/":
-             self.path = "/index.html"
+            self.path = "/index.html"
         self.path = "html" + os.sep + self.path
         if not os.path.exists(self.path):
             self.write_header("text/html")
@@ -142,30 +151,8 @@ class HTTPHandler(BaseHTTPRequestHandler):
                 txt = file.read()
                 file.close()
             self.write_header("text/html")
-            self.send(html(txt))
+            self.send(html2(txt))
         except (TypeError, FileNotFoundError, IsADirectoryError) as ex:
             self.send_response(404)
             later(ex)
             self.end_headers()
-
-    def log(self, code):
-        pass
-
-
-"utilities"
-
-
-def html(txt):
-    return """<!doctype html>
-<html>
-   %s
-</html>
-""" % txt
-
-
-def image(file):
- size = len(file)
- return f"""Content-Type: image/gif\r\n
-Content-Length: [{size}]\r\n
-\r\n
-"""
