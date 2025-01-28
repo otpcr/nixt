@@ -71,7 +71,7 @@ class Table:
     def inits(names, wait=False):
         mods = []
         for name in spl(names):
-            mname = f"{Config.pname}.{name}"
+            mname = Commands.names.get(name)
             mod = Table.load(mname)
             thr = launch(mod.init)
             mods.append((mod, thr))
@@ -96,7 +96,10 @@ class Table:
                 continue
             if mods and nme not in spl(mods):
                 continue
-            mod = Table.load(f'{Config.pname}.{nme}')
+            name = Commands.get(nme)
+            if not name:
+                continue
+            mod = Table.load(name)
             Commands.scan(mod)
             res.append(mod)
         return res
