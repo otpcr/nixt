@@ -143,10 +143,9 @@ def fns(clz):
                 if dname.count('-') == 2:
                     ddd = p(rootdir, dname)
                     for fll in os.listdir(ddd):
-                        yield p(ddd, fll)
+                        yield (p(ddd, fll))
 
 
-@locked
 def find(clz, selector=None, deleted=False, matching=False):
     skel()
     pth = long(clz)
@@ -162,7 +161,7 @@ def find(clz, selector=None, deleted=False, matching=False):
         if selector and not search(obj, selector, matching):
             continue
         res.append((fnm, obj))
-    return res
+    return sorted(res, key=lambda x: fntime(x[0]))
 
 
 "methods"

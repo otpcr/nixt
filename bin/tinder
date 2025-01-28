@@ -47,6 +47,7 @@ paylock = _thread.allocate_lock()
 
 
 param = Object()
+param.log = ["bla", ""]
 param.cfg = ["cfg nick=mekker", ""]
 param.cmd = [""]
 param.dne = ["mekker", ""]
@@ -54,7 +55,6 @@ param.dpl = ["hnrss title,url", ""]
 param.exp = ['']
 param.fnd = ["log", ""]
 param.imp = ["tests/feeds.opml", ""]
-param.log = ["bla", ""]
 param.mod = [""]
 param.mre = [""]
 param.nme = ["hnrss hackernews", ""]
@@ -103,7 +103,7 @@ def consume(evts):
 
 def payload(clt):
     nmr = 0
-    for cmdd in sorted(Commands.cmds):
+    for cmdd in keys(param):
         for ex in getattr(param, cmdd, [""]):
             evt = Event()
             evt.txt = cmdd + " " + ex

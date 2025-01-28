@@ -77,12 +77,13 @@ class Event(Default):
         self._ready = threading.Event()
         self._thr   = None
         self.ctime  = time.time()
-        self.result = []
+        self.result = {}
         self.type   = "event"
         self.txt    = ""
 
     def display(self):
-        for txt in self.result:
+        for tme in sorted(self.result):
+            txt = self.result[tme]
             Fleet.say(self.orig, self.channel, txt)
 
     def done(self):
@@ -92,12 +93,12 @@ class Event(Default):
         self._ready.set()
 
     def reply(self, txt):
-        self.result.append(txt)
+        self.result[time.time()] = txt
 
     def wait(self):
-        self._ready.wait()
         if self._thr:
             self._thr.join()
+        self._ready.wait()
 
 
 "fleet"
@@ -118,7 +119,8 @@ class Fleet:
 
     @staticmethod
     def display(evt):
-        for text in evt.result:
+        for tme in sorted(evt.result):
+            text = evt.result[tme]
             Fleet.say(evt.orig, evt.channel, text)
 
     @staticmethod
@@ -154,7 +156,7 @@ class Output:
         while Output.running.is_set():
             evt = Output.oqueue.get()
             if evt is None:
-                Output.oqueue.task_done()
+                #Output.oqueue.task_done()
                 break
             Fleet.display(evt)
             Output.oqueue.task_done()
@@ -175,8 +177,7 @@ class Output:
     def stop():
         Output.oqueue.join()
         Output.running.clear()
-        Output.oqueue.put(None)
-        print(Output.oqueue.qsize())
+        #Output.oqueue.put(None)
 
 
 "interface"

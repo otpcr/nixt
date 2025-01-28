@@ -22,7 +22,7 @@ def fnd(event):
     otype = event.args[0]
     clz = long(otype)
     nmr = 0
-    for fnm, obj in find(clz, event.gets):
+    for fnm, obj in list(find(clz, event.gets)):
         event.reply(f"{nmr} {fmt(obj)} {elapsed(time.time()-fntime(fnm))}")
         nmr += 1
     if not nmr:

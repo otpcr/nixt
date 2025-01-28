@@ -10,6 +10,7 @@ import inspect
 
 
 from .clients import Default, Output
+from .persist import locked
 from .runtime import later, launch
 
 
@@ -106,6 +107,7 @@ class Table:
 "callbacks"
 
 
+@locked
 def command(evt):
     parse(evt)
     func = Commands.get(evt.cmd)
@@ -137,7 +139,7 @@ def parse(obj, txt=None):
     obj.index   = None
     obj.mod     = ""
     obj.opts    = ""
-    obj.result  = []
+    obj.result  = {}
     obj.sets    = Default()
     obj.txt     = txt or ""
     obj.otxt    = obj.txt
