@@ -7,11 +7,10 @@
 
 import importlib
 import inspect
+import threading
 
 
-from .clients import Default, Output
-from .persist import locked
-from .runtime import later, launch
+from .runtime import Default, Fleet, later, launch
 
 
 try:
@@ -19,6 +18,18 @@ try:
 except Exception as ex:
     later(ex)
     NAMES = {}
+
+
+def locked(func, *args, **kwargs):
+
+    def locker(*args, **kwargs):
+        with lock:
+            return func(*args, **kwargs)
+
+    return locker
+
+
+lock = threading.RLock()
 
 
 "commands"
@@ -107,7 +118,6 @@ class Table:
 "callbacks"
 
 
-@locked
 def command(evt):
     parse(evt)
     func = Commands.get(evt.cmd)
@@ -117,10 +127,11 @@ def command(evt):
             mod = Table.load(mname)
             Commands.scan(mod)
             func = Commands.get(evt.cmd)
-    if func:
-        func(evt)
-        Output.put(evt)
-    evt.ready()
+    if not func:
+        evt.ready()
+        return
+    func(evt)
+    Fleet.display(evt)
 
 
 "utilities"

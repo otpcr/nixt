@@ -17,12 +17,12 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.clients import Buffered, Config, Event
+from nixt.clients import Buffered, Client, Config, Event
 from nixt.command import Commands, Table, command, parse
 from nixt.modules import face
 from nixt.objects import Object, keys
 from nixt.persist import Workdir, elapsed, skel
-from nixt.runtime import launch, errors, later
+from nixt.runtime import Reactor, launch, errors, later
 
 
 "defines"
@@ -93,6 +93,7 @@ def banner():
 
 def consume(evts):
     done = []
+    time.sleep(0.01)
     for evt in sorted(evts, key=lambda x: x.ctime):
         evt.wait()
         done.append(evt)
@@ -159,6 +160,7 @@ def main():
         thr.join()
     consume(events)
     clt.stop()
+    #clt.wait()
 
 
 if __name__ == "__main__":

@@ -18,6 +18,27 @@ import _thread
 STARTTIME = time.time()
 
 
+"default"
+
+
+class Default:
+
+    def __contains__(self, key):
+        return key in dir(self)
+
+    def __getattr__(self, key):
+        return self.__dict__.get(key, "")
+
+    def __iter__(self):
+        return iter(self.__dict__)
+
+    def __len__(self):
+        return len(self.__dict__)
+
+    def __str__(self):
+        return str(self.__dict__)
+
+
 "reactor"
 
 
@@ -67,7 +88,6 @@ class Reactor:
         launch(self.loop)
 
     def stop(self):
-        #self.queue.join()
         self.stopped.set()
         self.queue.put(None)
 
@@ -164,6 +184,83 @@ class Repeater(Timer):
         super().run()
 
 
+"event"
+
+
+class Event(Default):
+
+    def __init__(self):
+        Default.__init__(self)
+        self._ready = threading.Event()
+        self._thr   = None
+        self.ctime  = time.time()
+        self.result = {}
+        self.type   = "event"
+        self.txt    = ""
+
+    def display(self):
+        for tme in sorted(self.result):
+            txt = self.result[tme]
+            Fleet.say(self.orig, self.channel, txt)
+        self.ready()
+
+    def done(self):
+        self.reply("ok")
+
+    def ready(self):
+        self._ready.set()
+
+    def reply(self, txt):
+        self.result[time.time()] = txt
+
+    def wait(self):
+        if self._thr:
+            self._thr.join()
+        self._ready.wait()
+
+
+"fleet"
+
+
+class Fleet:
+
+    bots = {}
+
+    @staticmethod
+    def add(bot):
+        Fleet.bots[repr(bot)] = bot
+
+    @staticmethod
+    def announce(txt):
+        for bot in Fleet.bots.values():
+            bot.announce(txt)
+
+    @staticmethod
+    def display(evt):
+        for tme in sorted(evt.result):
+            text = evt.result[tme]
+            Fleet.say(evt.orig, evt.channel, text)
+        evt.ready()
+
+    @staticmethod
+    def first():
+        bots =  list(Fleet.bots.values())
+        res = None
+        if bots:
+            res = bots[0]
+        return res
+
+    @staticmethod
+    def get(orig):
+        return Fleet.bots.get(orig, None)
+
+    @staticmethod
+    def say(orig, channel, txt):
+        bot = Fleet.get(orig)
+        if bot:
+            bot.say(channel, txt)
+
+
 "errors"
 
 
@@ -192,6 +289,8 @@ def later(exc):
         Errors.errors.append(fmt)
 
 
+
+
 "interface"
 
 
@@ -200,6 +299,8 @@ def __dir__():
         'STARTTIME',
         'Cache',
         'Errors',
+        'Event',
+        'Fleet',
         'Reactor',
         'Repeater',
         'Table',
