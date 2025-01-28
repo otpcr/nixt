@@ -43,13 +43,10 @@ class Reactor:
             try:
                 evt = self.poll()
                 if evt is None:
-                    self.queue.task_done()
                     break
                 evt.orig = repr(self)
                 self.callback(evt)
-                self.queue.task_done()
             except (KeyboardInterrupt, EOFError):
-                self.queue.task_done()
                 if "ready" in dir(evt):
                     evt.ready()
                 _thread.interrupt_main()
@@ -70,7 +67,7 @@ class Reactor:
         launch(self.loop)
 
     def stop(self):
-        self.queue.join()
+        #self.queue.join()
         self.stopped.set()
         self.queue.put(None)
 
