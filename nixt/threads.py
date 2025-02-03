@@ -10,10 +10,10 @@ import time
 import typing
 
 
-lock = threading.RLock()
-
-
 from .excepts import later
+
+
+lock = threading.RLock()
 
 
 class Thread(threading.Thread):

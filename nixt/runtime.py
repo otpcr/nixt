@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C,R0903,W0105,W0212,W0611,W0613,W0718,E0402
 
 
 "main"
@@ -26,6 +25,9 @@ from .workdir import Workdir, pidname
 
 from . import clients
 from . import modules as MODS
+
+
+STARTTIME = time.time()
 
 
 cfg   = Config()

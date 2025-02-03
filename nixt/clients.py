@@ -21,6 +21,7 @@ class Config(Default):
     opts    = Default()
     version = 170
 
+
 class Client(Reactor):
 
     def __init__(self):

@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0116,E0402
 
 
 """| **Information and Evidence Unit**

@@ -1,8 +1,7 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,C0209,W0105,E0402
 
 
-"Genocide model of the Netherlands since 4 March 2019"
+"genocide model of the netherlands since 4 march 2019"
 
 
 import datetime
@@ -15,17 +14,11 @@ from ..threads import Repeater
 from ..utility import elapsed
 
 
-"defines"
-
-
 DAY = 24*60*60
 YEAR = 365*DAY
 SOURCE = "https://github.com/bthate/genocide"
 STARTDATE = "2019-03-04 00:00:00"
 STARTTIME = time.mktime(time.strptime(STARTDATE, "%Y-%m-%d %H:%M:%S"))
-
-
-"init"
 
 
 def init():

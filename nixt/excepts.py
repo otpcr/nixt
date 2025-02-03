@@ -7,9 +7,6 @@
 import traceback
 
 
-DEBUG = True
-
-
 class Errors:
 
     name = __file__.rsplit(".", maxsplit=2)[-2]
