@@ -8,6 +8,7 @@
 import time
 
 
+from ..clients import Config
 from ..utility import elapsed
 
 
@@ -16,3 +17,7 @@ STARTTIME = time.time()
 
 def upt(event):
     event.reply(elapsed(time.time()-STARTTIME))
+
+
+def ver(event):
+    event.reply(f"{Config.name.upper()} {Config.version}")
