@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C,R0903,W0105,W0201,W0212,W0603,W0613,W0718,E0401
 
 
 "tinder"
@@ -23,6 +22,7 @@ from nixt.excepts import errors, later
 from nixt.objects import Object, keys
 from nixt.package import Table
 from nixt.reactor import Event
+from nixt.runtime import STARTTIME
 from nixt.threads import launch
 from nixt.utility import elapsed
 from nixt.workdir import Workdir, skel
@@ -42,7 +42,6 @@ lap = 1
 nrs = 1
 nrcommand = 1
 percall   = 1
-starttime = time.time()
 
 
 events = []
@@ -100,7 +99,7 @@ def consume(evts):
 
 def payload(clt):
     nmr = 0
-    for cmdd in Commands.names.keys():
+    for cmdd in sorted(Commands.names.keys()):
         for ex in getattr(param, cmdd, [""]):
             event = Event()
             event.txt = cmdd + " " + ex
@@ -135,7 +134,7 @@ def main():
     for mod in Table.all(MODS):
         Commands.scan(mod)
         mod.DEBUG = True
-        mod.output = print
+        #mod.output = print
     nrcommand = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()
@@ -161,8 +160,8 @@ def main():
 if __name__ == "__main__":
     wrap(main)
     endtime = time.time()
-    lap = elapsed(endtime-starttime)
-    percall = (endtime-starttime)/(nrs*nrcommand)
+    lap = elapsed(endtime-STARTTIME)
+    percall = (endtime-STARTTIME)/(nrs*nrcommand)
     if "v" in cfg.opts:
         if not list(errors()):
             print("no errors")

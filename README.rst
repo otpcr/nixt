@@ -13,10 +13,11 @@ N I X T
 
 |
 | ``nixt <cmd> [key=val] [key==val]``
-| ``nixt -cviw``
-| ``nixt -d`` 
+| ``nixt -civw``
+| ``nixt -d``
 | ``nixt -s``
 |
+
 
 **DESCRIPTION**
 
@@ -68,6 +69,12 @@ current directory to sys.path
 
 |
 | ``export PYTHONPATH="."``
+|
+
+and use this alias
+
+|
+| ``alias nixt="python3 -m nixt.runtime"
 |
 
 **USAGE**
@@ -126,6 +133,7 @@ here is a list of available commands
 | ``thr`` - show running threads
 | ``upt`` - show uptime
 |
+
 
 **CONFIGURATION**
 
