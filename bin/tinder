@@ -17,15 +17,18 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.clients import Buffered, Client, Config
-from nixt.command import Commands, Table, command, parse
-from nixt.modules import face
+from nixt.clients import Buffered, Config
+from nixt.command import Commands, command, parse
+from nixt.excepts import errors, later
 from nixt.objects import Object, keys
-from nixt.persist import Workdir, elapsed, skel
-from nixt.runtime import Event, Reactor, launch, errors, later
+from nixt.package import Table
+from nixt.reactor import Event
+from nixt.threads import launch
+from nixt.utility import elapsed
+from nixt.workdir import Workdir, skel
 
 
-"defines"
+import nixt.modules as MODS
 
 
 Workdir.wdr  = ".test"
@@ -68,9 +71,6 @@ param.thr = [""]
 param.ver = [""]
 
 
-"console"
-
-
 class CLI(Buffered):
 
     def __init__(self):
@@ -82,20 +82,17 @@ class CLI(Buffered):
             print(txt)
 
 
-"utilities"
-
-
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{Config.name.upper()} since {tme}")
-    print(",".join(keys(Commands.cmds)))
+    print(",".join(sorted(keys(Commands.cmds))))
 
 
 def consume(evts):
     done = []
-    for evt in evts:
-        evt.wait()
-        done.append(evt)
+    for event in evts:
+        event.wait()
+        done.append(event)
     for todo in done:
         events.remove(todo)
     return done
@@ -103,18 +100,15 @@ def consume(evts):
 
 def payload(clt):
     nmr = 0
-    for cmdd in keys(param):
+    for cmdd in Commands.names.keys():
         for ex in getattr(param, cmdd, [""]):
-            evt = Event()
-            evt.txt = cmdd + " " + ex
-            evt.type = "command"
-            events.append(evt)
-            clt.put(evt)
+            event = Event()
+            event.txt = cmdd + " " + ex
+            event.type = "command"
+            events.append(event)
+            clt.put(event)
             nmr += 1
     return nmr
-
-
-"runtime"
 
 
 def wrap(function):
@@ -138,7 +132,8 @@ def main():
     global nrs
     global nrcommand
     parse(cfg, " ".join(sys.argv[1:]))
-    for mod in Table.scan(face):
+    for mod in Table.all(MODS):
+        Commands.scan(mod)
         mod.DEBUG = True
         mod.output = print
     nrcommand = len(Commands.cmds) or 1
@@ -158,8 +153,9 @@ def main():
     for thr in thrs:
         thr.join()
     consume(events)
-    #clt.stop()
-    #clt.wait()
+    clt.stop()
+    if "w" in cfg.opts:
+        clt.wait()
 
 
 if __name__ == "__main__":
@@ -167,14 +163,15 @@ if __name__ == "__main__":
     endtime = time.time()
     lap = elapsed(endtime-starttime)
     percall = (endtime-starttime)/(nrs*nrcommand)
-    for line in errors():
-        print(line)
     if "v" in cfg.opts:
         if not list(errors()):
             print("no errors")
+        for line in errors():
+            print(line)
         if events:
             for evt in events:
                 print(evt)
             print(f"{len(events)} events")
         print(f"{lap} {nrs} {nrcommand} {percall}")
     sys.stdout.flush()
+    sys.exit(0)
