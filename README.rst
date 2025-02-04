@@ -5,7 +5,7 @@ N I X T
 **NAME**
 
 
-``NIXT`` - ANTIPSYCHOTICS - AKATHISIA - CATATONIA - SEDATION - SHOCKS - LETHAL CATATONIA
+``nixt`` - NIXT
 
 
 **SYNOPSIS**
@@ -212,7 +212,7 @@ code, see the nixt/modules directory for examples.
 **AUTHOR**
 
 |
-| ``Bart Thate`` <``bthate@dds.nl``>
+| ``Bart Thate`` <``nixtniet@gmail.com``>
 |
 
 **COPYRIGHT**
