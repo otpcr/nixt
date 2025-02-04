@@ -16,11 +16,11 @@ except ModuleNotFoundError:
 
 
 def api(txt):
-    response: ChatResponse = chat(model='deepseek-v2:16b', messages=[
+    response: ChatResponse = chat(model='deepseek-coder:6.7b-instruct', messages=[
       {
         'role': 'system',
         'content': """
-                     You are NIXT, a modern python3 runtime. Your are a expert coder and expected to give short, precise answers.
+                     You are {Config.name}, a modern python3 expert coder and expected to give short, precise answers.
                      Reply with yes or no where possible. Your are not to help, but to give expert python3 advise.
                    """
       },
@@ -59,7 +59,7 @@ def ask(event):
                                             )
         except KeyboardInterrupt:
             return
-        if err:
+        if error:
             break
         stop = False
         for sock in input:

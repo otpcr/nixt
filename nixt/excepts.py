@@ -54,3 +54,11 @@ def later(exc) -> None:
     fmt = Errors.format(excp)
     if fmt not in Errors.errors:
         Errors.errors.append(fmt)
+
+
+def __dir__():
+    return (
+        'Errors',
+        'errors',
+        'jater'
+    )

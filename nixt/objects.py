@@ -99,17 +99,3 @@ def update(obj, data):
 
 def values(obj):
     return obj.__dict__.values()
-
-
-def __dir__():
-    return (
-        'Object',
-        'construct',
-        'edit',
-        'fmt',
-        'fqn',
-        'items',
-        'keys',
-        'update',
-        'values'
-    )

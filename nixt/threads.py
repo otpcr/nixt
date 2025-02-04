@@ -103,7 +103,6 @@ class Repeater(Timer):
 
 def __dir__():
     return (
-        'Errors',
         'Repeater',
         'Thread',
         'Timer',
