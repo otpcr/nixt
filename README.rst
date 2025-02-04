@@ -5,7 +5,7 @@ N I X T
 **NAME**
 
 
-``nixt`` - ANTIPSYCHOTICS - AKATHISIA - CATATONIA - SEDATION - SHOCKS - LETHAL CATATONIA
+``NIXT`` - ANTIPSYCHOTICS - AKATHISIA - CATATONIA - SEDATION - SHOCKS - LETHAL CATATONIA
 
 
 **SYNOPSIS**
@@ -74,7 +74,7 @@ current directory to sys.path
 and use this alias
 
 |
-| ``alias nixt="python3 -m nixt.runtime"
+| ``alias nixt="python3 -m nixt.runtime"``
 |
 
 **USAGE**

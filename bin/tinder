@@ -133,7 +133,6 @@ def main():
     parse(cfg, " ".join(sys.argv[1:]))
     for mod in Table.all(MODS):
         Commands.scan(mod)
-        print(mod)
         mod.DEBUG = True
     nrcommand = len(Commands.cmds) or 1
     if "v" in cfg.opts:
