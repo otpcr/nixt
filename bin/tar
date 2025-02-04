@@ -10,7 +10,6 @@ import sys
 
 
 def popen(txt):
-    "run popen command."
     for line in os.popen(txt).readlines():
         print(line.rstrip())
         sys.stdout.flush()

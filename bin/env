@@ -15,13 +15,11 @@ NAME   = 'nixt'
 
 
 def banner():
-    """ show banner. """
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{NAME.upper()} since {tme}")
 
 
 def ignoring(txt):
-    """ check for ignore """
     for ign in IGNORES:
         if ign in txt:
             return True
@@ -29,7 +27,6 @@ def ignoring(txt):
 
 
 def popen(txt):
-    """ run command in popen """
     for line in os.popen(txt).readlines():
         if ignoring(line):
             continue
@@ -38,7 +35,6 @@ def popen(txt):
 
 
 def main():
-    """ main. """
     banner()
     print("\nclean")
     popen("bin/clean -f")

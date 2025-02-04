@@ -174,7 +174,7 @@ def service():
     privileges()
     pidfile(pidname(Config.name))
     Commands.add(cmd)
-    Table.inits(Config.init, pname)
+    Table.inits(Config.init or "irc,mdl,rss", pname)
     forever()
 
 
@@ -214,7 +214,7 @@ After=network-online.target
 Type=simple
 User=%s
 Group=%s
-ExecStart=/home/%s/.local/bin/%s -s
+ExecStart=/home/%s/.local/bin/%s -s mod=irc,mdl,rss
 
 [Install]
 WantedBy=multi-user.target"""

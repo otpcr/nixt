@@ -11,6 +11,7 @@ import pathlib
 import threading
 
 
+from .caching import Cache
 from .decoder import loads
 from .encoder import dumps
 from .objects import fqn, update
@@ -52,6 +53,7 @@ def write(obj, pth=None):
             pth = store(ident(obj))
         cdir(pth)
         txt = dumps(obj, indent=4)
+        Cache.objs[pth] = obj
         with open(pth, 'w', encoding='utf-8') as ofile:
             ofile.write(txt)
     return pth

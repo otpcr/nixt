@@ -11,7 +11,6 @@ import __main__
 
 
 def main():
-    "profile given filename."
     if len(sys.argv) <= 1:
         print("profile <filename>")
         return

@@ -12,7 +12,7 @@ version = "170"
 authors = [
     {name = "Bart Thate", email = "nixtniet@gmail.com" },
 ]
-description = "NIXT"
+description = "ANTIPSYCHOTICS - AKATHISIA - CATATONIA - SEDATION - SHOCKS - LETHAL CATATONIA"
 readme = "README.rst"
 license = { text="Public Domain"}
 classifiers=[
@@ -24,6 +24,10 @@ classifiers=[
 ]
 
 
+[project.scripts]
+"nixt" = "nixt.runtime:wrapped"
+
+
 [project.urls]
 "home" = "https://pypi.org/project/nixt"
 "bugs" = "https://github.com/otpcr/nixt/issues"
@@ -31,9 +35,6 @@ classifiers=[
 
 
 [tool.setuptools]
-script-files = [
-    'bin/nixt'
-]
 packages = [
     'nixt',
     'nixt.modules'
