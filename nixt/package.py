@@ -19,15 +19,19 @@ loadlock = threading.RLock()
 
 class Table:
 
+    """ Table """
+
     disable = ["dbg", "tmr"]
     mods = {}
 
     @staticmethod
     def add(mod):
+        """ add module. """
         Table.mods[mod.__name__] = mod
 
     @staticmethod
     def all(pkg, mods=""):
+        """ return all modules. """
         res = []
         path = pkg.__path__[0]
         pname = ".".join(path.split(os.sep)[-2:])
@@ -49,10 +53,12 @@ class Table:
 
     @staticmethod
     def get(name):
+        """ return module by full qualified name. """
         return Table.mods.get(name, None)
 
     @staticmethod
     def inits(names, pname):
+        """ call init() available in the module. """
         with initlock:
             mods = []
             for name in spl(names):
@@ -68,6 +74,7 @@ class Table:
 
     @staticmethod
     def load(name):
+        """ load module by full qualified name. """
         with loadlock:
             pname = ".".join(name.split(".")[:-1])
             module = Table.mods.get(name)
@@ -80,6 +87,7 @@ class Table:
 
     @staticmethod
     def modules(path):
+        """ return module names from a directory. """
         return [
                 x[:-3] for x in os.listdir(path)
                 if x.endswith(".py") and not x.startswith("__") and
@@ -88,6 +96,7 @@ class Table:
 
 
 def gettable():
+    """ return lookup table. """
     try:
         from .lookups import NAMES as names
     except Exception as ex:

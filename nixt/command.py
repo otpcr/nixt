@@ -5,16 +5,10 @@
 
 
 import inspect
-import threading
 
 
 from .default import Default
 from .package import Table, gettable
-
-
-initlock = threading.RLock()
-loadlock = threading.RLock()
-lock     = threading.RLock()
 
 
 class Commands:

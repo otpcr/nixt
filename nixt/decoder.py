@@ -12,7 +12,6 @@ from .objects import Object, construct
 
 class ObjectDecoder(json.JSONDecoder):
 
-
     """ ObjectDecoder """
 
     def __init__(self, *args, **kwargs):

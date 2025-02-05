@@ -53,7 +53,7 @@ def edit(obj, setter, skip=False) -> None:
 
 
 def fmt(obj, args=None, skip=None, plain=False) -> str:
-    """ fomrat an object in a key-value string. """
+    """ format an object in a key-value string. """
     if args is None:
         args = keys(obj)
     if skip is None:
@@ -91,7 +91,7 @@ def items(obj) -> []:
     return obj.__dict__.items()
 
 
-def keys(obj) = []:
+def keys(obj) -> []:
     """ return keys. """
     if isinstance(obj, type({})):
         return obj.keys()

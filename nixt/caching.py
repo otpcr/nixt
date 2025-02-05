@@ -9,6 +9,8 @@ import typing
 
 class Cache:
 
+    """ Cache """
+
     objs = {}
 
     @staticmethod
