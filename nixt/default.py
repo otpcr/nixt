@@ -6,6 +6,8 @@
 
 class Default:
 
+    """ Default """
+
     def __contains__(self, key):
         return key in dir(self)
 
@@ -20,3 +22,9 @@ class Default:
 
     def __str__(self):
         return str(self.__dict__)
+
+
+def __dir__():
+    return (
+        'Default',
+    )

@@ -6,6 +6,8 @@
 
 class Object:
 
+    """ Object """
+
     def __len__(self):
         return len(self.__dict__)
 
@@ -13,7 +15,8 @@ class Object:
         return str(self.__dict__)
 
 
-def construct(obj, *args, **kwargs):
+def construct(obj, *args, **kwargs) -> None:
+    """ initialise an already constructed object from arguments. """
     if args:
         val = args[0]
         if isinstance(val, zip):
@@ -26,7 +29,8 @@ def construct(obj, *args, **kwargs):
         update(obj, kwargs)
 
 
-def edit(obj, setter, skip=False):
+def edit(obj, setter, skip=False) -> None:
+    """ edit object with values from the setter. """
     for key, val in items(setter):
         if skip and val == "":
             continue
@@ -48,7 +52,8 @@ def edit(obj, setter, skip=False):
             setattr(obj, key, val)
 
 
-def fmt(obj, args=None, skip=None, plain=False):
+def fmt(obj, args=None, skip=None, plain=False) -> str:
+    """ fomrat an object in a key-value string. """
     if args is None:
         args = keys(obj)
     if skip is None:
@@ -71,31 +76,50 @@ def fmt(obj, args=None, skip=None, plain=False):
     return txt.strip()
 
 
-def fqn(obj):
+def fqn(obj) -> str:
+    """ return full qualified name. """
     kin = str(type(obj)).split()[-1][1:-2]
     if kin == "type":
         kin = f"{obj.__module__}.{obj.__name__}"
     return kin
 
 
-def items(obj):
+def items(obj) -> []:
+    """ return items. """
     if isinstance(obj,type({})):
         return obj.items()
     return obj.__dict__.items()
 
 
-def keys(obj):
+def keys(obj) = []:
+    """ return keys. """
     if isinstance(obj, type({})):
         return obj.keys()
     return list(obj.__dict__.keys())
 
 
-def update(obj, data):
+def update(obj, data) -> None:
+    """ update and object with the data dict. """
     if not isinstance(data, type({})):
         obj.__dict__.update(vars(data))
     else:
         obj.__dict__.update(data)
 
 
-def values(obj):
+def values(obj) -> []:
+    """ return values. """
     return obj.__dict__.values()
+
+
+def __dir__():
+    return (
+        'Object',
+        'construct',
+        'edit',
+        'fmt',
+        'fqn',
+        'items',
+        'keys',
+        'update',
+        'values'
+    )

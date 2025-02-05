@@ -19,25 +19,31 @@ lock     = threading.RLock()
 
 class Commands:
 
+    """ Commands """
+
     cmds = {}
     names = gettable()
 
     @staticmethod
     def add(func, mod=None):
+        """ add function. """
         Commands.cmds[func.__name__] = func
         if mod:
             Commands.names[func.__name__] = mod.__name__
 
     @staticmethod
     def get(cmd):
+        """ return command. """
         return Commands.cmds.get(cmd, None)
 
     @staticmethod
     def getname(cmd):
+        """ return name of module containing the command. """
         return Commands.names.get(cmd)
 
     @staticmethod
     def scan(mod):
+        """ scan modules for command. """
         for key, cmdz in inspect.getmembers(mod, inspect.isfunction):
             if key.startswith("cb"):
                 continue
@@ -46,6 +52,7 @@ class Commands:
 
 
 def command(evt):
+    """ command callback. """
     parse(evt)
     func = Commands.get(evt.cmd)
     if not func:
@@ -62,6 +69,7 @@ def command(evt):
 
 
 def parse(obj, txt=None):
+    """ parse text for commands. """
     if txt is None:
         if "txt" in dir(obj):
             txt = obj.txt
