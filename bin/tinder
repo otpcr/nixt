@@ -22,8 +22,7 @@ from nixt.excepts import errors, later
 from nixt.objects import Object, keys
 from nixt.package import Table
 from nixt.reactor import Event
-from nixt.runtime import STARTTIME
-from nixt.threads import launch
+from nixt.threads import STARTTIME, launch
 from nixt.utility import elapsed
 from nixt.workdir import Workdir, skel
 

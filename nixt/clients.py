@@ -119,7 +119,6 @@ def debug(txt) -> None:
 
 def output(txt) -> None:
     """ text to screen. """
-    # print(txt)
 
 
 def __dir__():
