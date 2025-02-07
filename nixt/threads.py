@@ -18,6 +18,8 @@ lock = threading.RLock()
 
 class Thread(threading.Thread):
 
+    """ Thread """
+
     def __init__(self, func, thrname, *args, daemon=True, **kwargs):
         super().__init__(None, self.run, name, (), {}, daemon=daemon)
         self.name = thrname
@@ -28,6 +30,7 @@ class Thread(threading.Thread):
         self.queue.put((func, args))
 
     def run(self) -> None:
+        """ code tu run in thread. """
         func, args = self.queue.get()
         try:
             self.result = func(*args)
@@ -37,11 +40,13 @@ class Thread(threading.Thread):
                 args[0].ready()
 
     def join(self, timeout=None) -> typing.Any:
+        """ join thread for result. """
         super().join(timeout)
         return self.result
 
 
 def launch(func, *args, **kwargs) -> Thread:
+    """ launch a thread. """
     nme = kwargs.get("name", name(func))
     thread = Thread(func, nme, *args, **kwargs)
     thread.start()
@@ -49,6 +54,7 @@ def launch(func, *args, **kwargs) -> Thread:
 
 
 def name(obj) -> str:
+    """ return name of an object. """
     typ = type(obj)
     if '__builtins__' in dir(typ):
         return obj.__name__
@@ -65,6 +71,8 @@ def name(obj) -> str:
 
 class Timer:
 
+    """ Timer """
+
     def __init__(self, sleep, func, *args, thrname=None, **kwargs):
         self.args   = args
         self.func   = func
@@ -75,10 +83,12 @@ class Timer:
         self.timer  = None
 
     def run(self) -> None:
+        """ run timer function. """
         self.state["latest"] = time.time()
         launch(self.func, *self.args)
 
     def start(self) -> None:
+        """ start the timer. """
         timer = threading.Timer(self.sleep, self.run)
         timer.name   = self.name
         timer.sleep  = self.sleep
@@ -90,13 +100,18 @@ class Timer:
         self.timer   = timer
 
     def stop(self) -> None:
+        """ stop theme timer. """
         if self.timer:
             self.timer.cancel()
 
 
 class Repeater(Timer):
 
+
+    """ Repeater """
+
     def run(self) -> None:
+        """ start the repeater. """
         launch(self.start)
         super().run()
 

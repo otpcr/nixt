@@ -13,10 +13,13 @@ p = os.path.join
 
 class Workdir:
 
+    """ Workdir """
+
     wdr  = ""
 
 
 def long(name):
+    """ expand class name to full qualified name. """
     split = name.split(".")[-1].lower()
     res = name
     for names in types():
@@ -27,23 +30,28 @@ def long(name):
 
 
 def pidname(name):
+    """ return path for pidfile. """
     return p(Workdir.wdr, f"{name}.pid")
 
 
 def skel():
+    """ create necesarry directories, """
     path = pathlib.Path(store())
     path.mkdir(parents=True, exist_ok=True)
     return path
 
 
 def store(pth=""):
+    """ return storage directory, """
     return p(Workdir.wdr, "store", pth)
 
 
 def strip(pth, nmr=3):
+    """ strip from path. """
     return os.sep.join(pth.split(os.sep)[-nmr:])
 
 def types():
+    """ return all types in store. """
     return os.listdir(store())
 
 

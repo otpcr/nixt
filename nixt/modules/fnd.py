@@ -14,6 +14,7 @@ from ..utility import elapsed
 
 
 def fnd(event):
+    """ locate objects. """
     skel()
     if not event.rest:
         res = sorted([x.split('.')[-1].lower() for x in types()])

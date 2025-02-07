@@ -38,27 +38,34 @@ clients.output = output = print
 
 class CLI(Client):
 
+    """ CLI """
+
     def __init__(self):
         Client.__init__(self)
         self.register("command", command)
 
     def announce(self, txt):
-        pass
+        """ announce text on screen. """
 
     def raw(self, txt):
+        """ output text to screen. """
         output(txt.encode('utf-8', 'replace').decode("utf-8"))
 
 
 class Console(CLI):
 
+    """ Console """
+
     def announce(self, txt):
-        pass
+        """ announce text on console. """
 
     def callback(self, evt):
+        """ wait for callback to finish. """
         CLI.callback(self, evt)
         evt.wait()
 
     def poll(self):
+        """ poll user for event. """
         evt = Event()
         evt.txt = input("> ")
         evt.type = "command"
@@ -66,11 +73,13 @@ class Console(CLI):
 
 
 def banner():
+    """ print banner. """
     tme = time.ctime(time.time()).replace("  ", " ")
     output(f"{Config.name.upper()} since {tme}")
 
 
 def check(txt):
+    """ check text or options. """
     args = sys.argv[1:]
     for arg in args:
         if not arg.startswith("-"):
@@ -82,6 +91,7 @@ def check(txt):
 
 
 def daemon(verbose=False):
+    """ switch to background. """
     pid = os.fork()
     if pid != 0:
         os._exit(0)
@@ -102,6 +112,7 @@ def daemon(verbose=False):
 
 
 def forever():
+    """ sleep loop until ctrl-c. """
     while True:
         try:
             time.sleep(0.1)
@@ -110,6 +121,7 @@ def forever():
 
 
 def pidfile(filename):
+    """ write pid to file. """
     if os.path.exists(filename):
         os.unlink(filename)
     path2 = pathlib.Path(filename)
@@ -119,6 +131,7 @@ def pidfile(filename):
 
 
 def privileges():
+    """ drop privileges. """
     import getpass
     import pwd
     pwnam2 = pwd.getpwnam(getpass.getuser())
@@ -130,6 +143,7 @@ def privileges():
 
 
 def background():
+    """ run in the background. """
     daemon(True)
     privileges()
     pidfile(pidname(Config.name))
@@ -139,6 +153,7 @@ def background():
 
 
 def console():
+    """ run a console. """
     import readline # noqa: F401
     Commands.add(cmd)
     parse(cfg, " ".join(sys.argv[1:]))
@@ -156,6 +171,7 @@ def console():
 
 
 def control():
+    """ run a cli. """
     if len(sys.argv) == 1:
         return
     Commands.add(cmd)
@@ -171,6 +187,7 @@ def control():
     evt.wait()
 
 def service():
+    """ run a service. """
     privileges()
     pidfile(pidname(Config.name))
     Commands.add(cmd)
@@ -182,16 +199,19 @@ def service():
 
 
 def cmd(event):
+    """ display commands. """
     event.reply(",".join(sorted(Commands.names)))
 
 
 def srv(event):
+    """ create service file. """
     import getpass
     name = getpass.getuser()
     event.reply(TXT % (Config.name.upper(), name, name, name, Config.name))
 
 
 def tbl(event):
+    """ create table. """
     for mod in Table.all(MODS):
         Commands.scan(mod)
     event.reply("# This file is placed in the Public Domain.")
@@ -201,7 +221,7 @@ def tbl(event):
     event.reply("")
     event.reply("")
     event.reply(f"NAMES = {dumps(Commands.names, indent=4, sort_keys=True)}")
-    
+
 
 "data"
 
@@ -224,6 +244,7 @@ WantedBy=multi-user.target"""
 
 
 def wrap(func):
+    """ wrap control-break to restore console settings. """
     import termios
     old = None
     try:
@@ -244,14 +265,17 @@ def wrap(func):
 
 
 def wrapped():
+    """ wrap the main dispatcher. """
     wrap(main)
 
 
 def wraps():
+    """ wrap service. """
     wrap(service)
 
 
 def main():
+    """ dispatch from option. """
     if check("c"):
         wrap(console)
     elif check("d"):

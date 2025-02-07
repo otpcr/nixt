@@ -8,6 +8,7 @@ from ..excepts import Errors
 
 
 def err(event):
+    """ show errors. """
     nmr = 0
     for line in Errors.errors:
         event.reply(line.strip())
