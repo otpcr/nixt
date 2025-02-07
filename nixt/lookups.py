@@ -18,6 +18,7 @@ NAMES = {
     "nme": "nixt.modules.rss",
     "pwd": "nixt.modules.irc",
     "rem": "nixt.modules.rss",
+    "req": "nixt.modules.req",
     "res": "nixt.modules.rss",
     "rss": "nixt.modules.rss",
     "syn": "nixt.modules.rss",
