@@ -8,7 +8,7 @@ import time
 
 
 from ..clients import Config
-from ..runtime import STARTTIME
+from ..threads import STARTTIME
 from ..utility import elapsed
 
 

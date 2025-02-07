@@ -5,7 +5,6 @@
 
 
 NAMES = {
-    "ask": "nixt.modules.llm",
     "cfg": "nixt.modules.irc",
     "dpl": "nixt.modules.rss",
     "err": "nixt.modules.err",

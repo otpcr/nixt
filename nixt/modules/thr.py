@@ -9,7 +9,7 @@ import time
 
 
 from ..objects import Object, update
-from ..runtime import STARTTIME
+from ..threads import STARTTIME
 from ..utility import elapsed
 
 

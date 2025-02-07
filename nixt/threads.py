@@ -13,6 +13,9 @@ import typing
 from .excepts import later
 
 
+STARTTIME = time.time()
+
+
 lock = threading.RLock()
 
 
