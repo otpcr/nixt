@@ -11,6 +11,7 @@ import __main__
 
 
 def main():
+    """ run profiler. """
     if len(sys.argv) <= 1:
         print("profile <filename>")
         return

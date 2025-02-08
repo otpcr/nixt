@@ -13,6 +13,7 @@ SKIP = ["env", ".git"]
 
 
 def loop(path, txt):
+    """ loop over sub directories. """
     old = os.getcwd()
     os.chdir(path)
     for fnn in os.listdir(path):
@@ -31,12 +32,14 @@ def loop(path, txt):
 
 
 def popen(txt):
+    """ run command. """
     for line in os.popen(txt).readlines():
         print(line.rstrip())
         sys.stdout.flush()
 
 
 def main():
+    """ main program. """
     popen("rm -fR DEAD* build dist MANIFEST *.egg-info *.whl")
     popen("rm -fR .pytest_cache .test __pycache__ .ruff_cache")
     popen("rm -fR .*~ *~")
