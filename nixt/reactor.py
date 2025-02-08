@@ -22,7 +22,7 @@ lock   = threading.RLock()
 
 class Event(Default):
 
-    "Event"
+    """ Event """
 
     def __init__(self):
         Default.__init__(self)

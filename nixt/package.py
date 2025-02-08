@@ -69,7 +69,8 @@ class Table:
                 mod = Table.load(mname)
                 if not mod:
                     continue
-                thr = launch(mod.init)
+                if "init" in dir(mod):
+                    thr = launch(mod.init)
                 mods.append((mod, thr))
             return mods
 
