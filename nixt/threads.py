@@ -111,7 +111,6 @@ class Timer:
 
 class Repeater(Timer):
 
-
     """ Repeater """
 
     def run(self) -> None:

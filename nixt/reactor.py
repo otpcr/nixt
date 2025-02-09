@@ -169,7 +169,7 @@ class Fleet:
             bot.say(channel, txt)
 
     @staticmethod
-    def wait():
+    def wait() -> None:
         """ call wait on all bots. """
         for bot in Fleet.bots.values():
             if "wait" in dir(bot):

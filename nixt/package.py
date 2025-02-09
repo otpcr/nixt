@@ -10,6 +10,9 @@ import os
 import threading
 
 
+from types import ModuleType
+
+
 from .threads import later, launch
 from .utility import spl
 
@@ -26,12 +29,12 @@ class Table:
     mods = {}
 
     @staticmethod
-    def add(mod):
+    def add(mod) -> None:
         """ add module. """
         Table.mods[mod.__name__] = mod
 
     @staticmethod
-    def all(pkg, mods=""):
+    def all(pkg, mods="") -> [ModuleType]:
         """ return all modules. """
         res = []
         path = pkg.__path__[0]
@@ -53,12 +56,12 @@ class Table:
         return res
 
     @staticmethod
-    def get(name):
+    def get(name) -> ModuleType:
         """ return module by full qualified name. """
         return Table.mods.get(name, None)
 
     @staticmethod
-    def inits(names, pname):
+    def inits(names, pname) -> [ModuleType]:
         """ call init() available in the module. """
         with initlock:
             mods = []
@@ -75,7 +78,7 @@ class Table:
             return mods
 
     @staticmethod
-    def load(name):
+    def load(name) -> ModuleType:
         """ load module by full qualified name. """
         with loadlock:
             pname = ".".join(name.split(".")[:-1])
@@ -88,7 +91,7 @@ class Table:
             return module
 
     @staticmethod
-    def modules(path):
+    def modules(path) -> [str]:
         """ return module names from a directory. """
         return [
                 x[:-3] for x in os.listdir(path)
@@ -97,7 +100,7 @@ class Table:
                ]
 
 
-def gettable():
+def gettable() -> dict:
     """ return lookup table. """
     try:
         from .lookups import NAMES as names

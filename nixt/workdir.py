@@ -19,7 +19,7 @@ class Workdir:
     wdr  = ""
 
 
-def long(name):
+def long(name) -> str:
     """ expand class name to full qualified name. """
     split = name.split(".")[-1].lower()
     res = name
@@ -30,28 +30,28 @@ def long(name):
     return res
 
 
-def pidname(name):
+def pidname(name) -> str:
     """ return path for pidfile. """
     return p(Workdir.wdr, f"{name}.pid")
 
 
-def skel():
+def skel() -> str:
     """ create necesarry directories, """
     path = pathlib.Path(store())
     path.mkdir(parents=True, exist_ok=True)
     return path
 
 
-def store(pth=""):
+def store(pth="") -> str:
     """ return storage directory, """
     return p(Workdir.wdr, "store", pth)
 
 
-def strip(pth, nmr=3):
+def strip(pth, nmr=3) -> str:
     """ strip from path. """
     return os.sep.join(pth.split(os.sep)[-nmr:])
 
-def types():
+def types() -> [str]:
     """ return all types in store. """
     return os.listdir(store())
 

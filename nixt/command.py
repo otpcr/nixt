@@ -6,6 +6,7 @@
 
 
 import inspect
+import typing
 
 
 from .default import Default
@@ -27,17 +28,17 @@ class Commands:
             Commands.names[func.__name__] = mod.__name__
 
     @staticmethod
-    def get(cmd):
+    def get(cmd) -> typing.Callable:
         """ return command. """
         return Commands.cmds.get(cmd, None)
 
     @staticmethod
-    def getname(cmd):
+    def getname(cmd) -> None:
         """ return name of module containing the command. """
         return Commands.names.get(cmd)
 
     @staticmethod
-    def scan(mod):
+    def scan(mod) -> None:
         """ scan modules for command. """
         for key, cmdz in inspect.getmembers(mod, inspect.isfunction):
             if key.startswith("cb"):
@@ -46,7 +47,7 @@ class Commands:
                 Commands.add(cmdz, mod)
 
 
-def command(evt):
+def command(evt) -> None:
     """ command callback. """
     parse(evt)
     func = Commands.get(evt.cmd)
@@ -63,7 +64,7 @@ def command(evt):
     evt.display()
 
 
-def parse(obj, txt=None):
+def parse(obj, txt=None) -> None:
     """ parse text for commands. """
     if txt is None:
         if "txt" in dir(obj):
@@ -115,7 +116,6 @@ def parse(obj, txt=None):
         obj.txt  = obj.cmd + " " + obj.rest
     else:
         obj.txt = obj.cmd or ""
-    return obj
 
 
 def __dir__():

@@ -17,7 +17,7 @@ from .workdir import long, skel, store
 p = os.path.join
 
 
-def fns(clz):
+def fns(clz) -> [str]:
     """ return filenames of a type. """
     dname = ''
     pth = store(clz)
@@ -30,7 +30,7 @@ def fns(clz):
                         yield p(ddd, fll)
 
 
-def fntime(daystr):
+def fntime(daystr) -> int:
     """ return time in second for a path, """
     daystr = daystr.replace('_', ':')
     datestr = ' '.join(daystr.split(os.sep)[-2:])
@@ -44,7 +44,7 @@ def fntime(daystr):
     return timed
 
 
-def find(clz, selector=None, deleted=False, matching=False):
+def find(clz, selector=None, deleted=False, matching=False) -> [Object]:
     """ find matching object of a type. """
     skel()
     pth = long(clz)
@@ -63,7 +63,7 @@ def find(clz, selector=None, deleted=False, matching=False):
     return sorted(res, key=lambda x: fntime(x[0]))
 
 
-def last(obj, selector=None):
+def last(obj, selector=None) -> Object:
     """ update object to last saved version. """
     if selector is None:
         selector = {}
@@ -79,7 +79,7 @@ def last(obj, selector=None):
     return res
 
 
-def search(obj, selector, matching=None):
+def search(obj, selector, matching=None) -> bool:
     """ search an object for matching items in the selector. """
     res = False
     if not selector:
