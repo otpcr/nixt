@@ -2,7 +2,7 @@
 # pylint: disable=R0912
 
 
-"command"
+""" command """
 
 
 import inspect
@@ -22,24 +22,24 @@ class Commands:
 
     @staticmethod
     def add(func, mod=None):
-        """ add function. """
+        "add function"
         Commands.cmds[func.__name__] = func
         if mod:
             Commands.names[func.__name__] = mod.__name__
 
     @staticmethod
     def get(cmd) -> typing.Callable:
-        """ return command. """
+        "return command"
         return Commands.cmds.get(cmd, None)
 
     @staticmethod
     def getname(cmd) -> None:
-        """ return name of module containing the command. """
+        "return name of module containing the command"
         return Commands.names.get(cmd)
 
     @staticmethod
     def scan(mod) -> None:
-        """ scan modules for command. """
+        "scan modules for command"
         for key, cmdz in inspect.getmembers(mod, inspect.isfunction):
             if key.startswith("cb"):
                 continue
@@ -48,7 +48,7 @@ class Commands:
 
 
 def command(evt) -> None:
-    """ command callback. """
+    "command callback"
     parse(evt)
     func = Commands.get(evt.cmd)
     if not func:
@@ -65,7 +65,7 @@ def command(evt) -> None:
 
 
 def parse(obj, txt=None) -> None:
-    """ parse text for commands. """
+    "parse text for commands"
     if txt is None:
         if "txt" in dir(obj):
             txt = obj.txt

@@ -2,7 +2,7 @@
 # pylint: disable=R0902
 
 
-"a clean namespace"
+""" a clean namespace """
 
 
 class Object:
@@ -17,7 +17,7 @@ class Object:
 
 
 def construct(obj, *args, **kwargs) -> None:
-    """ initialise an already constructed object from arguments. """
+    "initialise an already constructed object from arguments"
     if args:
         val = args[0]
         if isinstance(val, zip):
@@ -31,7 +31,7 @@ def construct(obj, *args, **kwargs) -> None:
 
 
 def edit(obj, setter, skip=False) -> None:
-    """ edit object with values from the setter. """
+    "edit object with values from the setter""
     for key, val in items(setter):
         if skip and val == "":
             continue
@@ -54,7 +54,7 @@ def edit(obj, setter, skip=False) -> None:
 
 
 def fmt(obj, args=None, skip=None, plain=False) -> str:
-    """ format an object in a key-value string. """
+    "format an object in a key-value string"
     if args is None:
         args = keys(obj)
     if skip is None:
@@ -78,7 +78,7 @@ def fmt(obj, args=None, skip=None, plain=False) -> str:
 
 
 def fqn(obj) -> str:
-    """ return full qualified name. """
+    "return full qualified name"
     kin = str(type(obj)).split()[-1][1:-2]
     if kin == "type":
         kin = f"{obj.__module__}.{obj.__name__}"
@@ -86,21 +86,21 @@ def fqn(obj) -> str:
 
 
 def items(obj) -> []:
-    """ return items. """
+    "return items"
     if isinstance(obj,type({})):
         return obj.items()
     return obj.__dict__.items()
 
 
 def keys(obj) -> []:
-    """ return keys. """
+    "return keys"
     if isinstance(obj, type({})):
         return obj.keys()
     return list(obj.__dict__.keys())
 
 
 def update(obj, data) -> None:
-    """ update and object with the data dict. """
+    "update and object with the data dict"
     if not isinstance(data, type({})):
         obj.__dict__.update(vars(data))
     else:
@@ -108,7 +108,7 @@ def update(obj, data) -> None:
 
 
 def values(obj) -> []:
-    """ return values. """
+    "return values"
     return obj.__dict__.values()
 
 

@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 
 
-"decoding"
+""" decoding """
 
 
 import json
@@ -18,7 +18,7 @@ class ObjectDecoder(json.JSONDecoder):
         json.JSONDecoder.__init__(self, *args, **kwargs)
 
     def decode(self, s, _w=None):
-        """ decode string into object. """
+        "decode string into object"
         val = json.JSONDecoder.decode(self, s)
         if isinstance(val, dict):
             return hook(val)
@@ -26,14 +26,14 @@ class ObjectDecoder(json.JSONDecoder):
 
 
 def hook(objdict) -> Object:
-    """ convert dict into object. """
+    "convert dict into object"
     obj = Object()
     construct(obj, objdict)
     return obj
 
 
 def loads(string, *args, **kw):
-    """ convert string to object. """
+    "convert string to object"
     kw["cls"] = ObjectDecoder
     kw["object_hook"] = hook
     return json.loads(string, *args, **kw)

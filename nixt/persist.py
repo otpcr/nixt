@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 
 
-"persistence"
+""" persistence """
 
 
 import datetime
@@ -28,18 +28,18 @@ class DecodeError(Exception):
 
 
 def cdir(pth) -> None:
-    """ create directory. """
+    "create directory"
     path = pathlib.Path(pth)
     path.parent.mkdir(parents=True, exist_ok=True)
 
 
 def ident(obj) -> str:
-    """ return path to save object to. """
+    "return path to save object to"
     return p(fqn(obj),*str(datetime.datetime.now()).split())
 
 
 def read(obj, pth):
-    """ read object fron path. """
+    "read object fron path"
     with lock:
         with open(pth, 'r', encoding='utf-8') as ofile:
             try:
@@ -51,7 +51,7 @@ def read(obj, pth):
 
 
 def write(obj, pth=None):
-    """ write object to provided path or freshly created one. """
+    "write object to provided path or freshly created one"
     with lock:
         if pth is None:
             pth = store(ident(obj))

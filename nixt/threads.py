@@ -2,7 +2,7 @@
 # pylint: disable=W0718
 
 
-"threads"
+""" threads """
 
 
 import queue
@@ -34,7 +34,7 @@ class Thread(threading.Thread):
         self.queue.put((func, args))
 
     def run(self) -> None:
-        """ code tu run in thread. """
+        "code tu run in thread"
         func, args = self.queue.get()
         try:
             self.result = func(*args)
@@ -44,13 +44,13 @@ class Thread(threading.Thread):
                 args[0].ready()
 
     def join(self, timeout=None) -> typing.Any:
-        """ join thread for result. """
+        "join thread for result"
         super().join(timeout)
         return self.result
 
 
 def launch(func, *args, **kwargs) -> Thread:
-    """ launch a thread. """
+    "launch a thread"
     nme = kwargs.get("name", name(func))
     thread = Thread(func, nme, *args, **kwargs)
     thread.start()
@@ -58,7 +58,7 @@ def launch(func, *args, **kwargs) -> Thread:
 
 
 def name(obj) -> str:
-    """ return name of an object. """
+    "return name of an object"
     typ = type(obj)
     if '__builtins__' in dir(typ):
         return obj.__name__
@@ -87,12 +87,12 @@ class Timer:
         self.timer  = None
 
     def run(self) -> None:
-        """ run timer function. """
+        "run timer function"
         self.state["latest"] = time.time()
         launch(self.func, *self.args)
 
     def start(self) -> None:
-        """ start the timer. """
+        "start the timer"
         timer = threading.Timer(self.sleep, self.run)
         timer.name   = self.name
         timer.sleep  = self.sleep
@@ -104,7 +104,7 @@ class Timer:
         self.timer   = timer
 
     def stop(self) -> None:
-        """ stop theme timer. """
+        "stop theme timer"
         if self.timer:
             self.timer.cancel()
 
@@ -114,7 +114,7 @@ class Repeater(Timer):
     """ Repeater """
 
     def run(self) -> None:
-        """ start the repeater. """
+        "start the repeater"
         launch(self.start)
         super().run()
 
