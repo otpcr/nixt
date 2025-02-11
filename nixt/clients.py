@@ -2,7 +2,23 @@
 # pylint: disable=R0903,W0613
 
 
-"clients"
+""" clients 
+
+
+This module contains a basic client for command input as well
+as a output buffered class to have command get their output
+buffered to have a command runner not to wait on the display.
+
+It also contains a Config class that has the basic configuration
+of a client enabled program. This configuration file contains a list
+of module to initialize at start, the package name of the program,
+options enabled in the cli and it's version.
+
+Every client has a callback engine to listen to user generated events,
+such as commands, where the basic callback for comands is already
+registered.
+
+"""
 
 
 import os
@@ -27,18 +43,18 @@ class Config(Default):
 
 class Client(Reactor):
 
-    """ Client """
+    """Client"""
 
     def __init__(self):
         Reactor.__init__(self)
         Fleet.add(self)
 
     def raw(self, txt) -> None:
-        """ text to screen. """
+        "text to screen"
         raise NotImplementedError("raw")
 
     def say(self, channel, txt) -> None:
-        """ text to channel. """
+        "text to channel"
         self.raw(txt)
 
 
@@ -51,7 +67,7 @@ class Output:
         self.running = threading.Event()
 
     def loop(self) -> None:
-        """ output loop. """
+        "output loop"
         self.running.set()
         while self.running.is_set():
             evt = self.oqueue.get()
@@ -62,24 +78,24 @@ class Output:
             self.oqueue.task_done()
 
     def oput(self,evt) -> None:
-        """ put event into output queue. """
+        "put event into output queue"
         if not self.running.is_set():
             Fleet.display(evt)
         self.oqueue.put(evt)
 
     def start(self) -> None:
-        """ start output loop. """
+        "start output loop"
         if not self.running.is_set():
             self.running.set()
             launch(self.loop)
 
     def stop(self) -> None:
-        """ stop output loop. """
+        "stop output loop"
         self.running.clear()
         self.oqueue.put(None)
 
     def wait(self) -> None:
-        """ wait for loop to finish, """
+        "wait for loop to finish"
         self.oqueue.join()
         self.running.wait()
 
@@ -93,39 +109,39 @@ class Buffered(Client, Output):
         Output.__init__(self)
 
     def raw(self, txt) -> None:
-        """ text to screen. """
+        "text to screen"
         raise NotImplementedError("raw")
 
     def start(self) -> None:
-        """ start client. """
+        "start client"
         Output.start(self)
         Client.start(self)
 
     def stop(self) -> None:
-        """ stop client. """
+        "stop client"
         Output.stop(self)
         Client.stop(self)
 
     def wait(self) -> None:
-        """ wait for client to finish. """
+        "wait for client to finish."
         Output.wait(self)
         Client.wait(self)
 
 
 def debug(txt) -> None:
-    """ text to screen if verbose is enabled. """
+    "text to screen if verbose is enabled"
     if "v" in Config.opts:
         output(txt)
 
 
 def output(txt) -> None:
-    """ text to screen. """
+    "text to screen"
 
 
 def __dir__():
     return (
-        'Default',
+        'Buffered',
         'Client',
-        'Fleet',
+        'Output',
         'debug'
     )
