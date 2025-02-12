@@ -1,9 +1,6 @@
 # This file is placed in the Public Domain.
 
 
-""" find objects """
-
-
 import os
 import time
 
@@ -18,7 +15,6 @@ p = os.path.join
 
 
 def fns(clz) -> [str]:
-    "return filenames of a type"
     dname = ''
     pth = store(clz)
     for rootdir, dirs, _files in os.walk(pth, topdown=False):
@@ -31,7 +27,6 @@ def fns(clz) -> [str]:
 
 
 def fntime(daystr) -> int:
-    "return time in second for a path"
     daystr = daystr.replace('_', ':')
     datestr = ' '.join(daystr.split(os.sep)[-2:])
     if '.' in datestr:
@@ -45,7 +40,6 @@ def fntime(daystr) -> int:
 
 
 def find(clz, selector=None, deleted=False, matching=False) -> [Object]:
-    "find matching object of a type"
     skel()
     pth = long(clz)
     res = []
@@ -64,7 +58,6 @@ def find(clz, selector=None, deleted=False, matching=False) -> [Object]:
 
 
 def last(obj, selector=None) -> Object:
-    "update object to last saved version"
     if selector is None:
         selector = {}
     result = sorted(
@@ -80,7 +73,6 @@ def last(obj, selector=None) -> Object:
 
 
 def search(obj, selector, matching=None) -> bool:
-    "search an object for matching items in the selector"
     res = False
     if not selector:
         return res
@@ -96,13 +88,3 @@ def search(obj, selector, matching=None) -> bool:
             res = False
             break
     return res
-
-
-def __dir__():
-    return (
-        'fns',
-        'fntime',
-        'find',
-        'last',
-        'search'
-    )

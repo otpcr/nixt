@@ -1,8 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R0912
-
-
-""" command """
 
 
 import inspect
@@ -15,31 +11,25 @@ from .package import Table, gettable
 
 class Commands:
 
-    """ Commands """
-
     cmds = {}
     names = gettable()
 
     @staticmethod
-    def add(func, mod=None):
-        "add function"
+    def add(func, mod=None) -> None:
         Commands.cmds[func.__name__] = func
         if mod:
             Commands.names[func.__name__] = mod.__name__
 
     @staticmethod
     def get(cmd) -> typing.Callable:
-        "return command"
         return Commands.cmds.get(cmd, None)
 
     @staticmethod
     def getname(cmd) -> None:
-        "return name of module containing the command"
         return Commands.names.get(cmd)
 
     @staticmethod
     def scan(mod) -> None:
-        "scan modules for command"
         for key, cmdz in inspect.getmembers(mod, inspect.isfunction):
             if key.startswith("cb"):
                 continue
@@ -48,7 +38,6 @@ class Commands:
 
 
 def command(evt) -> None:
-    "command callback"
     parse(evt)
     func = Commands.get(evt.cmd)
     if not func:
@@ -65,7 +54,6 @@ def command(evt) -> None:
 
 
 def parse(obj, txt=None) -> None:
-    "parse text for commands"
     if txt is None:
         if "txt" in dir(obj):
             txt = obj.txt
@@ -116,12 +104,3 @@ def parse(obj, txt=None) -> None:
         obj.txt  = obj.cmd + " " + obj.rest
     else:
         obj.txt = obj.cmd or ""
-
-
-def __dir__():
-    return (
-        'Commands',
-        'command',
-        'cmd',
-        'parse'
-    )

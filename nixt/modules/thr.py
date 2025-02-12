@@ -1,9 +1,6 @@
 # This file is placed in the Public Domain.
 
 
-"show running threads."
-
-
 import threading
 import time
 
@@ -14,7 +11,6 @@ from ..utility import elapsed
 
 
 def thr(event):
-    """ show running threads. """
     result = []
     for thread in sorted(threading.enumerate(), key=lambda x: x.name):
         if str(thread).startswith('<_'):

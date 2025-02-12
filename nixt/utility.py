@@ -1,11 +1,7 @@
 # This file is placed in the Public Domain.
 
 
-""" utilities """
-
-
 def elapsed(seconds, short=True):
-    "return string of elapsed time"
     txt = ""
     nsec = float(seconds)
     if nsec < 1:
@@ -45,7 +41,6 @@ def elapsed(seconds, short=True):
 
 
 def spl(txt):
-    "iterate over comma seperated string"
     try:
         result = txt.split(',')
     except (TypeError, ValueError):
