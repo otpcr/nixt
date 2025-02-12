@@ -2,9 +2,6 @@
 # This file is placed in the Public Domain.
 
 
-"replace"
-
-
 import os
 import sys
 

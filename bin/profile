@@ -2,16 +2,12 @@
 # This file is placed in the Public Domain.
 
 
-"profiler"
-
-
 import profile
 import sys
 import __main__
 
 
 def main():
-    """ run profiler. """
     if len(sys.argv) <= 1:
         print("profile <filename>")
         return

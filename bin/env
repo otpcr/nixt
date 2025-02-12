@@ -2,9 +2,6 @@
 # This file is placed in the Public Domain.
 
 
-"environment"
-
-
 import os
 import sys
 import time
