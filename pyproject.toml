@@ -8,11 +8,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nixt"
-version = "170"
+version = "180"
 authors = [
     {name = "Bart Thate", email = "nixtniet@gmail.com" },
 ]
-description = "ANTIPSYCHOTICS - AKATHISIA - CATATONIA - SEDATION - SHOCKS - LETHAL CATATONIA"
+description = "NIXT"
 readme = "README.rst"
 license = { text="Public Domain"}
 classifiers=[
@@ -25,7 +25,7 @@ classifiers=[
 
 
 [project.scripts]
-"nixt" = "nixt.runtime:wrapped"
+"nixt" = "nixt.__main__:wrapped"
 
 
 [project.urls]

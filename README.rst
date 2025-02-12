@@ -74,7 +74,7 @@ current directory to sys.path
 and use this alias
 
 |
-| ``alias nixt="python3 -m nixt.runtime"``
+| ``alias nixt="python3 -m nixt"``
 |
 
 **USAGE**
@@ -129,7 +129,6 @@ here is a list of available commands
 | ``req`` - reconsider
 | ``rss`` - add a feed
 | ``syn`` - sync rss feeds
-| ``tdo`` - add todo item
 | ``thr`` - show running threads
 | ``upt`` - show uptime
 |
