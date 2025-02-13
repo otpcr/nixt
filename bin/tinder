@@ -16,10 +16,10 @@ sys.path.insert(0, os.getcwd())
 from nixt.clients import Buffered, Config
 from nixt.command import Commands, command, parse
 from nixt.excepts import errors, later
-from nixt.objects import Object, keys
+from nixt.objects import Object, items, keys, values
 from nixt.package import Table
 from nixt.reactor import Event
-from nixt.threads import STARTTIME, launch
+from nixt.threads import STARTTIME, Thread, launch
 from nixt.utility import elapsed
 from nixt.workdir import Workdir, skel
 
@@ -45,25 +45,28 @@ paylock = _thread.allocate_lock()
 
 
 param = Object()
-param.log = ["bla", ""]
-param.cfg = ["cfg nick=mekker", ""]
-param.cmd = [""]
-param.dne = ["mekker", ""]
 param.dpl = ["hnrss title,url", ""]
-param.exp = ['']
-param.fnd = ["log", ""]
 param.imp = ["tests/feeds.opml", ""]
-param.mod = [""]
-param.mre = [""]
 param.nme = ["hnrss hackernews", ""]
 param.pwd = ["bla mekker", ""]
 param.rem = ["hnrss", ""]
 param.res = ["hnrss"]
-param.rss = ["http://hnrss.org/newest", ""]
 param.srv = [""]
-param.tdo = ["mekker", ""]
 param.thr = [""]
 param.ver = [""]
+param.cmd = [""]
+param.mod = [""]
+param.mre = [""]
+param.exp = ['']
+param.fnd = ["log", "rss", "config"]
+param.dne = ["mekker", ""]
+
+
+pre = Object()
+pre.log = ["bla", ""]
+pre.cfg = ["cfg nick=mekker", ""]
+pre.rss = ["http://hnrss.org/newest", ""]
+pre.tdo = ["mekker", ""]
 
 
 class CLI(Buffered):
@@ -93,12 +96,12 @@ def consume(evts):
     return done
 
 
-def payload(clt):
+def payload(clt, cmds):
     nmr = 0
-    for cmdd in sorted(Commands.names.keys()):
-        for ex in getattr(param, cmdd, [""]):
+    for cmd, examples in items(cmds):
+        for example in examples:
             event = Event()
-            event.txt = cmdd + " " + ex
+            event.txt = cmd + " " + example
             event.type = "command"
             events.append(event)
             clt.put(event)
@@ -143,7 +146,11 @@ def main():
     nrs = cfg.index or 1
     thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, clt))
+        thrs.append(launch(payload, clt, pre))
+    for thr in thrs:
+        thr.join()
+    for _nr in range(nrs):
+        thrs.append(launch(payload, clt, param))
     for thr in thrs:
         thr.join()
     consume(events)
@@ -157,6 +164,8 @@ if __name__ == "__main__":
     endtime = time.time()
     lap = elapsed(endtime-STARTTIME)
     percall = (endtime-STARTTIME)/(nrs*nrcommand)
+    if "b" in cfg.opts:
+        Thread.bork = True
     if "v" in cfg.opts:
         if not list(errors()):
             print("no errors")

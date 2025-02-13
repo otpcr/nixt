@@ -6,8 +6,9 @@ import traceback
 
 class Errors:
 
-    name = __file__.rsplit(".", maxsplit=2)[-2]
+    name = __file__.rsplit("/", maxsplit=2)[-2]
     errors = []
+    print(name)
 
     @staticmethod
     def format(exc) -> str:
@@ -16,12 +17,14 @@ class Errors:
         result = ""
         for i in trace:
             fname = i[0]
+            if fname.endswith(".py"):
+                fname = fname[:-3]
             linenr = i[1]
-            plugfile = fname[:-3].split("/")
+            plugfile = fname.split("/")
             mod = []
             for i in plugfile[::-1]:
                 mod.append(i)
-                if Errors.name in i:
+                if Errors.name in i or "bin" in i:
                     break
             ownname = '.'.join(mod[::-1])
             if ownname.endswith("__"):
