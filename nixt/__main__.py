@@ -8,8 +8,9 @@ import time
 import _thread
 
 
-from .clients import Client, Config
+from .clients import Client
 from .command import Commands, command, parse
+from .default import Default
 from .encoder import dumps
 from .excepts import errors, later
 from .package import Table
@@ -22,6 +23,15 @@ from . import modules as MODS
 
 
 STARTTIME = time.time()
+
+
+class Config(Default):
+
+    init    = ""
+    name    = __file__.rsplit(os.sep, maxsplit=2)[-2]
+    opts    = Default()
+    version = 180
+
 
 
 cfg   = Config()
@@ -131,7 +141,7 @@ def background():
     privileges()
     pidfile(pidname(Config.name))
     Commands.add(cmd)
-    Table.inits(Config.init, pname)
+    Table.inits(Config.init or "irc,rss", pname)
     forever()
 
 
@@ -171,7 +181,7 @@ def service():
     privileges()
     pidfile(pidname(Config.name))
     Commands.add(cmd)
-    Table.inits(Config.init or "irc,mdl,rss", pname)
+    Table.inits(Config.init or "irc,rss", pname)
     forever()
 
 
@@ -211,7 +221,7 @@ After=network-online.target
 Type=simple
 User=%s
 Group=%s
-ExecStart=/home/%s/.local/bin/%s -s mod=irc,mdl,rss
+ExecStart=/home/%s/.local/bin/%s -s
 
 [Install]
 WantedBy=multi-user.target"""

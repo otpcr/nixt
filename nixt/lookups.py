@@ -1,6 +1,9 @@
 # This file is placed in the Public Domain.
 
 
+"lookup tables"
+
+
 NAMES = {
     "cfg": "nixt.modules.irc",
     "dpl": "nixt.modules.rss",
@@ -18,6 +21,7 @@ NAMES = {
     "req": "nixt.modules.req",
     "res": "nixt.modules.rss",
     "rss": "nixt.modules.rss",
+    "slg": "nixt.modules.slg",
     "syn": "nixt.modules.rss",
     "thr": "nixt.modules.thr",
     "upt": "nixt.modules.upt",
