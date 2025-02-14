@@ -76,8 +76,6 @@ class Table:
     def load(name) -> types.ModuleType:
         with loadlock:
             pname = ".".join(name.split(".")[:-1])
-            if not pname.startswith(Table.name):
-                Table.update()
             module = Table.mods.get(name)
             if not module:
                 try:

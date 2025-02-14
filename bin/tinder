@@ -16,13 +16,13 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.clients import Buffered, Config
+from nixt.clients import STARTTIME, Buffered, Config
 from nixt.command import Commands, command, parse
 from nixt.excepts import errors, later
 from nixt.objects import Object, items, keys, values
 from nixt.package import Table
 from nixt.reactor import Event
-from nixt.threads import STARTTIME, Thread, launch
+from nixt.threads import Thread, launch
 from nixt.utility import elapsed
 from nixt.workdir import Workdir, skel
 

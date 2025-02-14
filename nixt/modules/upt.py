@@ -7,8 +7,7 @@
 import time
 
 
-from ..clients import Config
-from ..package import STARTTIME
+from ..clients import STARTTIME, Config
 from ..utility import elapsed
 
 

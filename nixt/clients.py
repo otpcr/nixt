@@ -7,11 +7,15 @@
 import os
 import queue
 import threading
+import time
 
 
 from .default import Default
 from .reactor import Fleet, Reactor
 from .threads import launch
+
+
+STARTTIME = time.time()
 
 
 class Config(Default):
@@ -103,6 +107,7 @@ def output(txt) -> None:
 
 def __dir__():
     return (
+        'STARTTIME',
         'Cached',
         'Client',
         'Config',

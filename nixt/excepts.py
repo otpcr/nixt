@@ -11,7 +11,6 @@ class Errors:
 
     name = __file__.rsplit("/", maxsplit=2)[-2]
     errors = []
-    print(name)
 
     @staticmethod
     def format(exc) -> str:

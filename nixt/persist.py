@@ -9,6 +9,7 @@ import os
 import json
 import pathlib
 import threading
+import typing
 
 
 from .decoder import loads
@@ -35,11 +36,11 @@ class Cache:
         Cache.objs[path] = obj
 
     @staticmethod
-    def get(path) -> Any:
+    def get(path) -> typing.Any:
         return Cache.objs.get(path, None)
 
     @staticmethod
-    def typed(matcher) -> [Any]:
+    def typed(matcher) -> [typing.Any]:
         for key in Cache.objs:
             if matcher not in key:
                 continue
