@@ -8,9 +8,7 @@ import importlib
 import os
 import threading
 import time
-
-
-from types import ModuleType
+import types
 
 
 from .threads import later, launch
@@ -27,14 +25,14 @@ loadlock = threading.RLock()
 class Table:
 
     disable = []
-    mods = {}
+    mods    = {}
 
     @staticmethod
     def add(mod) -> None:
         Table.mods[mod.__name__] = mod
 
     @staticmethod
-    def all(pkg, mods="") -> [ModuleType]:
+    def all(pkg, mods="") -> [types.ModuleType]:
         res = []
         path = pkg.__path__[0]
         pname = ".".join(path.split(os.sep)[-2:])
@@ -55,11 +53,11 @@ class Table:
         return res
 
     @staticmethod
-    def get(name) -> ModuleType:
+    def get(name) -> types.ModuleType:
         return Table.mods.get(name, None)
 
     @staticmethod
-    def inits(names, pname) -> [ModuleType]:
+    def inits(names, pname) -> [types.ModuleType]:
         with initlock:
             mods = []
             for name in spl(names):
@@ -75,9 +73,11 @@ class Table:
             return mods
 
     @staticmethod
-    def load(name) -> ModuleType:
+    def load(name) -> types.ModuleType:
         with loadlock:
             pname = ".".join(name.split(".")[:-1])
+            if not pname.startswith(Table.name):
+                Table.update()
             module = Table.mods.get(name)
             if not module:
                 try:

@@ -27,6 +27,11 @@ class Commands:
             Commands.names[func.__name__] = mod.__name__
 
     @staticmethod
+    def dump():
+        with open(lookups.__file__, "w") as file:
+            file.write(TXT % dumps(Commands.names, indent=4, sort_keys=True))
+
+    @staticmethod
     def get(cmd) -> Callable:
         return Commands.cmds.get(cmd, None)
 
