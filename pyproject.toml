@@ -25,7 +25,7 @@ classifiers=[
 
 
 [project.scripts]
-"nixt" = "nixt.__main__:wrapped"
+"nixt" = "nixt.runtime:wrapped"
 
 
 [project.urls]
