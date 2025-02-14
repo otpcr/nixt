@@ -1,6 +1,9 @@
 # This file is placed in the Public Domain.
 
 
+"a clean namespace"
+
+
 class Object:
 
     def __len__(self):
@@ -96,3 +99,17 @@ def update(obj, data) -> None:
 
 def values(obj) -> []:
     return obj.__dict__.values()
+
+
+def __dir__():
+    return (
+        'Object',
+        'construct',
+        'edit',
+        'fmt',
+        'fqn',
+        'items',
+        'keys',
+        'update',
+        'values'
+    )

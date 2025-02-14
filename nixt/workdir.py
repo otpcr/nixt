@@ -1,6 +1,9 @@
 # This file is placed in the Public Domain.
 
 
+"working directory"
+
+
 import os
 import pathlib
 
@@ -42,3 +45,15 @@ def strip(pth, nmr=3) -> str:
 
 def types() -> [str]:
     return os.listdir(store())
+
+
+def __dir__():
+    return (
+        'Workdir',
+        'long',
+        'pidname',
+        'skel',
+        'store',
+        'strip',
+        'types'
+    )

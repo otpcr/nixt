@@ -1,6 +1,9 @@
 # This file is placed in the Public Domain.
 
 
+"non blocking"
+
+
 import queue
 import threading
 import time
@@ -8,9 +11,6 @@ import typing
 
 
 from .excepts import later
-
-
-STARTTIME = time.time()
 
 
 lock = threading.RLock()

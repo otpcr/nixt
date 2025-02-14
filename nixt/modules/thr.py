@@ -1,12 +1,15 @@
 # This file is placed in the Public Domain.
 
 
+"running threads"
+
+
 import threading
 import time
 
 
 from ..objects import Object, update
-from ..threads import STARTTIME
+from ..package import STARTTIME
 from ..utility import elapsed
 
 

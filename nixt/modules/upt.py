@@ -1,11 +1,14 @@
 # This file is placed in the Public Domain.
 
 
+"show uptime/version"
+
+
 import time
 
 
 from ..clients import Config
-from ..threads import STARTTIME
+from ..package import STARTTIME
 from ..utility import elapsed
 
 

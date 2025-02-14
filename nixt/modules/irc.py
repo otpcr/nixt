@@ -1,6 +1,9 @@
 # This file is placed in the Public Domain.
 
 
+"internet relay chat"
+
+
 import base64
 import os
 import queue

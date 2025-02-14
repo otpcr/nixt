@@ -1,6 +1,9 @@
 # This file is placed in the Public Domain.
 
 
+"object encoding"
+
+
 import json
 
 
@@ -28,6 +31,6 @@ class ObjectEncoder(json.JSONEncoder):
                 return repr(o)
 
 
-def dumps(*args, **kw):
+def dumps(*args, **kw) -> str:
     kw["cls"] = ObjectEncoder
     return json.dumps(*args, **kw)

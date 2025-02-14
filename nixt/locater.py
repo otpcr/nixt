@@ -1,13 +1,15 @@
 # This file is placed in the Public Domain.
 
 
+"locating objects"
+
+
 import os
 import time
 
 
-from .caching import Cache
 from .objects import Object, fqn, items, update
-from .persist import read
+from .persist import Cache, read
 from .workdir import long, skel, store
 
 
@@ -88,3 +90,13 @@ def search(obj, selector, matching=None) -> bool:
             res = False
             break
     return res
+
+
+def __dir__():
+    return (
+        'fns',
+        'fntime',
+        'find',
+        'last',
+        'search'
+    )

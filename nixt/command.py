@@ -1,8 +1,14 @@
 # This file is placed in the Public Domain.
 
 
+"user commands"
+
+
 import inspect
 import typing
+
+
+from typing import Callable
 
 
 from .default import Default
@@ -21,7 +27,7 @@ class Commands:
             Commands.names[func.__name__] = mod.__name__
 
     @staticmethod
-    def get(cmd) -> typing.Callable:
+    def get(cmd) -> Callable:
         return Commands.cmds.get(cmd, None)
 
     @staticmethod
@@ -104,3 +110,11 @@ def parse(obj, txt=None) -> None:
         obj.txt  = obj.cmd + " " + obj.rest
     else:
         obj.txt = obj.cmd or ""
+
+
+def __dir__():
+    return (
+        'Commands',
+        'command',
+        'parse'
+    )

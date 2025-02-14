@@ -1,6 +1,9 @@
 # This file is placed in the Public Domain.
 
 
+"callback engine"
+
+
 import queue
 import threading
 import time
@@ -144,3 +147,11 @@ class Fleet:
         for bot in Fleet.bots.values():
             if "wait" in dir(bot):
                 bot.wait()
+
+
+def __dir__():
+    return (
+        'Event',
+        'Fleet',
+        'Reactor'
+    )

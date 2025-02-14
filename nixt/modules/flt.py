@@ -1,6 +1,9 @@
 # This file is placed in the Public Domain.
 
 
+"list of bots"
+
+
 from ..objects import fmt
 from ..threads import name
 from ..clients import Fleet

@@ -1,6 +1,9 @@
 # This file is placed in the Public Domain.
 
 
+"scripts"
+
+
 import os
 import pathlib
 import sys
@@ -8,7 +11,7 @@ import time
 import _thread
 
 
-from .clients import Client
+from .clients import Client, Config
 from .command import Commands, command, parse
 from .default import Default
 from .encoder import dumps
@@ -20,18 +23,6 @@ from .workdir import Workdir, pidname
 
 from . import clients
 from . import modules as MODS
-
-
-STARTTIME = time.time()
-
-
-class Config(Default):
-
-    init    = ""
-    name    = __file__.rsplit(os.sep, maxsplit=2)[-2]
-    opts    = Default()
-    version = 180
-
 
 
 cfg   = Config()

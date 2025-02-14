@@ -1,6 +1,9 @@
 # This file is placed in the Public Domain.
 
 
+"default values"
+
+
 class Default:
 
     def __contains__(self, key):
@@ -17,3 +20,9 @@ class Default:
 
     def __str__(self):
         return str(self.__dict__)
+
+
+def __dir__():
+    return (
+        'Default',
+    )

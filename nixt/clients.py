@@ -1,6 +1,9 @@
 # This file is placed in the Public Domain.
 
 
+"buffered clients"
+
+
 import os
 import queue
 import threading
@@ -96,3 +99,14 @@ def debug(txt) -> None:
 
 def output(txt) -> None:
     pass
+
+
+def __dir__():
+    return (
+        'Cached',
+        'Client',
+        'Config',
+        'Output',
+        'debug',
+        'output'
+    )

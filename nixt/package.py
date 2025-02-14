@@ -1,13 +1,13 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0415,W0718
 
 
-""" table """
+"module table"
 
 
 import importlib
 import os
 import threading
+import time
 
 
 from types import ModuleType
@@ -17,25 +17,24 @@ from .threads import later, launch
 from .utility import spl
 
 
+STARTTIME = time.time()
+
+
 initlock = threading.RLock()
 loadlock = threading.RLock()
 
 
 class Table:
 
-    """ Table """
-
-    disable = ["dbg", "tmr"]
+    disable = []
     mods = {}
 
     @staticmethod
     def add(mod) -> None:
-        "add module"
         Table.mods[mod.__name__] = mod
 
     @staticmethod
     def all(pkg, mods="") -> [ModuleType]:
-        "return all modules"
         res = []
         path = pkg.__path__[0]
         pname = ".".join(path.split(os.sep)[-2:])
@@ -57,12 +56,10 @@ class Table:
 
     @staticmethod
     def get(name) -> ModuleType:
-        "return module by full qualified name"
         return Table.mods.get(name, None)
 
     @staticmethod
     def inits(names, pname) -> [ModuleType]:
-        "call init() available in the module"
         with initlock:
             mods = []
             for name in spl(names):
@@ -79,7 +76,6 @@ class Table:
 
     @staticmethod
     def load(name) -> ModuleType:
-        "load module by full qualified name"
         with loadlock:
             pname = ".".join(name.split(".")[:-1])
             module = Table.mods.get(name)
@@ -92,7 +88,6 @@ class Table:
 
     @staticmethod
     def modules(path) -> [str]:
-        "return module names from a directory"
         return [
                 x[:-3] for x in os.listdir(path)
                 if x.endswith(".py") and not x.startswith("__") and
@@ -101,7 +96,6 @@ class Table:
 
 
 def gettable() -> dict:
-    "return lookup table"
     try:
         from .lookups import NAMES as names
     except Exception as ex:

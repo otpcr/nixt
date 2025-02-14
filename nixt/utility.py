@@ -1,6 +1,9 @@
 # This file is placed in the Public Domain.
 
 
+"utilities"
+
+
 def elapsed(seconds, short=True):
     txt = ""
     nsec = float(seconds)
@@ -46,3 +49,10 @@ def spl(txt):
     except (TypeError, ValueError):
         result = txt
     return [x for x in result if x]
+
+
+def __dir__():
+    return (
+        'elapsed',
+        'spl'
+    )
