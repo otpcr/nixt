@@ -52,6 +52,15 @@ def enable():
 output = nil
 
 
+def handler(signum, frame):
+    signame = signal.Signals(signum).name
+    print("shutdown")
+    sys.exit(0)
+
+
+signal.signal(signal.SIGHUP, handler)
+
+
 "clients"
 
 
@@ -149,22 +158,13 @@ def privileges():
     os.setuid(pwnam2.pw_uid)
 
 
-"handler"
-
-
-def handler(signum, frame):
-    signame = signal.Signals(signum).name
-    _thread.interrupt_main()
-
-
 "scripts"
 
 
 def background():
-    daemon("v" in cfg.opts)
+    daemon("-v" in sys.argv)
     privileges()
     pidfile(pidname(cfg.name))
-    signal.signal(signal.SIGHUP, handler)
     Commands.add(cmd)
     Table.inits(cfg.init or "irc,rss", pname)
     forever()
@@ -206,6 +206,7 @@ def control():
 
 
 def service():
+    signal.signal(signal.SIGHUP, handler)
     enable()
     privileges()
     pidfile(pidname(cfg.name))
