@@ -172,8 +172,7 @@ def background():
 
 def console():
     import readline # noqa: F401
-    global output
-    output = print
+    enable()
     Commands.add(cmd)
     parse(cfg, " ".join(sys.argv[1:]))
     cfg.init = cfg.sets.init or cfg.init
@@ -192,8 +191,7 @@ def console():
 def control():
     if len(sys.argv) == 1:
         return
-    global output
-    output = print
+    enable()
     Commands.add(cmd)
     Commands.add(srv)
     Commands.add(tbl)
@@ -208,7 +206,7 @@ def control():
 
 
 def service():
-    output = print
+    enable()
     privileges()
     pidfile(pidname(cfg.name))
     Commands.add(cmd)

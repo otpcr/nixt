@@ -23,10 +23,9 @@ from ..message import Message
 from ..objects import Object, edit, fmt, keys
 from ..persist import ident, write
 from ..reactor import Fleet, Reactor
+from ..runtime import output
 from ..threads import later, launch
 
-
-from .. import clients
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]
 NAME   = Main.name
@@ -36,7 +35,7 @@ saylock = _thread.allocate_lock()
 
 
 def debug(txt):
-    from ..runtime import output
+    print(txt)
     for ign in IGNORE:
         if ign in txt:
             return
