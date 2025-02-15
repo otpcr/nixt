@@ -12,40 +12,12 @@ import _thread
 
 from .default import Default
 from .excepts import later
+from .message import Message
 from .threads import launch
 
 
-cblock = threading.RLock()
-lock   = threading.RLock()
-
-
-class Event(Default):
-
-    def __init__(self):
-        Default.__init__(self)
-        self._ready = threading.Event()
-        self._thr   = None
-        self.ctime  = time.time()
-        self.result = {}
-        self.type   = "event"
-        self.txt    = ""
-
-    def display(self) -> None:
-        Fleet.display(self)
-
-    def done(self) -> None:
-        self.reply("ok")
-
-    def ready(self) -> None:
-        self._ready.set()
-
-    def reply(self, txt) -> None:
-        self.result[time.time()] = txt
-
-    def wait(self) -> None:
-        self._ready.wait()
-        if self._thr:
-            self._thr.join()
+cblock      = threading.RLock()
+displaylock = threading.RLock()
 
 
 class Reactor:
@@ -81,7 +53,7 @@ class Reactor:
                 _thread.interrupt_main()
         self.ready.set()
 
-    def poll(self) -> Event:
+    def poll(self) -> Message:
         return self.queue.get()
 
     def put(self, evt) -> None:
@@ -118,7 +90,7 @@ class Fleet:
 
     @staticmethod
     def display(evt) -> None:
-        with lock:
+        with displaylock:
             for tme in sorted(evt.result):
                 text = evt.result[tme]
                 Fleet.say(evt.orig, evt.channel, text)
@@ -151,7 +123,6 @@ class Fleet:
 
 def __dir__():
     return (
-        'Event',
         'Fleet',
         'Reactor'
     )

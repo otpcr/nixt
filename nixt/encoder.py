@@ -34,3 +34,9 @@ class ObjectEncoder(json.JSONEncoder):
 def dumps(*args, **kw) -> str:
     kw["cls"] = ObjectEncoder
     return json.dumps(*args, **kw)
+
+
+def __dir__():
+    return (
+        'dumps',
+    )

@@ -8,8 +8,8 @@ import threading
 import time
 
 
-from ..clients import STARTTIME
 from ..objects import Object, update
+from ..package import STARTTIME
 from ..utility import elapsed
 
 
@@ -37,3 +37,9 @@ def thr(event):
         event.reply(' '.join(res))
     else:
         event.reply('no threads')
+
+
+def __dir__():
+    return (
+        'thr',
+    )

@@ -16,3 +16,9 @@ def err(event):
         event.reply("no errors")
         return
     event.reply(f"found {nmr} errors.")
+
+
+def __dir__():
+    return (
+        'err',
+    )

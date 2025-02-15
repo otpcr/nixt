@@ -16,15 +16,17 @@ import _thread
 
 
 from ..clients import Config as Main
-from ..clients import output
 from ..command import command
 from ..default import Default
 from ..locater import last
+from ..message import Message
 from ..objects import Object, edit, fmt, keys
 from ..persist import ident, write
-from ..reactor import Event, Fleet, Reactor
+from ..reactor import Fleet, Reactor
 from ..threads import later, launch
 
+
+from .. import clients
 
 IGNORE = ["PING", "PONG", "PRIVMSG"]
 NAME   = Main.name
@@ -34,6 +36,7 @@ saylock = _thread.allocate_lock()
 
 
 def debug(txt):
+    from ..runtime import output
     for ign in IGNORE:
         if ign in txt:
             return
@@ -342,7 +345,7 @@ class IRC(Reactor, Output):
         rawstr = rawstr.replace('\u0001', '')
         rawstr = rawstr.replace('\001', '')
         debug(txt)
-        obj = Event()
+        obj = Message()
         obj.args = []
         obj.rawstr = rawstr
         obj.command = ''
@@ -503,6 +506,9 @@ class IRC(Reactor, Output):
         self.events.ready.wait()
 
 
+"callbacks"
+
+
 def cb_auth(bot, evt):
     bot = Fleet.get(evt.orig)
     bot.docommand(f'AUTHENTICATE {bot.cfg.password}')
@@ -586,6 +592,9 @@ def cb_quit(evt):
         bot.stop()
 
 
+"commands"
+
+
 def cfg(event):
     config = Config()
     fnm = last(config)
@@ -632,3 +641,15 @@ def pwd(event):
     base = base64.b64encode(enc)
     dcd = base.decode('ascii')
     event.reply(dcd)
+
+
+def __dir__():
+    return (
+        'Config',
+        'IRC',
+        'cfg',
+        'debug',
+        'init',
+        'mre',
+        'pwd'
+    )

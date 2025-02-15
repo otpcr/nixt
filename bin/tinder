@@ -16,12 +16,12 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.clients import STARTTIME, Buffered, Config
+from nixt.clients import Buffered, Config
 from nixt.command import Commands, command, parse
 from nixt.excepts import errors, later
+from nixt.message import Message
 from nixt.objects import Object, items, keys, values
-from nixt.package import Table
-from nixt.reactor import Event
+from nixt.package import STARTTIME, Table
 from nixt.threads import Thread, launch
 from nixt.utility import elapsed
 from nixt.workdir import Workdir, skel
@@ -103,7 +103,7 @@ def payload(clt, cmds):
     nmr = 0
     for cmd, examples in items(cmds):
         for example in examples:
-            event = Event()
+            event = Message()
             event.txt = cmd + " " + example
             event.type = "command"
             events.append(event)

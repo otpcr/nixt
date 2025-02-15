@@ -1,1 +1,1 @@
-python3 -m nixt $* ;
+python3 -m nixt.runtime $* ;

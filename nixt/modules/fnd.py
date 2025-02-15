@@ -28,3 +28,9 @@ def fnd(event):
         nmr += 1
     if not nmr:
         event.reply("no result")
+
+
+def __dir__():
+    return (
+        'fnd',
+    )

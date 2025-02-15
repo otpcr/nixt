@@ -47,7 +47,7 @@ class Errors:
         )
 
 
-def errors() -> []:
+def errors() -> [str]:
     return Errors.errors
 
 

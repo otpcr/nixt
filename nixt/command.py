@@ -8,11 +8,9 @@ import inspect
 import typing
 
 
-from typing import Callable
-
-
 from .default import Default
 from .package import Table, gettable
+from .reactor import Fleet
 
 
 class Commands:
@@ -27,12 +25,7 @@ class Commands:
             Commands.names[func.__name__] = mod.__name__
 
     @staticmethod
-    def dump():
-        with open(lookups.__file__, "w") as file:
-            file.write(TXT % dumps(Commands.names, indent=4, sort_keys=True))
-
-    @staticmethod
-    def get(cmd) -> Callable:
+    def get(cmd) -> typing.Callable:
         return Commands.cmds.get(cmd, None)
 
     @staticmethod
@@ -61,7 +54,7 @@ def command(evt) -> None:
         evt.ready()
         return
     func(evt)
-    evt.display()
+    Fleet.display(evt)
 
 
 def parse(obj, txt=None) -> None:

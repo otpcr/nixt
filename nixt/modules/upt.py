@@ -7,7 +7,8 @@
 import time
 
 
-from ..clients import STARTTIME, Config
+from ..clients import Config
+from ..package import STARTTIME
 from ..utility import elapsed
 
 
@@ -17,3 +18,10 @@ def upt(event):
 
 def ver(event):
     event.reply(f"{Config.name.upper()} {Config.version}")
+
+
+def __dir__():
+    return (
+        'upt',
+        'ver'
+    )

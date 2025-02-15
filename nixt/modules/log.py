@@ -23,7 +23,7 @@ class Log(Object):
 def log(event):
     if not event.rest:
         nmr = 0
-        for fnm, obj in find('log'):
+        for fnm, obj in find('log', event.gets):
             lap = elapsed(time.time() - fntime(fnm))
             event.reply(f'{nmr} {obj.txt} {lap}')
             nmr += 1
@@ -34,3 +34,9 @@ def log(event):
     obj.txt = event.rest
     write(obj)
     event.done()
+
+
+def __dir__():
+    return (
+        'log',
+    )

@@ -4,6 +4,9 @@
 "a clean namespace"
 
 
+import typing
+
+
 class Object:
 
     def __len__(self):
@@ -78,13 +81,13 @@ def fqn(obj) -> str:
     return kin
 
 
-def items(obj) -> []:
+def items(obj) -> [(str,typing.Any)]:
     if isinstance(obj,type({})):
         return obj.items()
     return obj.__dict__.items()
 
 
-def keys(obj) -> []:
+def keys(obj) -> [str]:
     if isinstance(obj, type({})):
         return obj.keys()
     return list(obj.__dict__.keys())
@@ -97,7 +100,7 @@ def update(obj, data) -> None:
         obj.__dict__.update(data)
 
 
-def values(obj) -> []:
+def values(obj) -> [typing.Any]:
     return obj.__dict__.values()
 
 

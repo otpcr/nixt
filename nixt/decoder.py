@@ -3,10 +3,9 @@
 
 "object decoding"
 
+
 import json
-
-
-from typing import Any
+import typing
 
 
 from .objects import Object, construct
@@ -17,7 +16,7 @@ class ObjectDecoder(json.JSONDecoder):
     def __init__(self, *args, **kwargs):
         json.JSONDecoder.__init__(self, *args, **kwargs)
 
-    def decode(self, s, _w=None) -> Any:
+    def decode(self, s, _w=None) -> typing.Any:
         val = json.JSONDecoder.decode(self, s)
         if isinstance(val, dict):
             return hook(val)
@@ -38,7 +37,5 @@ def loads(string, *args, **kw) -> Object:
 
 def __dir__():
     return (
-        'ObjectDecoder',
-        'hook',
-        'loads'
+        'loads',
     )

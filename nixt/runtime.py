@@ -6,6 +6,7 @@
 
 import os
 import pathlib
+import signal
 import sys
 import time
 import _thread
@@ -16,8 +17,8 @@ from .command import Commands, command, parse
 from .default import Default
 from .encoder import dumps
 from .excepts import errors, later
+from .message import Message
 from .package import Table
-from .reactor import Event
 from .workdir import Workdir, pidname
 
 
@@ -25,13 +26,33 @@ from . import clients
 from . import modules as MODS
 
 
+"defines"
+
+
 cfg   = Config()
 p     = os.path.join
-pname = f"{Config.name}.modules"
+pname = f"{cfg.name}.modules"
 
 
-Workdir.wdr    = os.path.expanduser(f"~/.{Config.name}")
-clients.output = output = print
+Workdir.wdr    = os.path.expanduser(f"~/.{cfg.name}")
+
+
+def nil(txt):
+    pass
+
+
+def output(txt):
+    print(txt)
+
+
+def enable():
+    global output
+    output = print
+
+output = nil
+
+
+"clients"
 
 
 class CLI(Client):
@@ -57,15 +78,18 @@ class Console(CLI):
         evt.wait()
 
     def poll(self):
-        evt = Event()
+        evt = Message()
         evt.txt = input("> ")
         evt.type = "command"
         return evt
 
 
+"utilities"
+
+
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
-    output(f"{Config.name.upper()} since {tme}")
+    output(f"{cfg.name.upper()} since {tme}")
 
 
 def check(txt):
@@ -107,6 +131,7 @@ def forever():
             _thread.interrupt_main()
 
 
+
 def pidfile(filename):
     if os.path.exists(filename):
         os.unlink(filename)
@@ -124,28 +149,39 @@ def privileges():
     os.setuid(pwnam2.pw_uid)
 
 
+"handler"
+
+
+def handler(signum, frame):
+    signame = signal.Signals(signum).name
+    _thread.interrupt_main()
+
+
 "scripts"
 
 
 def background():
-    daemon(True)
+    daemon("v" in cfg.opts)
     privileges()
-    pidfile(pidname(Config.name))
+    pidfile(pidname(cfg.name))
+    signal.signal(signal.SIGHUP, handler)
     Commands.add(cmd)
-    Table.inits(Config.init or "irc,rss", pname)
+    Table.inits(cfg.init or "irc,rss", pname)
     forever()
 
 
 def console():
     import readline # noqa: F401
+    global output
+    output = print
     Commands.add(cmd)
     parse(cfg, " ".join(sys.argv[1:]))
-    Config.init = cfg.sets.init or Config.init
-    Config.opts = cfg.opts
+    cfg.init = cfg.sets.init or cfg.init
+    cfg.opts = cfg.opts
     if "v" in cfg.opts:
         banner()
-    if "i" in cfg.opts or Config.init:
-        for _mod, thr in Table.inits(Config.init, pname):
+    if "i" in cfg.opts or cfg.init:
+        for _mod, thr in Table.inits(cfg.init, pname):
             if "w" in cfg.opts:
                 thr.join()
     csl = Console()
@@ -156,23 +192,27 @@ def console():
 def control():
     if len(sys.argv) == 1:
         return
+    global output
+    output = print
     Commands.add(cmd)
     Commands.add(srv)
     Commands.add(tbl)
     parse(cfg, " ".join(sys.argv[1:]))
     csl = CLI()
-    evt = Event()
+    evt = Message()
     evt.orig = repr(csl)
     evt.type = "command"
     evt.txt = cfg.otxt
     command(evt)
     evt.wait()
 
+
 def service():
+    output = print
     privileges()
-    pidfile(pidname(Config.name))
+    pidfile(pidname(cfg.name))
     Commands.add(cmd)
-    Table.inits(Config.init or "irc,rss", pname)
+    Table.inits(cfg.init or "irc,rss", pname)
     forever()
 
 
@@ -186,7 +226,7 @@ def cmd(event):
 def srv(event):
     import getpass
     name = getpass.getuser()
-    event.reply(TXT % (Config.name.upper(), name, name, name, Config.name))
+    event.reply(TXT % (cfg.name.upper(), name, name, name, cfg.name))
 
 
 def tbl(event):
@@ -239,14 +279,6 @@ def wrap(func):
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old)
     for line in errors():
         output(line)
-
-
-def wrapped():
-    wrap(main)
-
-
-def wraps():
-    wrap(service)
 
 
 def main():

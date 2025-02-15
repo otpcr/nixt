@@ -15,3 +15,9 @@ def flt(event):
         event.reply(fmt(list(Fleet.bots.values())[int(event.args[0])]))
     except (KeyError, IndexError, ValueError):
         event.reply(",".join([name(x).split(".")[-1] for x in bots]))
+
+
+def __dir__():
+    return (
+        'flt',
+    )

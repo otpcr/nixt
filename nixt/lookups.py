@@ -6,6 +6,7 @@
 
 NAMES = {
     "cfg": "nixt.modules.irc",
+    "dne": "nixt.modules.tdo",
     "dpl": "nixt.modules.rss",
     "err": "nixt.modules.err",
     "exp": "nixt.modules.rss",
@@ -17,12 +18,12 @@ NAMES = {
     "mre": "nixt.modules.irc",
     "nme": "nixt.modules.rss",
     "pwd": "nixt.modules.irc",
-    "rem": "nixt.modules.rss",
     "req": "nixt.modules.req",
     "res": "nixt.modules.rss",
     "rss": "nixt.modules.rss",
     "slg": "nixt.modules.slg",
     "syn": "nixt.modules.rss",
+    "tdo": "nixt.modules.tdo",
     "thr": "nixt.modules.thr",
     "upt": "nixt.modules.upt",
     "ver": "nixt.modules.upt"

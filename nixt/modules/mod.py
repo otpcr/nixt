@@ -19,3 +19,9 @@ def mod(event):
             continue
         mods.append(mdd[:-3])
     event.reply(",".join(sorted(mods)))
+
+
+def __dir__():
+    return (
+        'mod',
+    )

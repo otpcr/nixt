@@ -490,3 +490,18 @@ TEMPLATE = """<opml version="1.0">
     </head>
     <body>
         <outline title="opml" text="rss feeds">"""
+
+
+def __dir__():
+    return (
+        'Fetcher',
+        'dpl',
+        'exp',
+        'imp',
+        'init',
+        'nme',
+        'res',
+        'rss',
+        'syn'
+    )
+        
