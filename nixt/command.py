@@ -26,7 +26,14 @@ class Commands:
 
     @staticmethod
     def get(cmd) -> typing.Callable:
-        return Commands.cmds.get(cmd, None)
+        func = Commands.cmds.get(cmd, None)
+        if not func:
+            mname = Commands.names.get(cmd)
+            if mname:
+                mod = Table.load(mname)
+                Commands.scan(mod)
+                func = Commands.cmds.get(cmd)
+        return func
 
     @staticmethod
     def getname(cmd) -> None:
@@ -44,17 +51,10 @@ class Commands:
 def command(evt) -> None:
     parse(evt)
     func = Commands.get(evt.cmd)
-    if not func:
-        mname = Commands.names.get(evt.cmd)
-        if mname:
-            mod = Table.load(mname)
-            Commands.scan(mod)
-            func = Commands.get(evt.cmd)
-    if not func:
-        evt.ready()
-        return
-    func(evt)
-    Fleet.display(evt)
+    if func:
+        func(evt)
+        Fleet.display(evt)
+    evt.ready()
 
 
 def parse(obj, txt=None) -> None:

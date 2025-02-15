@@ -14,7 +14,6 @@ import _thread
 
 from .clients import Client, Config
 from .command import Commands, command, parse
-from .default import Default
 from .encoder import dumps
 from .excepts import errors, later
 from .message import Message
@@ -22,7 +21,6 @@ from .package import Table
 from .workdir import Workdir, pidname
 
 
-from . import clients
 from . import modules as MODS
 
 
@@ -49,12 +47,13 @@ def enable():
     global output
     output = print
 
-output = nil
+
+def disable():
+    global output
+    output = nil
 
 
 def handler(signum, frame):
-    signame = signal.Signals(signum).name
-    print("shutdown")
     sys.exit(0)
 
 
@@ -164,6 +163,7 @@ def privileges():
 def background():
     daemon("-v" in sys.argv)
     privileges()
+    disable()
     pidfile(pidname(cfg.name))
     Commands.add(cmd)
     Table.inits(cfg.init or "irc,rss", pname)

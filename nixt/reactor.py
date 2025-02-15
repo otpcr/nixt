@@ -6,11 +6,9 @@
 
 import queue
 import threading
-import time
 import _thread
 
 
-from .default import Default
 from .excepts import later
 from .message import Message
 from .threads import launch
